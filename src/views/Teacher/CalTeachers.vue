@@ -71,7 +71,7 @@ export default {
 
         // Función que envia el rfc del docente seleccionado para aprobarlo
         async approvedTeacher(rfc,ind){
-            await axios.post("http://localhost:5000/approveCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)
+            await axios.put("http://localhost:5000/approvedCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)
             .then(reponse => {
                 console.log("Aprobado "+rfc);
                 this.arrayTeachers.splice(ind,1);

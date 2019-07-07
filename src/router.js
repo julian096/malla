@@ -82,8 +82,17 @@ const router = new Router({
     },
     {
       path: '/membretado',
-      name: 'Membretado',
+      name: 'Membretados',
       component: () => import('@/views/Teacher/Letterhead.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
+      path: '/membretado/:letterheadName',
+      name: 'Membretado',
+      component: () => import('@/views/Teacher/DetailLetterhead.vue'),
       meta:{
         requiresAuth: true,
         requireAdmin: true

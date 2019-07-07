@@ -22,6 +22,7 @@ export default new Vuex.Store({
     coursesTaught:null,
     teachers:null,
     periods:null,
+    letterheads:null,
     btnDisableUserInt: true,
     btnDisableUserExt: true,
     btnDisableCourse: true,
@@ -106,8 +107,13 @@ mutations: {
     saveMyCourses(state,data){
         state.myCourses = data;
     },
+    // guarda los cursos a impartir
     saveCoursesTaught(state,data){
         state.coursesTaught = data;
+    },
+    // guarda los membretados
+    saveLetterheads(state,data){
+        state.letterheads = data;
     }
 },
 actions: {
@@ -252,6 +258,19 @@ actions: {
         })
         .catch(error => {
             console.error(error);
+        })
+    },
+    // Obtiene los membretados de los documentos
+    async getLetterheads({commit,state}){
+        commit('createKeyAuth');
+        await axios.get("http://localhost:5000/allMetadatas",state.keyAuth)
+        .then(response => {
+            console.log(response.data);
+            commit('saveLetterheads',response.data);
+        })
+        .catch(error => {
+            console.error(error);
+            
         })
     }
   }

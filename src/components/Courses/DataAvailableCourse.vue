@@ -106,6 +106,7 @@ export default {
     methods: {
         ...mapMutations(['createKeyAuth']),
 
+        // Obtiene los datos del curso disponible
         async getDataAvailableCourse(){
             this.createKeyAuth();
             await axios.get('http://localhost:5000/course/'+this.$route.params.cursoDisp,this.keyAuth)
@@ -128,8 +129,9 @@ export default {
                 console.error(error);
             })
         },
+
+        // Registra al docente en un curso y descarga el PDF de inscripcion
         async requestCourse(){
-            this.createKeyAuth();
             await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoDisp,this.keyAuth)
             .then(response => {
                 console.log("Peticion enviada");
@@ -153,6 +155,8 @@ export default {
                 console.error(error);
             })
         },
+
+        // Redirecciona a los cursos disponibles
         showAvailableCourses(){
             router.push({name: 'CursosDisponibles'});
         }

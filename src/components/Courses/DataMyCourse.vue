@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-lg text-xs-center>
-        <v-snackbar v-model="snack" :timeout="timeout" top>Te quedan X dias para realizar la encuesta</v-snackbar>
+        <v-snackbar v-model="snack" :timeout="timeout" top color="amber darken-3" class="white--text">Te quedan {{daysToPoll}} dias para realizar la encuesta</v-snackbar>
         <span class="display-2">Datos del curso</span>
         
         <v-card elevation="10" class="mt-4">
@@ -64,7 +64,7 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row justify-space-around class="mt-3">
-                    <v-btn outline color="orange" :disabled="!availableButton" @click="openFormPoll">Encuesta de satisfacción</v-btn>
+                    <v-btn outline color="orange" :disabled="findTeacher" @click="openFormPoll">Encuesta de satisfacción</v-btn>
                     <v-btn color="red" dark @click="dialog = true">Darse de baja</v-btn>
                 </v-layout>
             </v-card-text>
@@ -105,11 +105,12 @@ export default {
     name: 'DataMyCourse',
     data() {
         return {
-            snack:true,
+            snack:null,
             timeout:5000,
-            daysToPoll:5,
+            daysToPoll:0,
+            teachersThatHaveDoneThePoll:[],
             dialog:null,
-            availableButton:null,
+            availablePoll:null,
             Course:{
                 courseName:"",
                 courseTo:"",
@@ -127,7 +128,14 @@ export default {
         }
     },
     computed:{
-        ...mapState(['keyAuth']),
+        ...mapState(['keyAuth','userLoged']),
+
+        // Devuelve un booleano para habilitar encuesta
+        findTeacher(){
+            const valor = this.teachersThatHaveDoneThePoll.includes(this.userLoged.rfc);
+            this.snack = !valor;
+            return valor;
+        }
     },
     methods:{
         ...mapMutations(['createKeyAuth']),
@@ -150,6 +158,9 @@ export default {
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
                 this.availableButton = response.data.allowPoll;
+                this.snack = response.data.allowPoll;
+                this.daysToPoll = response.data.leftDays;
+                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
                 console.log(response);
             })
             .catch(error => {
