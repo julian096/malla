@@ -132,7 +132,7 @@ export default {
 
         // obtiene la lista de docentes del curso
         async getTeachersList(){
-            await axios.get("http://localhost:5000/teacherList/"+this.$route.params.CursoImpartido,this.keyAuth)
+            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartido,this.keyAuth)
             .then(response => {
                 this.availablePDFList = false;
             })

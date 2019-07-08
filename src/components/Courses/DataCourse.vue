@@ -84,7 +84,11 @@
                         <v-flex xs6 md6 lg6>
                             <ValidationProvider name="name" rules="required">
                                 <v-text-field v-model="Course.courseName"
-                                              label="Nombre del curso"/>
+                                              slot-scope="{errors, valid}"
+                                              :error-messages="errors"
+                                              :success="valid"
+                                              label="Nombre del curso"
+                                              required/>
                             </ValidationProvider>
                         </v-flex>
                         <v-flex xs6 md6 lg6>

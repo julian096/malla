@@ -58,7 +58,7 @@ export default {
         // Obtiene la lista completa de los docentes dentro del curso
         async getListTeacher(){
             this.createKeyAuth();
-            await axios.get("http://localhost:5000/teacherList/"+this.$route.params.CursoImpartido,this.keyAuth)
+            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartido,this.keyAuth)
             .then(response => {
                 this.listTeacher = response.data.teachers;
                 this.arrayTeachers = response.data.teachers;

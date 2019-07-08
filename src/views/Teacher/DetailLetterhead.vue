@@ -1,8 +1,8 @@
 <template>
-    <v-container>
+    <div>
         <Navigation/>
         <DataLetterhead/>
-    </v-container>
+    </div>
 </template>
 
 <script>
