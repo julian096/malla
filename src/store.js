@@ -17,7 +17,7 @@ export default new Vuex.Store({
     dataUserLoged:null,
     keyAuth: null,
     courses:null,
-    availableCourses:null,
+    availableCourses:[],
     myCourses:null,
     coursesTaught:null,
     teachers:null,
@@ -263,7 +263,7 @@ actions: {
     // Obtiene los membretados de los documentos
     async getLetterheads({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/allMetadatas",state.keyAuth)
+        await axios.get("http://localhost:5000/metadata",state.keyAuth)
         .then(response => {
             console.log(response.data);
             commit('saveLetterheads',response.data);

@@ -326,14 +326,16 @@ export default {
         //actualiza los datos del docente
         async updateTeacher(){
             this.Teacher.schedule = this.hourStart + '-' + this.hourEnd;
-            axios.put("http://localhost:5000/teacher/"+this.$route.params.docente,this.Teacher,this.keyAuth)
-            .then(response => {
-                this.getDataTeacher();
-                this.update = 'No';
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            if(this.Teacher.userType == 'Jefe de departamento'){
+                this.Teacher.position = 'Jefe de departamento';
+                try {
+                    axios.put("http://localhost:5000/teacher/"+this.$route.params.docente,this.Teacher,this.keyAuth);
+                    this.getDataTeacher();
+                    this.update = 'No';
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         },
 
         //obtiene los datos de un solo docente

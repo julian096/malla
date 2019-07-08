@@ -15,6 +15,11 @@
         </v-layout>
         <CardAvailableCourse :data="availableCourses"/>
 
+        <v-layout class="mt-3" row justify-center v-if="areThereCourses">
+            <v-flex xs12>
+                <span class="title">No hay cursos disponibles</span>
+            </v-flex>
+        </v-layout>
     </v-container>
 </template>
 
@@ -27,7 +32,11 @@ export default {
     name: 'AvailableCourses',
     components:{Navigation,CardAvailableCourse},
     computed:{
-        ...mapState(['availableCourses'])
+        ...mapState(['availableCourses']),
+
+        areThereCourses(){
+            return this.availableCourses.length == 0 ? true : false;
+        }
     },
     methods: {
         ...mapActions(['getAvailableCourses'])

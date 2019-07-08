@@ -101,7 +101,7 @@
             <v-card-actions>
                 <v-layout row justify-space-around class="mb-1">
                     <v-btn color="green" outline @click="dialog = true">Guardar</v-btn>
-                    <v-btn color="red" outline @click="update = 'No'">Cancelar</v-btn>
+                    <v-btn color="red" outline @click="backDataLetterhead">Cancelar</v-btn>
                 </v-layout>
             </v-card-actions>
         </v-card>
@@ -165,7 +165,7 @@ export default {
             this.createKeyAuth();
             try {
                 const dataLetterhead = await axios.get("http://localhost:5000/metadata/"+this.$route.params.letterheadName,this.keyAuth);
-                this.Letterhead.emitDate = dataLetterhead.data.emitDate.replace("T00:00:00+00:00","");;
+                this.Letterhead.emitDate = dataLetterhead.data.emitDate.replace("T00:00:00+00:00","");
                 this.Letterhead.nameDocument = dataLetterhead.data.nameDocument;
                 this.Letterhead.typeDocument = dataLetterhead.data.typeDocument;
                 this.Letterhead.version = dataLetterhead.data.version;
@@ -185,7 +185,15 @@ export default {
             } catch (error) {
                 console.error(error);
             }
-        }
+        },
+
+        // Regresa a los datos del curso
+        backDataLetterhead(){
+            this.getDataLetterhead();
+            this.update = 'No';
+        },
+
+        
     },
     created(){
         this.getDataLetterhead();

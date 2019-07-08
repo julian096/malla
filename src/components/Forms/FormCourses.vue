@@ -87,7 +87,7 @@
                             <v-form>
                                 <v-card-text>
                                     <v-layout row wrap>
-                                        <v-flex xs12 md6 lg6>
+                                        <v-flex xs12 sm6>
                                             <ValidationProvider name="DateStart" rules="required">
                                                 <v-menu ref="menuDateStart"
                                                         slot-scope="{errors,valid}"
@@ -113,7 +113,7 @@
                                                 </v-menu>
                                             </ValidationProvider>
                                         </v-flex>
-                                        <v-flex xs12 md6 lg6>
+                                        <v-flex xs12 sm6>
                                             <ValidationProvider name="DateEnd" rules="required">
                                                 <v-menu ref="menuDateEnd"
                                                         slot-scope="{errors,valid}"
@@ -142,7 +142,7 @@
                                         </v-flex>
                                     </v-layout>
                                     <v-layout row wrap>
-                                        <v-flex xs12 md6 lg6>
+                                        <v-flex xs12 sm6>
                                             <ValidationProvider name="HourStart" rules="required">
                                                 <v-menu ref="menuHourStart"
                                                         slot-scope="{errors,valid}"
@@ -169,7 +169,7 @@
                                                 </v-menu>
                                             </ValidationProvider>
                                         </v-flex>
-                                        <v-flex xs12 md6 lg6>
+                                        <v-flex xs12 sm6>
                                             <ValidationProvider name="HourEnd" rules="required">
                                                 <v-menu ref="menuHourEnd"
                                                         slot-scope="{errors,valid}"
