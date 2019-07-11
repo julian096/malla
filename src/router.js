@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { isAuth, isAdmin, isTeacher } from './auth';
+import { isAuth, isAdmin, isTeacher, isComm, isBoss } from './auth';
 
 Vue.use(Router)
 
@@ -36,7 +36,7 @@ const router = new Router({
       }
     },
     {
-      path: '/cursos',
+      path: '/Cursos',
       name: 'Cursos',
       component: () => import('@/views/Courses/ListCourses.vue'),
       meta:{
@@ -45,9 +45,18 @@ const router = new Router({
       }
     },
     {
-      path: '/cursos/:curso',
+      path: '/Cursos/:curso',
       name: 'Curso',
       component: () => import('@/views/Courses/DetailCourse.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
+      path: '/Cursos-disponibles',
+      name: 'CursosDisponiblesAdmin',
+      component: () => import('@/views/Teachers/AvailableCoursesAdmin.vue'),
       meta:{
         requiresAuth: true,
         requireAdmin: true
@@ -105,7 +114,6 @@ const router = new Router({
       component: () => import('@/views/Teacher/Profile.vue'),
       meta:{
         requiresAuth: true,
-        requireTeacher: true
       }
     },
     {
@@ -168,6 +176,7 @@ const router = new Router({
       component: () => import('@/views/Teacher/AvailableCourses.vue'),
       meta:{
         requiresAuth: true,
+        requireTeacher: true
       }
     },
     {
@@ -177,6 +186,24 @@ const router = new Router({
       meta:{
         requiresAuth: true,
         requireTeacher: true
+      }
+    },
+    {
+      path: '/cursos',
+      name: 'CursosFolio',
+      component: () => import('@/views/Communication/Courses.vue'),
+      meta:{
+        requiresAuth: true,
+        requireComm: true
+      }
+    },
+    {
+      path: '/cursos/:cursoFolio',
+      name: 'CursoFolio',
+      component: () => import('@/views/Communication/DataCourse.vue'),
+      meta:{
+        requiresAuth: true,
+        requireComm: true
       }
     }
   ]
@@ -190,11 +217,8 @@ router.beforeEach( (to, from, next) => {
         next()
       }
       else {
-        next({ path: '/login' })
+        next({path: '/login'})
       }
-    }
-    else{
-      next()
     }
     // Requiere autenticacion de administrador
     if(route.meta.requireAdmin){
@@ -203,19 +227,35 @@ router.beforeEach( (to, from, next) => {
       }else{
         next({name: 'Inicio'})
       }
-    }else{
-      next()
     }
     // Requiere autenticacion de docente
-    if(route.meta.requireTeacher){
+    else if(route.meta.requireTeacher){
       if(isTeacher()){
         next()
       }else{
         next({name: 'Inicio'})
       }
-    }else{
+    }
+    // Requiere autenticacion de comunicacion
+    else if(route.meta.requireComm){
+      if(isComm()){
+        next()
+      }else{
+        next({name: 'Inicio'})
+      }
+    }
+    // Requiere autenticacion de jefe de departamento
+    else if(route.meta.requireBoss){
+      if(isBoss()){
+        next()
+      }else{
+        next({name: 'Inicio'})
+      }
+    }
+    else{
       next()
     }
+    
   })
 })
 

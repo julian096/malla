@@ -92,7 +92,6 @@ export default {
             snackOk:false,
             snackEr:false,
             timeout:2500,
-            btnDisable:false,
             newPin:"",
             pass:{
                 pin:"",

@@ -24,6 +24,16 @@
 
             <v-list class="pt-0" dense>
                 <v-divider></v-divider>
+
+                <v-list-tile to="/perfil">
+                    <v-list-tile-action>
+                        <v-icon>perm_identity</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Mi perfil</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
                 <v-list-tile to="/registro">
                     <v-list-tile-action>
                         <v-icon>add_circle_outline</v-icon>
@@ -32,6 +42,7 @@
                         <v-list-tile-title>Registro</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+
                 <v-list-tile v-ripple to="/docentes">
                     <v-list-tile-action>
                         <v-icon>people_outline</v-icon>
@@ -40,14 +51,7 @@
                         <v-list-tile-title>Usuarios</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-ripple to="/membretado">
-                    <v-list-tile-action>
-                        <v-icon>view_headline</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>Membretado</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+
                 <v-list-group prepend-icon="event" no-action>
                     <template v-slot:activator>
                         <v-list-tile>
@@ -63,6 +67,16 @@
                         </v-list-tile-action>
                     </v-list-tile>
                 </v-list-group>
+
+                <v-list-tile v-ripple to="/membretado">
+                    <v-list-tile-action>
+                        <v-icon>view_headline</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Membretado</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
                 <v-list-tile v-ripple @click="logout">
                     <v-list-tile-action>
                         <v-icon>exit_to_app</v-icon>
@@ -71,6 +85,7 @@
                         <v-list-tile-title>Cerrar sesión</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+
             </v-list>
         </v-navigation-drawer>
 
@@ -98,13 +113,13 @@
 
             <v-list class="pt-0" dense>
                 <v-divider></v-divider>
-                <v-list-tile>
+                <v-list-tile to="/perfil">
                     <v-list-tile-action>
-                        <v-icon>people_outline</v-icon>
+                        <v-icon>perm_identity</v-icon>
                     </v-list-tile-action>
 
                     <v-list-tile-content>
-                        <v-list-tile-title>Soy jefe</v-list-tile-title>
+                        <v-list-tile-title>Mi perfil</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile v-ripple @click="logout">
@@ -142,15 +157,25 @@
 
             <v-list class="pt-0" dense>
                 <v-divider></v-divider>
-                <v-list-tile v-ripple>
-                    <v-list-tile-action>
-                        <v-icon>people_outline</v-icon>
-                    </v-list-tile-action>
 
+                <v-list-tile to="/perfil">
+                    <v-list-tile-action>
+                        <v-icon>perm_identity</v-icon>
+                    </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title>Soy comunicacion</v-list-tile-title>
+                        <v-list-tile-title>Mi perfil</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+
+                <v-list-tile :to="{name: 'CursosFolio'}">
+                    <v-list-tile-action>
+                        <v-icon>event_note</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Cursos</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
                 <v-list-tile v-ripple @click="logout">
                     <v-list-tile-action>
                         <v-icon>exit_to_app</v-icon>
@@ -159,6 +184,7 @@
                         <v-list-tile-title>Cerrar sesión</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+
             </v-list>
         </v-navigation-drawer>
 
@@ -183,10 +209,10 @@
                     </v-list-tile>
                 </v-list>
             </v-toolbar>
-
             <v-list class="pt-0" dense>
                 <v-divider></v-divider>
-                <v-list-tile to="/perfil">
+
+                <v-list-tile :to="{name: 'Perfil'}">
                     <v-list-tile-action>
                         <v-icon>perm_identity</v-icon>
                     </v-list-tile-action>
@@ -194,6 +220,7 @@
                         <v-list-tile-title>Mi perfil</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+
                 <v-list-group prepend-icon="event_note" no-action>
                     <template v-slot:activator>
                         <v-list-tile>
@@ -209,6 +236,7 @@
                         </v-list-tile-action>
                     </v-list-tile>
                 </v-list-group>
+
                 <v-list-tile v-ripple @click="logout">
                     <v-list-tile-action>
                         <v-icon>exit_to_app</v-icon>
@@ -217,15 +245,14 @@
                         <v-list-tile-title>Cerrar sesión</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+
             </v-list>
         </v-navigation-drawer>
 	</div>
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex';
-import axios from 'axios';
-import jwt from 'vue-jwt-decode'
+import {mapActions} from 'vuex';
 
 export default {
     name: "Navigation",
@@ -236,7 +263,7 @@ export default {
             drawer: true,
             itemsAdmin: [
                 { title: 'Todos los cursos', icon: 'event_note', route: 'Cursos' },
-                { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponibles' }
+                { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponiblesAdmin' }
             ],
             itemsTeacher:[
                 { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponibles'},
@@ -246,9 +273,6 @@ export default {
             mini: true,
             userType:0
 		};
-    },
-    computed:{
-        ...mapState(['keyAuth'])
     },
     methods:{
         ...mapActions(['logout']),

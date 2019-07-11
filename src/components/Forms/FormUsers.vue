@@ -17,125 +17,137 @@
         <div v-if="!internal">
             <ValidationObserver ref="external">
                 <v-card slot-scope="{invalid, validated}">
-                <v-form>
-                    <v-card-text>
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <ValidationProvider name="RFC" rules="required|alpha_num|length:13">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.rfc"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="RFC"
-                                              required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="name" rules="required|alpha_spaces">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.name"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="Nombres"
-                                              required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="fitst name" rules="required|alpha_spaces">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.fstSurname"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="Primer apellido"
-                                              required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="second name" rules="required|alpha_spaces">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.sndSurname"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="Segundo apellido"
-                                              required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="email" rules="required|email">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.email"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="Correo electrónico"
-                                              required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="number phone" rules="required|numeric|digits:10">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.numberPhone"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="Número de teléfono"
-                                              required 
-                                              type="number"/>
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="studyLevel" rules="required">
-                                <v-select slot-scope="{errors, valid}"
-                                          :items="studyLevel"
-                                          v-model="Teacher.studyLevel"
-                                          :error-messages="errors"
-                                          :success="valid"
-                                          label="Nivel de estudio"
-                                          required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="degree" rules="required">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.degree"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="Titulo"
-                                              required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <ValidationProvider name="speciality" rules="required">
-                                <v-text-field slot-scope="{errors, valid}"
-                                              v-model="Teacher.speciality"
-                                              :error-messages="errors"
-                                              :success="valid"
-                                              placeholder="Especialidad"
-                                              required />
-                            </ValidationProvider>
-                        </v-flex>
-                    </v-layout>
-                </v-card-text>
-                    <v-card-actions>
-                        <v-btn flat color="green" :disabled="invalid || !validated || !btnDisableUserExt"  @click="send">Enviar</v-btn>
-                        <v-btn flat color="orange" :disabled="btnDisableUserExt" @click="newUser">Nuevo</v-btn>
+                    <v-form>
+                        <v-card-text>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="RFC" rules="required|alpha_num|length:13">
+                                    <v-text-field slot-scope="{errors, valid}"
+                                                  v-model="TeacherExt.rfc"
+                                                  :error-messages="errors"
+                                                  :success="valid"
+                                                  label="RFC"
+                                                  required />
+                                </ValidationProvider>
+                            </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="name" rules="required|alpha_spaces">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model="TeacherExt.name"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="Nombres"
+                                                      required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="first name" rules="required|alpha_spaces">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model="TeacherExt.fstSurname"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="Primer apellido"
+                                                      required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="second name" rules="required|alpha_spaces">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model="TeacherExt.sndSurname"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="Segundo apellido"
+                                                      required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="email" rules="required|email">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model="TeacherExt.email"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="Correo electrónico"
+                                                      required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="number phone" rules="required|numeric|digits:10">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model="TeacherExt.numberPhone"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="Número de teléfono"
+                                                      required 
+                                                      type="number"/>
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="studyLevel" rules="required">
+                                        <v-select slot-scope="{errors, valid}"
+                                                  :items="studyLevel"
+                                                  v-model="TeacherExt.studyLevel"
+                                                  :error-messages="errors"
+                                                  :success="valid"
+                                                  label="Nivel de estudio"
+                                                  required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="degree" rules="required">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model="TeacherExt.degree"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="Titulo"
+                                                      required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="speciality" rules="required">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model="TeacherExt.speciality"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="Especialidad"
+                                                      required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <ValidationProvider name="pin" rules="required|alpha_dash|min:8">
+                                        <v-text-field slot-scope="{errors, valid}"
+                                                      v-model.trim="Teacher.pin"
+                                                      :error-messages="errors"
+                                                      :success="valid"
+                                                      label="PIN"
+                                                      required />
+                                    </ValidationProvider>
+                                </v-flex>
+                            </v-layout>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn flat color="green" :disabled="invalid || !validated || !btnDisableUserExt"  @click="send">Enviar</v-btn>
+                            <v-btn flat color="orange" :disabled="btnDisableUserExt" @click="newUser">Nuevo</v-btn>
                         </v-card-actions>
-                </v-form>
-            </v-card>
+                    </v-form>
+                </v-card>
             </ValidationObserver>
         </div>
 
@@ -474,6 +486,20 @@ export default {
                 userType:"",
                 pin:"",
                 internal:null
+            },
+            TeacherExt:{
+                rfc:"",
+                name:"",
+                fstSurname:"",
+                sndSurname:"",
+                numberPhone:"",
+                email:"",
+                internal:null,
+                studyLevel:"",
+                degree:"",
+                speciality:"",
+                userType:"",
+                pin:""
             }
         }
     },
@@ -483,8 +509,10 @@ export default {
         //muestra un formulario u otro dependiendo el tipo de usuario
         internal(){
             if(this.isInternal == 'Interno'){
+                this.Teacher.internal = true;
                 return true;
             }else if(this.isInternal == 'Externo'){
+                this.TeacherExt.internal = false;
                 return false;
             }
         },
@@ -510,13 +538,12 @@ export default {
             }
 
             if(this.isInternal=="Interno"){
-                this.Teacher.internal=true;
+                //Aqui ejecuta la accion de guardar el usuario
+                this.saveUser(this.Teacher);
             }else if(this.isInternal=="Externo"){
-                this.Teacher.internal = false;
-                this.Teacher.userType = 'Docente';
+                this.TeacherExt.userType = 'Docente';
+                this.saveUser(this.TeacherExt);
             }
-            //Aqui ejecuta la accion de guardar el usuario
-            this.saveUser(this.Teacher);
         },
 
         //limpia los campos de ambos formularios

@@ -1,6 +1,5 @@
 <template>
-    <v-container grid-list-lg text-xs-center>
-
+    <v-container text-xs-center grid-list-lg>
         <Navigation/>
         <p class="display-1">Cursos disponibles</p>
         <!-- Simbologia de colores -->
@@ -13,7 +12,7 @@
                     <div class="yellow darken-2 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Cursando</span></div>
             </v-flex>
         </v-layout>
-        
+
         <CardAvailableCourse :data="availableCourses"/>
 
         <v-layout class="mt-3" row justify-center v-if="areThereCourses">
@@ -27,10 +26,10 @@
 <script>
 import Navigation from '@/components/Navbars/Navigation.vue';
 import CardAvailableCourse from '@/components/Courses/CardAvailableCourse.vue';
-import {mapState,mapActions} from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
-    name: 'AvailableCourses',
+    name: 'AvailableCoursesAdmin',
     components:{Navigation,CardAvailableCourse},
     computed:{
         ...mapState(['availableCourses']),
@@ -39,7 +38,7 @@ export default {
             return this.availableCourses.length == 0 ? true : false;
         }
     },
-    methods: {
+    methods:{
         ...mapActions(['getAvailableCourses'])
     },
     mounted() {

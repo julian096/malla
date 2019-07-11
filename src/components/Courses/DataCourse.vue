@@ -2,8 +2,7 @@
     <v-container grid-list-xl text-xs-center>
 
         <span class="display-2">Datos del curso</span>
-
-        <!-- Formulario de datos -->
+            <!-- Formulario de datos -->
         <v-card elevation="10" v-if="update=='No'" class="mt-4">
             <v-card-text>
                 <v-layout row wrap>
@@ -76,7 +75,7 @@
             </v-card-text>
         </v-card>
 
-        <!-- Formulario para actualizar datos del usuario -->
+            <!-- Formulario para actualizar datos del usuario -->
         <v-card elevation="10" class="mt-4" v-else>
             <v-card-text>
                 <v-form>
@@ -270,7 +269,7 @@
             </v-card-text>
         </v-card>
 
-        <!-- confirmación de eliminacion del docente -->
+            <!-- confirmación de eliminacion del docente -->
         <v-dialog v-model="dialog" max-width="350" persistent>
             <v-card>
                 <v-toolbar card color="red lighten-2" dark>
@@ -291,8 +290,8 @@
                     </v-card-text>
                 </v-container>
             </v-card>
-            
         </v-dialog>
+
     </v-container>
 </template>
 

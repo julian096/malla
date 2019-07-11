@@ -1,7 +1,11 @@
 import jwt from 'vue-jwt-decode'
 
+var user = null;
+
 function isAuth(){
     try {
+        let token = jwt.decode(sessionStorage.getItem("token"));
+        user = token.identity[1];
         return isExpired()
     } catch (error) {
         return false
@@ -17,8 +21,18 @@ function isExpired(){
 }
 
 function isAdmin(){
-    let token = jwt.decode(sessionStorage.getItem("token"));    
+    let token = jwt.decode(sessionStorage.getItem("token"));
     return token.identity[1] == 0
+}
+
+function isBoss(){
+    let token = jwt.decode(sessionStorage.getItem("token"));
+    return token.identity[1] == 1 
+}
+
+function isComm(){
+    let token = jwt.decode(sessionStorage.getItem("token"));
+    return token.identity[1] == 2 
 }
 
 function isTeacher(){
@@ -26,4 +40,5 @@ function isTeacher(){
     return token.identity[1] == 3
 }
 
-export {isAuth, isAdmin, isTeacher};
+
+export {isAuth, isAdmin, isTeacher, isComm, isBoss, user};

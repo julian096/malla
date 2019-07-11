@@ -64,7 +64,7 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row justify-space-around class="mt-3">
-                    <v-btn outline color="orange" :disabled="findTeacher" @click="openFormPoll">Encuesta de satisfacción</v-btn>
+                    <v-btn outline color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta de satisfacción</v-btn>
                     <v-btn color="red" dark @click="dialog = true">Darse de baja</v-btn>
                 </v-layout>
             </v-card-text>
@@ -108,9 +108,9 @@ export default {
             snack:null,
             timeout:5000,
             daysToPoll:0,
+            availableButton:null,
             teachersThatHaveDoneThePoll:[],
             dialog:null,
-            availablePoll:null,
             Course:{
                 courseName:"",
                 courseTo:"",
