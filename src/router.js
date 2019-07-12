@@ -217,8 +217,11 @@ router.beforeEach( (to, from, next) => {
         next()
       }
       else {
-        next({path: '/login'})
+        next({ path: '/login' })
       }
+    }
+    else{
+      next()
     }
     // Requiere autenticacion de administrador
     if(route.meta.requireAdmin){
@@ -236,14 +239,6 @@ router.beforeEach( (to, from, next) => {
         next({name: 'Inicio'})
       }
     }
-    // Requiere autenticacion de comunicacion
-    else if(route.meta.requireComm){
-      if(isComm()){
-        next()
-      }else{
-        next({name: 'Inicio'})
-      }
-    }
     // Requiere autenticacion de jefe de departamento
     else if(route.meta.requireBoss){
       if(isBoss()){
@@ -252,10 +247,17 @@ router.beforeEach( (to, from, next) => {
         next({name: 'Inicio'})
       }
     }
+    // Requiere autenticacion de comunicacion
+    else if(route.meta.requireComm){
+      if(isComm()){
+        next()
+      }else{
+        next({name: 'Inicio'})
+      }
+    }
     else{
       next()
     }
-    
   })
 })
 

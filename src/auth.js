@@ -1,11 +1,7 @@
 import jwt from 'vue-jwt-decode'
 
-var user = null;
-
 function isAuth(){
     try {
-        let token = jwt.decode(sessionStorage.getItem("token"));
-        user = token.identity[1];
         return isExpired()
     } catch (error) {
         return false
@@ -41,4 +37,4 @@ function isTeacher(){
 }
 
 
-export {isAuth, isAdmin, isTeacher, isComm, isBoss, user};
+export {isAuth, isAdmin, isTeacher, isComm, isBoss};
