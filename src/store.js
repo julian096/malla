@@ -138,7 +138,7 @@ actions: {
         commit('createKeyAuth');
         await axios.get("http://localhost:5000/logoutA",state.keyAuth)
         .then(response => {
-            console.log("Cerrando sesión en logoutA");
+            console.log("Cerrando sesión");
             sessionStorage.clear()
             router.push('/login');
         })

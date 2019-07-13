@@ -188,6 +188,7 @@ const router = new Router({
         requireTeacher: true
       }
     },
+    // Rutas para usuario comunicacion
     {
       path: '/cursos',
       name: 'CursosFolio',
@@ -205,7 +206,26 @@ const router = new Router({
         requiresAuth: true,
         requireComm: true
       }
-    }
+    },
+    // Rutas para jefe de departamento
+    {
+      path: '/cursos-disponibles',
+      name: 'CursosDisponiblesJefe',
+      component: () => import('@/views/Boss/AvailableCoursesBoss.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
+    {
+      path: '/cursos-disponibles/recomendar-docentes/:recDocente',
+      name: 'RecomendarDocente',
+      component: () => import('@/views/Boss/RecTeacher.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
   ]
 })
 
@@ -213,51 +233,35 @@ router.beforeEach( (to, from, next) => {
   to.matched.some( route => {
     // Requiere autenticacion de cualquier usuario
     if(route.meta.requiresAuth){
-      if(isAuth()){
-        next()
-      }
-      else {
+      if(!isAuth()){
         next({ path: '/login' })
       }
     }
-    else{
-      next()
-    }
     // Requiere autenticacion de administrador
     if(route.meta.requireAdmin){
-      if(isAdmin()){
-        next()
-      }else{
+      if(!isAdmin()){
         next({name: 'Inicio'})
       }
     }
     // Requiere autenticacion de docente
-    else if(route.meta.requireTeacher){
-      if(isTeacher()){
-        next()
-      }else{
+    if(route.meta.requireTeacher){
+      if(!isTeacher()){
         next({name: 'Inicio'})
       }
     }
     // Requiere autenticacion de jefe de departamento
-    else if(route.meta.requireBoss){
-      if(isBoss()){
-        next()
-      }else{
+    if(route.meta.requireBoss){
+      if(!isBoss()){
         next({name: 'Inicio'})
       }
     }
     // Requiere autenticacion de comunicacion
-    else if(route.meta.requireComm){
-      if(isComm()){
-        next()
-      }else{
+    if(route.meta.requireComm){
+      if(!isComm()){
         next({name: 'Inicio'})
       }
     }
-    else{
-      next()
-    }
+    next()
   })
 })
 
