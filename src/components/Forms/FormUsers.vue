@@ -327,17 +327,6 @@
                                     <v-card-text>
                                         <v-layout row wrap>
                                             <v-flex xs6>
-                                                <ValidationProvider name="departments" rules="required">
-                                                    <v-select slot-scope="{errors, valid}"
-                                                              :items="departments"
-                                                              v-model="Teacher.departament"
-                                                              :error-messages="errors"
-                                                              :success="valid"
-                                                              label="Departamento al que pertenece"
-                                                              required />
-                                                </ValidationProvider>
-                                            </v-flex>
-                                            <v-flex xs6>
                                                 <ValidationProvider name="userType" rules="required">
                                                     <v-select slot-scope="{errors, valid}"
                                                               :items="typeUsers"
@@ -348,8 +337,19 @@
                                                               required />
                                                 </ValidationProvider>
                                             </v-flex>
+                                            <v-flex xs6>
+                                                <ValidationProvider name="departments" rules="required" v-if="Teacher.userType != 'Comunicación'">
+                                                    <v-select slot-scope="{errors, valid}"
+                                                              :items="departments"
+                                                              v-model="Teacher.departament"
+                                                              :error-messages="errors"
+                                                              :success="valid"
+                                                              label="Departamento al que pertenece"
+                                                              required />
+                                                </ValidationProvider>
+                                            </v-flex>
                                         </v-layout>
-                                        <v-layout row wrap v-if="Teacher.userType != 'Jefe de departamento'">
+                                        <v-layout row wrap v-if="Teacher.userType != 'Jefe de departamento' && Teacher.userType != 'Comunicación'">
                                             <v-flex xs12>
                                                 <ValidationProvider name="position" rules="required">
                                                     <v-text-field slot-scope="{errors, valid}"
@@ -468,7 +468,7 @@ export default {
             menuScheduleEnd:false,
             studyLevel:['Licenciatura','Maestría','Doctorado','Otro'],
             departments:['Ciencias Básicas','Desarrollo Académico','Económico-Administrativo','Ingenierías','Ingeniería Industrial','Sistemas y Computación'],
-            typeUsers:['Administrador','Jefe de departamento','Docente','Comunicación'],
+            typeUsers:['Administrador','Jefe de departamento','Comunicación','Docente'],
             Teacher:{
                 rfc:"",
                 name:"",
