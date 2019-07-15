@@ -85,7 +85,7 @@
                             </ValidationProvider>
                         </v-flex>
                         <v-flex xs12 sm4>
-                            <ValidationProvider name="version">
+                            <ValidationProvider name="version" rules="required">
                                 <v-text-field v-model="Letterhead.version"
                                               slot-scope="{errors, valid}"
                                               :error-messages="errors"

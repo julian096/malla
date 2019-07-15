@@ -19,18 +19,6 @@ export default {
     methods:{
 
         ...mapActions(['getLetterheads']),
-
-        // Obtiene los datos del membretado
-        async getLetterheadData(){
-            this.createKeyAuth();
-            await axios.get("http://localhost:5000/addInfo",this.keyAuth)
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            })
-        }
     },
     created() {
         this.getLetterheads();

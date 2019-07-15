@@ -63,9 +63,36 @@ const router = new Router({
       }
     },
     {
-      path: '/cursos-disponibles/:listaPeticion',
+      path: '/cursos-disponibles/:cursoAdmin',
+      name: 'CursoDisponibleAdmin',
+      component: () => import('@/views/Teachers/DetailAvailableCourseAdmin.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
+      path: '/cursos-disponibles/:listaPeticion/peticiones',
       name: 'PeticionCurso',
       component: () => import('@/views/Teachers/PetitionCourse.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
+      path: '/mis-cursos',
+      name: 'CursosDelAdmin',
+      component: () => import('@/views/Teachers/MyCoursesAdmin.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
+      path: '/mis-cursos/:MiCursoAdmin',
+      name: 'CursoDelAdmin',
+      component: () => import('@/views/Teachers/DetailMyCourseAdmin.vue'),
       meta:{
         requiresAuth: true,
         requireAdmin: true

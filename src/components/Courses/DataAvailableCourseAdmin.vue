@@ -64,7 +64,8 @@
                 </v-layout>
                 <v-layout row justify-space-around class="mt-3">
                     <v-btn outline color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
-                    <v-btn dark color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
+                    <v-btn outline color="green" @click="openPetitions">Gestionar peticiones</v-btn>
+                    <v-btn dark color="blue" :to="{name:'CursosDisponiblesAdmin'}">Otros cursos</v-btn>
                 </v-layout>
             </v-card-text>
         </v-card>
@@ -77,7 +78,7 @@ import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
 
 export default {
-    name: 'DataAvailableCourse',
+    name: 'DataAvailableCourseAdmin',
     data() {
         return {
             btnDisable:false,
@@ -98,69 +99,51 @@ export default {
         }
     },
     computed:{
-        ...mapState(['keyAuth'])
-    }
-    ,
-    methods: {
+        ...mapState(['keyAuth']),
+    },
+    methods:{
         ...mapMutations(['createKeyAuth']),
 
-        // Obtiene los datos del curso disponible
+        // Obtiene los datos del curso
         async getDataAvailableCourse(){
             this.createKeyAuth();
-            await axios.get('http://localhost:5000/course/'+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
-                this.Course.courseName = response.data.courseName;
-                this.Course.courseTo = response.data.courseTo;
-                this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
-                this.Course.dateEnd = response.data.dateEnd.replace("T00:00:00+00:00","");
-                this.Course.description = response.data.description;
-                this.Course.modality = response.data.modality;
-                this.Course.place = response.data.place;
-                this.Course.timetable = response.data.timetable;
-                this.Course.typeCourse = response.data.typeCourse;
-                this.Course.totalHours = response.data.totalHours;
-                this.Course.state = response.data.state;
-                this.Course.teacherName = response.data.teacherName;
-                console.log(response);
-            })
-            .catch(error => {
+            try {
+                const dataCourse = await axios.get('http://localhost:5000/course/'+this.$route.params.cursoAdmin,this.keyAuth)
+                this.Course.courseName = dataCourse.data.courseName;
+                this.Course.courseTo = dataCourse.data.courseTo;
+                this.Course.dateStart = dataCourse.data.dateStart.replace("T00:00:00+00:00","");
+                this.Course.dateEnd = dataCourse.data.dateEnd.replace("T00:00:00+00:00","");
+                this.Course.description = dataCourse.data.description;
+                this.Course.modality = dataCourse.data.modality;
+                this.Course.place = dataCourse.data.place;
+                this.Course.timetable = dataCourse.data.timetable;
+                this.Course.typeCourse = dataCourse.data.typeCourse;
+                this.Course.totalHours = dataCourse.data.totalHours;
+                this.Course.state = dataCourse.data.state;
+                this.Course.teacherName = dataCourse.data.teacherName;
+                console.log(dataCourse);
+            } catch (error) {
                 console.error(error);
-            })
+            }
         },
-
-        // Registra al docente en un curso y descarga el PDF de inscripcion
+        
+        //solicita el curso 
         async requestCourse(){
-            await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
-                console.log("Peticion enviada");
-            })
-            .catch(error => {
+            try {
+                await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoAdmin,this.keyAuth);
+                console.log("Solicitud enviada");
+            } catch (error) {
                 console.error(error);
-            })
-
-            await axios.get("http://localhost:5000/inscriptionDocument/"+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
-                let name = "inscripcion"+this.$route.params.cursoDisp.replace(" ","");
-                this.btnDisable = true;
-                let blob = new Blob([response.data], { type:'application/pdf' } );
-                let link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = name;
-                link.target = '_blank';
-                link.click();
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            }
         },
 
-        // Redirecciona a los cursos disponibles
-        showAvailableCourses(){
-            router.push({name: 'CursosDisponibles'});
-        }
+        // Abre la vista para gestionar las peticiones
+        openPetitions(){
+            router.push({name: 'PeticionCurso', params:{listaPeticion: this.Course.courseName}})
+        },
     },
-    mounted() {
+    created(){
         this.getDataAvailableCourse();
-    },
+    }
 }
 </script>

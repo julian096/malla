@@ -273,7 +273,8 @@ export default {
             drawer: true,
             itemsAdmin: [
                 { title: 'Todos los cursos', icon: 'event_note', route: 'Cursos' },
-                { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponiblesAdmin' }
+                { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponiblesAdmin' },
+                { title: 'Mis cursos', icon: 'assignment', route: 'CursosDelAdmin'}
             ],
             itemsTeacher:[
                 { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponibles'},

@@ -26,7 +26,7 @@
             <v-flex xs12 sm6 md3 lg3>
                 <v-select v-model="department"
                           :items="departments"
-                          label="Seleccione un departamento"
+                          label="Seleccione un departamento o tipo de usuario"
                           solo/>
             </v-flex>
         </v-layout>
@@ -46,7 +46,7 @@ export default {
     data() {
         return {
             department:"",
-            departments:['Ciencias Básicas','Desarrollo Académico','Económico-Administrativo','Ingenierías','Ingeniería Industrial','Sistemas y Computación']
+            departments:['Ciencias Básicas','Desarrollo Académico','Económico-Administrativo','Ingenierías','Ingeniería Industrial','Sistemas y Computación','Comunicación','Externo']
         }
     },
     computed:{

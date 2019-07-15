@@ -1,7 +1,8 @@
 <template>
-    <v-container grid-list-lg text-xs-center>
+<v-container grid-list-lg text-xs-center>
+        <v-snackbar v-model="snack" :timeout="timeout" top color="amber darken-3" class="white--text">Te quedan {{daysToPoll}} dias para realizar la encuesta</v-snackbar>
         <span class="display-2">Datos del curso</span>
-
+        
         <v-card elevation="10" class="mt-4">
             <v-card-text>
                 <v-layout row wrap>
@@ -63,11 +64,35 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row justify-space-around class="mt-3">
-                    <v-btn outline color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
-                    <v-btn dark color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
+                    <v-btn outline color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta de satisfacción</v-btn>
+                    <v-btn color="red" dark @click="dialog = true">Darse de baja</v-btn>
                 </v-layout>
             </v-card-text>
         </v-card>
+
+        <!-- confirmación de eliminacion del docente -->
+        <v-dialog v-model="dialog" max-width="350" persistent>
+            <v-card>
+                <v-toolbar card color="red lighten-2" dark>
+                    <v-icon>warning</v-icon>
+                    <v-toolbar-title>Advertencia</v-toolbar-title>
+                </v-toolbar>
+                <v-container text-xs-center>    
+                    <v-card-text>
+                        <v-layout row wrap>
+                            <v-flex xs12>
+                                <span class="subheading">¿Estas seguro que quieres darte de baja del curso?</span>
+                            </v-flex>
+                            <v-flex class="mt-4">
+                                <v-btn flat color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
+                                <v-btn flat color="red" @click="dialog = false">Cancelar</v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-text>
+                </v-container>
+            </v-card>
+            
+        </v-dialog>
     </v-container>
 </template>
 
@@ -77,10 +102,15 @@ import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
 
 export default {
-    name: 'DataAvailableCourse',
+    name: 'DataMyCourseAdmin',
     data() {
         return {
-            btnDisable:false,
+            snack:null,
+            timeout:5000,
+            daysToPoll:0,
+            availableButton:null,
+            teachersThatHaveDoneThePoll:[],
+            dialog:null,
             Course:{
                 courseName:"",
                 courseTo:"",
@@ -98,17 +128,23 @@ export default {
         }
     },
     computed:{
-        ...mapState(['keyAuth'])
-    }
-    ,
-    methods: {
+        ...mapState(['keyAuth','userLoged']),
+
+        // Devuelve un booleano para habilitar encuesta
+        findTeacher(){
+            const valor = this.teachersThatHaveDoneThePoll.includes(this.userLoged.rfc);
+            this.snack = !valor;
+            return valor;
+        }
+    },
+    methods:{
         ...mapMutations(['createKeyAuth']),
 
-        // Obtiene los datos del curso disponible
-        async getDataAvailableCourse(){
+        //obtiene los datos del curso
+        async getDataCourse(){
             this.createKeyAuth();
-            await axios.get('http://localhost:5000/course/'+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
+            try {
+                const response = await axios.get('http://localhost:5000/course/'+this.$route.params.MiCursoAdmin,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -121,46 +157,33 @@ export default {
                 this.Course.totalHours = response.data.totalHours;
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
+                this.availableButton = response.data.allowPoll;
+                this.snack = response.data.allowPoll;
+                this.daysToPoll = response.data.leftDays;
+                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
                 console.log(response);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error(error);
-            })
+            }
         },
 
-        // Registra al docente en un curso y descarga el PDF de inscripcion
-        async requestCourse(){
-            await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
-                console.log("Peticion enviada");
-            })
-            .catch(error => {
-                console.error(error);
-            })
-
-            await axios.get("http://localhost:5000/inscriptionDocument/"+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
-                let name = "inscripcion"+this.$route.params.cursoDisp.replace(" ","");
-                this.btnDisable = true;
-                let blob = new Blob([response.data], { type:'application/pdf' } );
-                let link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = name;
-                link.target = '_blank';
-                link.click();
-            })
-            .catch(error => {
-                console.error(error);
-            })
+        // Abre la vista para la encuesta de satisfacción
+        openFormPoll(){
+            router.push({name: 'Encuesta'});
         },
 
-        // Redirecciona a los cursos disponibles
-        showAvailableCourses(){
-            router.push({name: 'CursosDisponibles'});
+        // pide un body que es redundante, decirle mañana
+        async removeTeacherInCourse(){
+            try {
+                await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCursoAdmin,this.keyAuth);
+                router.push({name: 'CursosDelAdmin'})
+            } catch (error) {
+                console.error(error);
+            }
         }
     },
-    mounted() {
-        this.getDataAvailableCourse();
-    },
+    created(){
+        this.getDataCourse();
+    }
 }
 </script>

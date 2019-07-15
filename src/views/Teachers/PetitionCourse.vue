@@ -82,7 +82,6 @@ export default {
 
         //rechaza el docente en el curso
         async rejectTeacherOfCourse(rfc,ind){
-            this.getList();
             await axios.post("http://localhost:5000/rejectTeacherOfCourse/"+this.$route.params.listaPeticion,{"rfc":rfc},this.keyAuth)
             .then(response => {
                 console.log("docente rechazado");

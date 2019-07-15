@@ -21,7 +21,7 @@
         <!-- Abrira la lista de los docentes que solicitaron el curso seleccionado -->
         <v-layout row wrap class="mt-1" v-if="userType == 0">
             <v-flex xs12 sm4 md3 v-for="item of data" :key="item[0]" >
-                <v-card elevation="7" :to="{name: 'PeticionCurso', params:{listaPeticion: item.courseName}}">
+                <v-card elevation="7" :to="{name: 'CursoDisponibleAdmin', params:{cursoAdmin: item.courseName}}">
                     <v-toolbar dark color="green lighten-1" card v-if="item.state=='Por empezar'">
                         <span class="subheading">Curso: {{item.courseName}}</span>
                     </v-toolbar>
