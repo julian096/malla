@@ -16,10 +16,10 @@ export default new Vuex.Store({
     },
     dataUserLoged:null,
     keyAuth: null,
-    courses:null,
+    courses:[],
     availableCourses:[],
-    myCourses:null,
-    coursesTaught:null,
+    myCourses:[],
+    coursesTaught:[],
     teachers:null,
     periods:null,
     letterheads:null,
@@ -114,6 +114,13 @@ mutations: {
     // guarda los membretados
     saveLetterheads(state,data){
         state.letterheads = data;
+    },
+    // restaura los arrays a vacios
+    restartDataCourses(state){
+        state.myCourses = [];
+        state.availableCourses = [];
+        state.courses = [];
+        state.coursesTaught = [];
     }
 },
 actions: {
@@ -125,6 +132,7 @@ actions: {
             sessionStorage.setItem("token", response.data.data.access_token);
             commit('saveUserLogin',response);
             commit('createKeyAuth');
+            commit('restartDataCourses');
             router.push("/inicio");
             console.log(response);
         })

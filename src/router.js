@@ -99,6 +99,24 @@ const router = new Router({
       }
     },
     {
+      path: '/cursos-impartidos/',
+      name: 'CursosImpartidosAdmin',
+      component: () => import('@/views/Teachers/CoursesTaughtAdmin.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
+      path: '/cursos-impartidos/:CursoImpartidoAdmin',
+      name: 'CursoImpartidoAdmin',
+      component: () => import('@/views/Teachers/DetailCourseTaughtAdmin.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
       path: '/docentes',
       name: 'Docentes',
       component: () => import('@/views/Teachers/ListTeachers.vue'),

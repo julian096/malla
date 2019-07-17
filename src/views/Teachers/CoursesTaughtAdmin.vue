@@ -19,16 +19,16 @@ import CardCourseTaught from '@/components/Courses/CardCourseTaught.vue';
 import {mapState,mapActions} from 'vuex';
 
 export default {
-    name: 'CoursesTaught',
+    name: 'CoursesTaughtAdmin',
     components:{Navigation,CardCourseTaught},
-    computed:{
+    computed: {
         ...mapState(['coursesTaught'])
     },
     methods:{
-        ...mapActions(['getCoursesTaught'])
+        ...mapActions(['getCoursesTaught']),
     },
-    mounted() {
+    created() {
         this.getCoursesTaught();
-    }
+    },
 }
 </script>

@@ -1,6 +1,5 @@
 <template>
-<v-container grid-list-lg text-xs-center>
-        <v-snackbar v-model="snack" :timeout="timeout" top color="amber darken-3" class="white--text">Te quedan {{daysToPoll}} dias para realizar la encuesta</v-snackbar>
+    <v-container grid-list-lg text-xs-center>
         <span class="display-2">Datos del curso</span>
         
         <v-card elevation="10" class="mt-4">
@@ -64,36 +63,13 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row justify-space-around class="mt-3">
-                    <v-btn outline color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
-                    <v-btn color="red" dark @click="dialog = true">Darse de baja</v-btn>
+                    <v-btn outline color="orange" :disabled="availablePDFList" @click="getPDFList">Obtener lista de asistencia</v-btn>
+                    <v-btn outline color="blue" :disabled="!availableButton" @click="openCalTeachers">Calificar docentes</v-btn>
                 </v-layout>
             </v-card-text>
         </v-card>
 
-        <!-- confirmación de eliminacion del docente -->
-        <v-dialog v-model="dialog" max-width="350" persistent>
-            <v-card>
-                <v-toolbar card color="red lighten-2" dark>
-                    <v-icon>warning</v-icon>
-                    <v-toolbar-title>Advertencia</v-toolbar-title>
-                </v-toolbar>
-                <v-container text-xs-center>    
-                    <v-card-text>
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <span class="subheading">¿Estas seguro que quieres darte de baja del curso?</span>
-                            </v-flex>
-                            <v-flex class="mt-4">
-                                <v-btn flat color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
-                                <v-btn flat color="red" @click="dialog = false">Cancelar</v-btn>
-                            </v-flex>
-                        </v-layout>
-                    </v-card-text>
-                </v-container>
-            </v-card>
-            
-        </v-dialog>
-    </v-container>
+   </v-container> 
 </template>
 
 <script>
@@ -102,15 +78,11 @@ import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
 
 export default {
-    name: 'DataMyCourseAdmin',
+    name: 'DataCourseTaughtAdmin',
     data() {
         return {
-            snack:null,
-            timeout:5000,
-            daysToPoll:0,
             availableButton:null,
-            teachersThatHaveDoneThePoll:[],
-            dialog:null,
+            availablePDFList:true,
             Course:{
                 courseName:"",
                 courseTo:"",
@@ -128,23 +100,16 @@ export default {
         }
     },
     computed:{
-        ...mapState(['keyAuth','userLoged']),
-
-        // Devuelve un booleano para habilitar encuesta
-        findTeacher(){
-            const valor = this.teachersThatHaveDoneThePoll.includes(this.userLoged.rfc);
-            this.snack = !valor;
-            return valor;
-        }
+        ...mapState(['keyAuth'])
     },
     methods:{
         ...mapMutations(['createKeyAuth']),
 
-        //obtiene los datos del curso
-        async getDataCourse(){
+        // Obtiene los datos del curso 
+        async getDataCourseTaught(){
             this.createKeyAuth();
-            try {
-                const response = await axios.get('http://localhost:5000/course/'+this.$route.params.MiCursoAdmin,this.keyAuth);
+            await axios.get('http://localhost:5000/course/'+this.$route.params.CursoImpartidoAdmin,this.keyAuth)
+            .then(response => {
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -158,32 +123,51 @@ export default {
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
                 this.availableButton = response.data.allowPoll;
-                this.snack = response.data.allowPoll;
-                this.daysToPoll = response.data.leftDays;
-                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
                 console.log(response);
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error(error);
-            }
+            })
         },
 
-        // Abre la vista para la encuesta de satisfacción
-        openFormPoll(){
-            router.push({name: 'Encuesta'});
+        // obtiene la lista de docentes del curso
+        async getTeachersList(){
+            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartidoAdmin,this.keyAuth)
+            .then(response => {
+                this.availablePDFList = false;
+            })
+            .catch(error => {
+                console.error(error);
+            })
         },
 
-        // pide un body que es redundante, decirle mañana
-        async removeTeacherInCourse(){
-            try {
-                await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCursoAdmin,this.keyAuth);
-                router.push({name: 'CursosDelAdmin'})
-            } catch (error) {
+        // Obtiene el PDF de la lista de asistencia del curso
+        async getPDFList(){
+            await axios.get("http://localhost:5000/course/"+this.$route.params.CursoImpartidoAdmin+"/assistantList",this.keyAuth)
+            .then(response => {
+                console.log("PDF descargado");
+                let name = "ListaAsistencia"+this.$route.params.CursoImpartidoAdmin.replace(" ","");
+                this.btnDisable = true;
+                let blob = new Blob([response.data], { type:'application/pdf' } );
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.target = '_blank';
+                link.click();
+            })
+            .catch(error => {
                 console.error(error);
-            }
+            })
+        },
+
+        // Abre la vista para calificar los docentes
+        openCalTeachers(){
+            router.push({name: 'CalDocentes'});
         }
     },
-    created(){
-        this.getDataCourse();
+    created() {
+        this.getDataCourseTaught();
+        this.getTeachersList();
     }
 }
 </script>

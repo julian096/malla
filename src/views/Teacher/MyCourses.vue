@@ -3,7 +3,13 @@
         <Navigation/>
         <span class="display-1">Mis cursos</span>
 
-        <CardMyCourses :data="myCourses" class="mt-4"/>
+        <CardMyCourses :data="myCourses" class="mt-4" v-if="myCourses.length"/>
+
+        <v-layout class="mt-5" row justify-center v-else>
+            <v-flex xs12>
+                <span class="title">No hay peticiones para este curso</span>
+            </v-flex>
+        </v-layout>
     </v-container>
 </template>
 

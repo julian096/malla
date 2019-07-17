@@ -274,7 +274,8 @@ export default {
             itemsAdmin: [
                 { title: 'Todos los cursos', icon: 'event_note', route: 'Cursos' },
                 { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponiblesAdmin' },
-                { title: 'Mis cursos', icon: 'assignment', route: 'CursosDelAdmin'}
+                { title: 'Mis cursos', icon: 'assignment', route: 'CursosDelAdmin'},
+                { title: 'Cursos Impartidos', icon: 'assignment', route: 'CursosImpartidosAdmin'}
             ],
             itemsTeacher:[
                 { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponibles'},
