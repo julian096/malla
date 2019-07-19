@@ -46,7 +46,7 @@ mutations: {
     createKeyAuth(state){
         state.userLoged.token = sessionStorage.getItem("token");
         state.userLoged.rfc = sessionStorage.getItem("user");
-        state.keyAuth = {headers: {'Authorization': 'Bearer '+ sessionStorage.getItem("token")}};;
+        state.keyAuth = {headers: {'Authorization': 'Bearer '+ sessionStorage.getItem("token")}};
     },
     // activa el boton nuevo en los formularios
     enableButtonNew(state,{form,value}){
