@@ -280,6 +280,7 @@ import {ValidationProvider} from 'vee-validate';
 import axios from 'axios';
 import {mapState,mapMutations} from 'vuex';
 import router from '../../router';
+import { setTimeout } from 'timers';
 
 export default {
     name: 'DataTeacher',
@@ -331,11 +332,13 @@ export default {
             }
             try {
                 axios.put("http://localhost:5000/teacher/"+this.$route.params.docente,this.Teacher,this.keyAuth)
-                this.getDataTeacher();
-                this.update = 'No';
+                setTimeout(() => {
+                    this.getDataTeacher();
+                }, 1000);
             } catch (error) {
                 console.error(error);
             }
+            this.update = 'No';
         },
 
         //obtiene los datos de un solo docente
