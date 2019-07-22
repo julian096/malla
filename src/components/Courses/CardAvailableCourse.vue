@@ -50,7 +50,7 @@
                         <p><span class="subheading">Instructor: {{item.teacherName}}</span></p>
                         <p><span class="subheading">Horario: {{item.timetable}}</span></p>
                         <v-layout row wrap>
-                            <v-btn dark color="blue" block :to="{name: 'RecomendarDocente', params:{recDocente: item.courseName}}">Recomendar docente</v-btn>
+                            <v-btn dark color="blue" block outline :to="{name: 'RecomendarDocente', params:{recDocente: item.courseName}}">Recomendar docente</v-btn>
                         </v-layout>
                     </v-card-text>
                 </v-card>

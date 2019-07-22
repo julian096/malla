@@ -40,6 +40,9 @@ export default {
     },
     methods:{
         ...mapActions(['getAvailableCourses'])
-    }
+    },
+    created() {
+        this.getAvailableCourses();
+    },
 }
 </script>

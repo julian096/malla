@@ -16,7 +16,7 @@
             <v-flex xs2>
                 <div class="red lighten-2 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Terminado</span></div>
             </v-flex>
-            </v-layout>
+        </v-layout>
 
         <!-- Aqui va el select para escoger el periodo -->
         <v-layout row justify-center>

@@ -233,6 +233,15 @@ const router = new Router({
         requireTeacher: true
       }
     },
+    {
+      path: '/solicitudes-pendientes',
+      name: 'SolicitudesPendientes',
+      component: () => import('@/views/Teacher/PendingRequest.vue'),
+      meta:{
+        requiresAuth: true,
+        requireTeacher: true
+      }
+    },
     // Rutas para usuario comunicacion
     {
       path: '/cursos',

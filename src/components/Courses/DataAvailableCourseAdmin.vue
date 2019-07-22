@@ -133,7 +133,7 @@ export default {
                 await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoAdmin,this.keyAuth);
                 console.log("Solicitud enviada");
             } catch (error) {
-                console.error(error);
+                console.log(error.response);
             }
         },
 

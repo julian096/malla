@@ -199,7 +199,7 @@
         </v-navigation-drawer>
 
         <!-- Navigation para docente -->
-        <v-navigation-drawer app v-model="drawer" :mini-variant.sync="mini" hide-overlay stateless width="256" v-if="userType == 3">
+        <v-navigation-drawer app v-model="drawer" :mini-variant.sync="mini" hide-overlay stateless width="277" v-if="userType == 3">
             <v-toolbar flat class="transparent" color="red lighten-2" dark>
                 <v-list class="pa-0">
                     <v-list-tile avatar>
@@ -279,6 +279,7 @@ export default {
             ],
             itemsTeacher:[
                 { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponibles'},
+                { title: 'Solicitudes pendientes', icon: 'hourglass_empty', route: 'SolicitudesPendientes'},
                 { title: 'Mis cursos', icon: 'assignment', route: 'MisCursos'},
                 { title: 'Cursos impartidos', icon: 'school', route: 'CursosImpartidos'}
             ],
