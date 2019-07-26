@@ -23,7 +23,7 @@
                                                           v-model="dataSerial.serial"
                                                           label="Folio"
                                                           prepend-icon="done"
-                                                          @keyup.enter.prevent="changePass(pass)"/>
+                                                          @keyup.enter.prevent="sendSerial"/>
                                         </ValidationProvider>
                                     </v-flex>
                                 </v-layout>
@@ -40,7 +40,7 @@
                                                           v-model="confirmSerial"
                                                           label="Confirme folio"
                                                           prepend-icon="done_all"
-                                                          @keyup.enter.prevent="changePass(pass)"/>
+                                                          @keyup.enter.prevent="sendSerial"/>
                                         </ValidationProvider>
                                     </v-flex>
                                 </v-layout>

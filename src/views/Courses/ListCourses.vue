@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid grid-list-lg text-xs-center>
+    <v-container grid-list-lg text-xs-center>
 
         <Navigation />
         <p class="display-1">Lista de cursos</p>

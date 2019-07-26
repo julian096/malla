@@ -280,6 +280,6 @@ actions: {
             console.error(error);
             
         })
-    }
+    },
   }
 })

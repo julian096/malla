@@ -14,6 +14,12 @@ import {mapMutations} from 'vuex';
 export default {
     name: 'Inicio',
     components:{Navigation},
+    methods:{
+        ...mapMutations(['createKeyAuth'])
+    },
+    created(){
+        this.createKeyAuth();
+    }
 }
 </script>
 

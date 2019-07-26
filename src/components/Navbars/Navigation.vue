@@ -77,6 +77,15 @@
                     </v-list-tile-content>
                 </v-list-tile>
 
+                <v-list-tile v-ripple @click="dialogLimitDays = true">
+                    <v-list-tile-action>
+                        <v-icon>schedule</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Dias para la encuesta</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
                 <v-list-tile v-ripple @click="logout">
                     <v-list-tile-action>
                         <v-icon>exit_to_app</v-icon>
@@ -258,14 +267,19 @@
 
             </v-list>
         </v-navigation-drawer>
+
+        <FormLimitDays :showDialog="dialogLimitDays"/>
 	</div>
 </template>
 
 <script>
 import {mapActions} from 'vuex';
+import FormLimitDays from '@/components/Forms/FormLimitDays.vue';
+import EventBus from '@/bus.js';
 
 export default {
     name: "Navigation",
+    components:{FormLimitDays},
 	data() {
 		return {
             userType:null,
@@ -275,7 +289,7 @@ export default {
                 { title: 'Todos los cursos', icon: 'event_note', route: 'Cursos' },
                 { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponiblesAdmin' },
                 { title: 'Mis cursos', icon: 'assignment', route: 'CursosDelAdmin'},
-                { title: 'Cursos Impartidos', icon: 'assignment', route: 'CursosImpartidosAdmin'}
+                { title: 'Cursos Impartidos', icon: 'school', route: 'CursosImpartidosAdmin'}
             ],
             itemsTeacher:[
                 { title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponibles'},
@@ -284,7 +298,8 @@ export default {
                 { title: 'Cursos impartidos', icon: 'school', route: 'CursosImpartidos'}
             ],
             mini: true,
-            userType:0
+            userType:0,
+            dialogLimitDays: false
 		};
     },
     methods:{
@@ -292,6 +307,11 @@ export default {
     },
     created() {
         this.userType = sessionStorage.getItem("userType");
+    },
+    mounted() {
+        EventBus.$on('closeLimitDays', () => {
+            this.dialogLimitDays = false;
+        })
     },
 };
 </script>
