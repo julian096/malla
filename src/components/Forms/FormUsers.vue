@@ -361,7 +361,7 @@
                                                 </ValidationProvider>
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout row wrap>
+                                        <v-layout row wrap v-if="breakpoint.xs">
                                             <v-flex xs12 md6 lg6>
                                                 <ValidationProvider name="ScheduleStart" rules="required">
                                                     <v-menu ref="menuScheduleStart"
@@ -418,6 +418,30 @@
                                                 </ValidationProvider> 
                                             </v-flex>
                                         </v-layout>
+                                        <v-layout row wrap v-else>
+                                            <v-flex xs12 sm6>
+                                                <ValidationProvider name="hora de entrada" rules="required">
+                                                    <v-select slot-scope="{errors, valid}"
+                                                              v-model.trim="scheduleStart"
+                                                              :items="itemsScheduleStart"
+                                                              :error-messages="errors"
+                                                              :success="valid"
+                                                              label="Hora de entrada"
+                                                              required />
+                                                </ValidationProvider>
+                                            </v-flex>
+                                            <v-flex xs12 sm6>
+                                                <ValidationProvider name="hora de salida" rules="required">
+                                                    <v-select slot-scope="{errors, valid}"
+                                                              v-model.trim="scheduleEnd"
+                                                              :items="itemsScheduleEnd"
+                                                              :error-messages="errors"
+                                                              :success="valid"
+                                                              label="Hora de salida"
+                                                              required />
+                                                </ValidationProvider>
+                                            </v-flex>
+                                        </v-layout>
                                         <v-layout row wrap>
                                             <v-flex xs12>
                                                 <ValidationProvider name="pin" rules="required|alpha_dash|min:8">
@@ -459,7 +483,7 @@ export default {
     components:{ValidationObserver,ValidationProvider},
     data() {
         return {
-            step:1,
+            step:3,
             isInternal:"Interno",
             timeout:2500,
             scheduleStart:"",
@@ -469,6 +493,9 @@ export default {
             studyLevel:['Licenciatura','Maestría','Doctorado','Otro'],
             departments:['Ciencias Básicas','Desarrollo Académico','Económico-Administrativo','Ingenierías','Ingeniería Industrial','Sistemas y Computación'],
             typeUsers:['Administrador','Jefe de departamento','Comunicación','Docente'],
+            itemsScheduleStart:[],
+            itemsScheduleEnd:[],
+            breakpoint: this.$vuetify.breakpoint,
             Teacher:{
                 rfc:"",
                 name:"",
@@ -592,6 +619,26 @@ export default {
             this.$refs.obs2.reset();
             this.$refs.obs3.reset();
         }
-    }
+    },
+    created() {
+        // Llena el selecto de la hora de entrada
+        let valueItem="";
+        for(let i=7; i<13; i++){
+            valueItem = "0"+i+":00";
+            this.itemsScheduleStart.push(valueItem);
+        }
+        let newData = this.itemsScheduleStart.slice(3);
+        this.itemsScheduleStart.splice(3,3);
+        for(let j of newData){
+            this.itemsScheduleStart.push(j.substring(1));
+        }
+
+        // Llena el select de la hora de salida
+        let valueItems2="";
+        for(let k=11; k<17; k++){
+            valueItems2 = k+":00";
+            this.itemsScheduleEnd.push(valueItems2);
+        }
+    },
 }
 </script>

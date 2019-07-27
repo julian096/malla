@@ -268,7 +268,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <FormLimitDays :showDialog="dialogLimitDays"/>
+        <FormLimitDays :showDialog="dialogLimitDays" v-if="this.dialogLimitDays"/>
 	</div>
 </template>
 
