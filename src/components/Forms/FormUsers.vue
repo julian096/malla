@@ -433,7 +433,7 @@
                                             <v-flex xs12 sm6>
                                                 <ValidationProvider name="hora de salida" rules="required">
                                                     <v-select slot-scope="{errors, valid}"
-                                                              v-model.trim="scheduleEnd"
+                                                              v-model="scheduleEnd"
                                                               :items="itemsScheduleEnd"
                                                               :error-messages="errors"
                                                               :success="valid"
@@ -446,7 +446,7 @@
                                             <v-flex xs12>
                                                 <ValidationProvider name="pin" rules="required|alpha_dash|min:8">
                                                     <v-text-field slot-scope="{errors, valid}"
-                                                                  v-model.trim="Teacher.pin"
+                                                                  v-model="Teacher.pin"
                                                                   :error-messages="errors"
                                                                   :success="valid"
                                                                   label="PIN"
@@ -483,7 +483,7 @@ export default {
     components:{ValidationObserver,ValidationProvider},
     data() {
         return {
-            step:3,
+            step:1,
             isInternal:"Interno",
             timeout:2500,
             scheduleStart:"",
@@ -621,12 +621,13 @@ export default {
         }
     },
     created() {
-        // Llena el selecto de la hora de entrada
+        // Llena el select de la hora de entrada
         let valueItem="";
         for(let i=7; i<13; i++){
             valueItem = "0"+i+":00";
             this.itemsScheduleStart.push(valueItem);
         }
+        console.log(this.itemsScheduleStart);
         let newData = this.itemsScheduleStart.slice(3);
         this.itemsScheduleStart.splice(3,3);
         for(let j of newData){
@@ -635,7 +636,7 @@ export default {
 
         // Llena el select de la hora de salida
         let valueItems2="";
-        for(let k=11; k<17; k++){
+        for(let k=15; k<21; k++){
             valueItems2 = k+":00";
             this.itemsScheduleEnd.push(valueItems2);
         }

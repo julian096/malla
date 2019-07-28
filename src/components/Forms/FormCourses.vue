@@ -1,5 +1,5 @@
 <template>
-    <v-container text-xs-center>
+    <v-container text-xs-center grid-list-lg>
         <v-snackbar :value="snackbars.snackbarSuCourse" :timeout="timeout" top color="gray" class="light-green--text text--accent-3">Curso registrado con éxito</v-snackbar>
         <v-snackbar :value="snackbars.snackbarErCourse" :timeout="timeout" top color="red darken-4" class="white--text">Error, verifique correctamente los datos</v-snackbar>
 
@@ -141,7 +141,7 @@
                                             </ValidationProvider> 
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout row wrap>
+                                    <v-layout row wrap v-if="breakpoint.xs">
                                         <v-flex xs12 sm6>
                                             <ValidationProvider name="HourStart" rules="required">
                                                 <v-menu ref="menuHourStart"
@@ -197,6 +197,30 @@
                                             </ValidationProvider>
                                         </v-flex>
                                     </v-layout>
+                                    <v-layout row wrap v-else>
+                                            <v-flex xs12 sm6>
+                                                <ValidationProvider name="hora de entrada" rules="required">
+                                                    <v-select slot-scope="{errors, valid}"
+                                                              v-model="hourStart"
+                                                              :items="itemsScheduleStart"
+                                                              :error-messages="errors"
+                                                              :success="valid"
+                                                              label="Hora de entrada"
+                                                              required />
+                                                </ValidationProvider>
+                                            </v-flex>
+                                            <v-flex xs12 sm6>
+                                                <ValidationProvider name="hora de salida" rules="required">
+                                                    <v-select slot-scope="{errors, valid}"
+                                                              v-model="hourEnd"
+                                                              :items="itemsScheduleEnd"
+                                                              :error-messages="errors"
+                                                              :success="valid"
+                                                              label="Hora de salida"
+                                                              required />
+                                                </ValidationProvider>
+                                            </v-flex>
+                                        </v-layout>
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-btn outline color="light-blue lighten-2" @click="step=1">Atras</v-btn>
@@ -277,7 +301,7 @@ export default {
     data() {
         return {
             timeout:2500,
-            step:1,
+            step:2,
             btnDisables:true,
             menuDateStart:false,
             menuDateEnd:false,
@@ -285,6 +309,9 @@ export default {
             menuHourEnd:false,
             hourStart:"",
             hourEnd:"",
+            itemsScheduleStart:[],
+            itemsScheduleEnd:[],
+            breakpoint: this.$vuetify.breakpoint,
             Course:{
                 courseName:"",
                 teacherRFC:"",
@@ -338,8 +365,27 @@ export default {
             this.$refs.obs2.reset();
             this.$refs.obs3.reset();
         }
+    },
+    created() {
+        // Llena el selecto de la hora de entrada
+        let valueItem="";
+        for(let i=7; i<13; i++){
+            valueItem = "0"+i+":00";
+            this.itemsScheduleStart.push(valueItem);
+        }
+        let newData = this.itemsScheduleStart.slice(3);
+        this.itemsScheduleStart.splice(3,3);
+        for(let j of newData){
+            this.itemsScheduleStart.push(j.substring(1));
+        }
 
-    }
+        // Llena el select de la hora de salida
+        let valueItems2="";
+        for(let k=11; k<17; k++){
+            valueItems2 = k+":00";
+            this.itemsScheduleEnd.push(valueItems2);
+        }
+    },
     
 }
 </script>
