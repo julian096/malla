@@ -5,11 +5,11 @@
         <v-card elevation="10" class="mt-4">
             <v-card-text>
                 <v-layout row wrap>
-                    <v-flex xs6 sm6>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Nombre</p>
                         <span class="subheading">{{Course.courseName}}</span>
                     </v-flex>
-                    <v-flex xs6 sm6>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Instructor</p>
                         <span class="subheading">{{Course.teacherName}}</span>
                     </v-flex>
@@ -21,53 +21,53 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap class="mt-4">
-                    <v-flex xs6 sm3>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de inicio</p>
                         <span class="subheading">{{Course.dateStart}}</span>
                     </v-flex>
-                    <v-flex xs6 sm3>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de cierre</p>
                         <span class="subheading">{{Course.dateEnd}}</span>
                     </v-flex>
-                    <v-flex xs6 sm3>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Horario</p>
                         <span class="subheading">{{Course.timetable}}</span>
                     </v-flex>
-                    <v-flex xs6 sm3>
-                        <p class="headline font-italic">Aula</p>
-                        <span class="subheading">{{Course.place}}</span>
-                    </v-flex>
                 </v-layout>
                 <v-layout row wrap class="mt-4">
-                    <v-flex xs12 sm4 md3>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Destinado a</p>
                         <span class="subheading">{{Course.courseTo}}</span>
                     </v-flex>
-                    <v-flex xs12 sm4 md2>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Modalidad</p>
                         <span class="subheading">{{Course.modality}}</span>
                     </v-flex>
-                    <v-flex xs12 sm4 md2>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Estado</p>
                         <span class="subheading">{{Course.state}}</span>
                     </v-flex>
-                     <v-flex xs12 sm6 md2>
+                </v-layout>
+                <v-layout row wrap class="mt-4">
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Tipo</p>
                         <span class="subheading">{{Course.typeCourse}}</span>
                     </v-flex>
-                    <v-flex xs12 sm6 md3>
+                    <v-flex xs12 sm4>
+                        <p class="headline font-italic">Aula</p>
+                        <span class="subheading">{{Course.place}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Total de horas</p>
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
-                </v-layout>
                 <v-layout row wrap class="mt-3">
-                    <v-flex xs12 sm6>
-                        <v-btn outline color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
+                    <v-flex xs12 sm3>
+                        <v-btn outline block color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm6>
-                        <v-btn dark color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
+                    <v-flex xs12 sm3>
+                        <v-btn dark block color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-text>

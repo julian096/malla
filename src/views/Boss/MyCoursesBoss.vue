@@ -1,10 +1,10 @@
 <template>
     <v-container grid-list-lg text-xs-center>
         <Navigation/>
-        <p class="display-1">Lista de cursos</p>
+    
+        <span class="display-1">Mis cursos</span>
 
-        <!-- Simbologia de colores -->
-        <span class="title">Simbología de colores</span>    
+        <p class="title mt-3">Simbología de colores</p>   
         <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">
             <v-flex xs2>
                 <div class="green lighten-1 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Disponible</span></div>
@@ -28,42 +28,37 @@
             </v-flex>
         </v-layout>
 
-        <!-- Aqui va el select para escoger el periodo -->
-        <v-layout row justify-center>
-            <v-flex xs12 sm6 md3 lg3>
-                <v-select v-model="period"
-                          :items="periods"
-                          label="Seleccione un periodo"
-                          solo/>
+        <CardMyCourses :data="myCourses" class="mt-3" v-if="myCourses.length"/>
+
+        <v-layout class="mt-3" row justify-center v-else>
+            <v-flex xs12>
+                <span class="title">No hay peticiones para este curso</span>
             </v-flex>
         </v-layout>
-        <CardCourse :data="courses" :periodSelect="period"/>
     </v-container>
 </template>
 
 <script>
 import Navigation from '@/components/Navbars/Navigation.vue';
-import CardCourse from '@/components/Courses/CardCourse.vue';
-import { mapState, mapActions } from 'vuex';
+import CardMyCourses from '@/components/Courses/CardMyCourses.vue';
+import {mapState,mapActions} from 'vuex';
 
 export default {
-    name: 'Courses',
-    components:{Navigation,CardCourse},
+    name: 'MyCoursesBoss',
+    components:{Navigation,CardMyCourses},
     data() {
         return {
-            period:"",
             breakpoint: this.$vuetify.breakpoint
         }
     },
     computed:{
-        ...mapState(['courses','periods'])
+        ...mapState(['myCourses'])
     },
     methods:{
-        ...mapActions(['getCourses','getPeriods'])
+        ...mapActions(['getMyCourses'])
     },
-    mounted() {
-        this.getPeriods();
-        this.getCourses();
+    created() {
+        this.getMyCourses()
     },
 }
 </script>

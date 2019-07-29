@@ -1,8 +1,7 @@
 <template>
     <v-container grid-list-lg text-xs-center>
-        <v-snackbar v-model="snack" :timeout="timeout" top color="amber darken-3" class="white--text">Te quedan {{daysToPoll}} dias para realizar la encuesta</v-snackbar>
         <span class="display-2">Datos del curso</span>
-        
+
         <v-card elevation="10" class="mt-4">
             <v-card-text>
                 <v-layout row wrap>
@@ -45,13 +44,13 @@
                         <span class="subheading">{{Course.modality}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic">Estado del curso</p>
+                        <p class="headline font-italic">Estado</p>
                         <span class="subheading">{{Course.state}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap class="mt-4">
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic">Tipo del curso</p>
+                        <p class="headline font-italic">Tipo</p>
                         <span class="subheading">{{Course.typeCourse}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
@@ -64,39 +63,18 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap class="mt-3">
-                    <v-flex xs12 sm3>
-                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    <v-flex xs12 sm4>
+                        <v-btn outline block color="green" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm3>
-                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
+                    <v-flex xs12 sm4>
+                        <v-btn outline block color="orange" @click="openRecTeachers">Recomendar docentes</v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm4>
+                        <v-btn dark block color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-text>
         </v-card>
-
-        <!-- confirmación de eliminacion del docente -->
-        <v-dialog v-model="dialog" max-width="350" persistent>
-            <v-card>
-                <v-toolbar card color="red lighten-2" dark>
-                    <v-icon>warning</v-icon>
-                    <v-toolbar-title>Advertencia</v-toolbar-title>
-                </v-toolbar>
-                <v-container text-xs-center>    
-                    <v-card-text>
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <span class="subheading">¿Estas seguro que quieres darte de baja del curso?</span>
-                            </v-flex>
-                            <v-flex class="mt-4">
-                                <v-btn flat color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
-                                <v-btn flat color="red" @click="dialog = false">Cancelar</v-btn>
-                            </v-flex>
-                        </v-layout>
-                    </v-card-text>
-                </v-container>
-            </v-card>
-            
-        </v-dialog>
     </v-container>
 </template>
 
@@ -106,15 +84,10 @@ import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
 
 export default {
-    name: 'DataMyCourse',
+    name: 'DataAvailableCourseBoss',
     data() {
         return {
-            snack:null,
-            timeout:5000,
-            daysToPoll:0,
-            availableButton:null,
-            teachersThatHaveDoneThePoll:[],
-            dialog:null,
+            btnDisable:false,
             Course:{
                 courseName:"",
                 courseTo:"",
@@ -132,23 +105,16 @@ export default {
         }
     },
     computed:{
-        ...mapState(['keyAuth','userLoged']),
-
-        // Devuelve un booleano para habilitar encuesta
-        findTeacher(){
-            const valor = this.teachersThatHaveDoneThePoll.includes(this.userLoged.rfc);
-            this.snack = !valor;
-            return valor;
-        }
+        ...mapState(['keyAuth'])
     },
     methods:{
         ...mapMutations(['createKeyAuth']),
 
-        //obtiene los datos del curso
-        async getDataCourse(){
+        // Obtiene los datos del curso
+        async getDataAvailableCourse(){
             this.createKeyAuth();
-            await axios.get('http://localhost:5000/course/'+this.$route.params.MiCurso,this.keyAuth)
-            .then(response => {
+            try {
+                const response = await axios.get('http://localhost:5000/course/'+this.$route.params.cursoDispJefe,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -161,37 +127,44 @@ export default {
                 this.Course.totalHours = response.data.totalHours;
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
-                this.availableButton = response.data.allowPoll;
-                this.snack = response.data.allowPoll;
-                this.daysToPoll = response.data.leftDays;
-                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
                 console.log(response);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error(error);
-            })
+            }
         },
 
-        // Abre la vista para la encuesta de satisfacción
-        openFormPoll(){
-            router.push({name: 'Encuesta'});
+        // Abre la vista para recomendar docentes al curso
+        openRecTeachers(){
+            router.push({name: 'RecomendarDocente', params:{recDocente: this.Course.courseName}})
         },
 
-        // pide un body que es redundante, decirle mañana
-        async removeTeacherInCourse(){
-            this.createKeyAuth();
-            await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCurso,this.keyAuth)
-            .then(response => {
-                console.log("Dado de baja con éxito");
-                router.push({name: 'MisCursos'})
-            })
-            .catch(error => {
-                console.error(error);
-            })
+        // Solicita un curso y descarga el PDF de inscripcion
+        async requestCourse(){
+            try {
+                await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoDispJefe,this.keyAuth);
+                console.log("Peticion enviada");
+
+                const response = await axios.get("http://localhost:5000/inscriptionDocument/"+this.$route.params.cursoDispJefe,this.keyAuth);    
+                let name = "inscripcion"+this.$route.params.cursoDispJefe.replace(" ","");
+                this.btnDisable = true;
+                let blob = new Blob([response.data], { type:'application/pdf' } );
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.target = '_blank';
+                link.click();
+            } catch (error) {
+                console.error(error);   
+            }
+        },
+
+        // Muestra los demas cursos dusponibles
+        showAvailableCourses(){
+            router.push({name: 'CursosDisponibles'});
         }
     },
-    created(){
-        this.getDataCourse();
-    }
+    created() {
+        this.getDataAvailableCourse();
+    },
 }
 </script>

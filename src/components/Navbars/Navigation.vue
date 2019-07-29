@@ -99,7 +99,7 @@
         </v-navigation-drawer>
 
         <!-- Navigation para el jefe de departamento -->
-        <v-navigation-drawer app v-model="drawer" :mini-variant.sync="mini" hide-overlay stateless width="256" v-if="userType == 1">
+        <v-navigation-drawer app v-model="drawer" :mini-variant.sync="mini" hide-overlay stateless width="277" v-if="userType == 1">
             <v-toolbar flat class="transparent" color="red lighten-2" dark>
                 <v-list class="pa-0">
                     <v-list-tile avatar>
@@ -132,15 +132,22 @@
                     </v-list-tile-content>
                 </v-list-tile>
 
-                <v-list-tile :to="{name: 'CursosDisponiblesJefe'}">
-                    <v-list-tile-action>
-                        <v-icon>event_available</v-icon>
-                    </v-list-tile-action>
+                <v-list-group prepend-icon="event_note" no-action>
+                    <template v-slot:activator>
+                        <v-list-tile>
+                            <v-list-tile-title>Cursos</v-list-tile-title>
+                        </v-list-tile>
+                    </template>
+                    <v-list-tile v-for="item of itemsBoss" :key="item.title" :to="{name: item.route}">
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{item.title}}</v-list-tile-title>
+                        </v-list-tile-content>
+                        <v-list-tile-action>
+                            <v-icon>{{item.icon}}</v-icon>
+                        </v-list-tile-action>
+                    </v-list-tile>
+                </v-list-group>
 
-                    <v-list-tile-content>
-                        <v-list-tile-title>Cursos disponibles</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
                 <v-list-tile v-ripple @click="logout">
                     <v-list-tile-action>
                         <v-icon>exit_to_app</v-icon>
@@ -296,6 +303,12 @@ export default {
                 { title: 'Solicitudes pendientes', icon: 'hourglass_empty', route: 'SolicitudesPendientes'},
                 { title: 'Mis cursos', icon: 'assignment', route: 'MisCursos'},
                 { title: 'Cursos impartidos', icon: 'school', route: 'CursosImpartidos'}
+            ],
+            itemsBoss:[
+                {title: 'Cursos disponibles', icon: 'event_available', route: 'CursosDisponiblesJefe'},
+                { title: 'Solicitudes pendientes', icon: 'hourglass_empty', route: 'SolicitudesPendientesJefe'},
+                { title: 'Mis cursos', icon: 'assignment', route: 'MisCursosJefe'},
+                { title: 'Cursos impartidos', icon: 'school', route: 'CursosImpartidosJefe'}
             ],
             mini: true,
             userType:0,

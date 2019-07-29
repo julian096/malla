@@ -7,27 +7,29 @@
         <v-card elevation="10" class="mt-4">
             <v-card-text>
                 <v-layout row wrap>
-                    <v-flex xs12 sm4>
-                        <p class="headline font-italic">Nombre del curso</p>
+                    <v-flex xs12 sm6>
+                        <p class="headline font-italic">Nombre</p>
                         <span class="subheading">{{Course.courseName}}</span>
                     </v-flex>
-                    <v-flex xs12 sm4>
-                        <p class="headline font-italic">Descripción</p>
-                        <span class="subheading">{{Course.description}}</span>
-                    </v-flex>
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Folio</p>
                         <span class="subheading">{{Course.serial}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12 sm6>
-                        <p class="headline font-italic">Nombre del instructor</p>
+                        <p class="headline font-italic">Instructor</p>
                         <span class="subheading">{{teacherName}}</span>
                     </v-flex>
                     <v-flex xs12 sm6>
                         <p class="headline font-italic">RFC del instructor</p>
                         <span class="subheading">{{Course.teacherRFC}}</span>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <p class="headline font-italic">Descripción</p>
+                        <span class="subheading">{{Course.description}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>

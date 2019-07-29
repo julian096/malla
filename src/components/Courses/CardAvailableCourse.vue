@@ -39,7 +39,7 @@
         <!-- Abrira la lista para recomendar los docentes al curso -->
         <v-layout row wrap class="mt-1" v-if="userType == 1">
             <v-flex xs12 sm4 md3 v-for="item of data" :key="item[0]" >
-                <v-card elevation="7">
+                <v-card elevation="7" :to="{name: 'CursoDisponibleJefe', params:{cursoDispJefe: item.courseName}}">
                     <v-toolbar dark color="green lighten-1" card v-if="item.state=='Por empezar'">
                         <span class="subheading">Curso: {{item.courseName}}</span>
                     </v-toolbar>
@@ -49,9 +49,6 @@
                     <v-card-text>
                         <p><span class="subheading">Instructor: {{item.teacherName}}</span></p>
                         <p><span class="subheading">Horario: {{item.timetable}}</span></p>
-                        <v-layout row wrap>
-                            <v-btn dark color="blue" block outline :to="{name: 'RecomendarDocente', params:{recDocente: item.courseName}}">Recomendar docente</v-btn>
-                        </v-layout>
                     </v-card-text>
                 </v-card>
             </v-flex>

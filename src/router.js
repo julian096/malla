@@ -272,6 +272,15 @@ const router = new Router({
       }
     },
     {
+      path: '/cursos-disponibles/:cursoDispJefe',
+      name: 'CursoDisponibleJefe',
+      component: () => import('@/views/Boss/DetailAvailableCourseBoss.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
+    {
       path: '/cursos-disponibles/recomendar-docentes/:recDocente',
       name: 'RecomendarDocente',
       component: () => import('@/views/Boss/RecTeacher.vue'),
@@ -280,6 +289,42 @@ const router = new Router({
         requireBoss: true
       }
     },
+    {
+      path: '/solicitudes-pendientes',
+      name: 'SolicitudesPendientesJefe',
+      component: () => import('@/views/Boss/PendingRequest.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
+    {
+      path: '/mis-cursos',
+      name: 'MisCursosJefe',
+      component: () => import('@/views/Boss/MyCoursesBoss.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
+    {
+      path: '/mis-cursos/:MiCursoJefe',
+      name: 'MiCursoJefe',
+      component: () => import('@/views/Boss/DetailMyCourseBoss.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
+    {
+      path: '/cursos-impartidos',
+      name: 'CursosImpartidosJefe',
+      component: () => import('@/views/Boss/CoursesTaughtBoss.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    }
   ]
 })
 

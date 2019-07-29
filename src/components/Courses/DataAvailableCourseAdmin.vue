@@ -62,10 +62,16 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row justify-space-around class="mt-3">
-                    <v-btn outline color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
-                    <v-btn outline color="green" @click="openPetitions">Gestionar peticiones</v-btn>
-                    <v-btn dark color="blue" :to="{name:'CursosDisponiblesAdmin'}">Otros cursos</v-btn>
+                <v-layout row wrap class="mt-3">
+                    <v-flex xs12 sm4>
+                        <v-btn outline block color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm4>
+                        <v-btn outline block color="green" @click="openPetitions">Gestionar peticiones</v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm4>
+                        <v-btn dark block color="blue" :to="{name:'CursosDisponiblesAdmin'}">Otros cursos</v-btn>
+                    </v-flex>
                 </v-layout>
             </v-card-text>
         </v-card>

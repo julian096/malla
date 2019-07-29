@@ -4,7 +4,7 @@
         <p class="display-1">Solicitudes pendientes de cursos</p>
         <CardPendingRequest :data="arrayPendingRequests" v-if="arrayPendingRequests.length"/>
 
-        <v-layout class="mt-5" row justify-center v-else>
+        <v-layout row justify-center v-else>
             <v-flex xs12>
                 <span class="title">No hay peticiones pendientes de cursos</span>
             </v-flex>
