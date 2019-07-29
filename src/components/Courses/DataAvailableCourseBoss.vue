@@ -127,6 +127,9 @@ export default {
                 this.Course.totalHours = response.data.totalHours;
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
+                
+                const infoCourse = await axios.get("http://localhost:5000/course/"+this.$route.params.cursoDispJefe,this.keyAuth);
+                console.log(infoCourse);
                 console.log(response);
             } catch (error) {
                 console.error(error);

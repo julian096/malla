@@ -82,6 +82,7 @@
 import axios from 'axios';
 import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
+import { arch } from 'os';
 
 export default {
     name: 'DataAvailableCourseAdmin',
@@ -127,7 +128,18 @@ export default {
                 this.Course.totalHours = dataCourse.data.totalHours;
                 this.Course.state = dataCourse.data.state;
                 this.Course.teacherName = dataCourse.data.teacherName;
-                console.log(dataCourse);
+                console.log(dataCourse.data);
+                
+                const user = sessionStorage.getItem("user");
+                const infoCourse = await axios.get("http://localhost:5000/requestsTo/"+this.$route.params.cursoAdmin,this.keyAuth);
+                let arrayRFC = [];
+                for(let i of infoCourse.data){
+                    arrayRFC.push(i.rfc);
+                }
+                if(arrayRFC.includes(user) || dataCourse.data.teachersInCourse.includes(user) || dataCourse.data.teacherRFC == user){
+                    this.btnDisable = true;
+                    console.log("Ya no puedes solicitar el curso");
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -138,6 +150,16 @@ export default {
             try {
                 await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoAdmin,this.keyAuth);
                 console.log("Solicitud enviada");
+
+                const response = await axios.get("http://localhost:5000/inscriptionDocument/"+this.$route.params.cursoAdmin,this.keyAuth);
+                let name = "inscripcion"+this.$route.params.cursoAdmin.replace(" ","");
+                this.btnDisable = true;
+                let blob = new Blob([response.data], { type:'application/pdf' } );
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.target = '_blank';
+                link.click();
             } catch (error) {
                 console.log(error.response);
             }

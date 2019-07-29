@@ -283,8 +283,8 @@
                                 <span class="subheading">¿Estas seguro que quieres eliminar el curso?</span>
                             </v-flex>
                             <v-flex class="mt-4">
-                                <v-btn flat color="green" @click="deleteCourse">Aceptar</v-btn>
-                                <v-btn flat color="red" @click="dialog = false">Cancelar</v-btn>
+                                <v-btn outline color="green" @click="deleteCourse">Aceptar</v-btn>
+                                <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
                     </v-card-text>

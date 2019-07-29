@@ -84,8 +84,8 @@
                                 <span class="subheading">¿Estas seguro que quieres darte de baja del curso?</span>
                             </v-flex>
                             <v-flex class="mt-4">
-                                <v-btn flat color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
-                                <v-btn flat color="red" @click="dialog = false">Cancelar</v-btn>
+                                <v-btn outline color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
+                                <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
                     </v-card-text>
