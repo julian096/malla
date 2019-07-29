@@ -6,63 +6,63 @@
         <v-card elevation="10" v-if="update=='No'" class="mt-4">
             <v-card-text>
                 <v-layout row wrap>
-                    <v-flex xs12 md6>
-                        <p class="headline font-italic">Nombre del curso</p>
+                    <v-flex xs12 sm6>
+                        <p class="headline font-italic">Nombre</p>
                         <span class="subheading">{{Course.courseName}}</span>
                     </v-flex>
-                    <v-flex xs12 md6>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Descripción</p>
                         <span class="subheading">{{Course.description}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12 md6>
-                        <p class="headline font-italic">Nombre del instructor</p>
+                    <v-flex xs12 sm6>
+                        <p class="headline font-italic">Instructor</p>
                         <span class="subheading">{{teacherName}}</span>
                     </v-flex>
-                    <v-flex xs12 md6>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">RFC del instructor</p>
                         <span class="subheading">{{Course.teacherRFC}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de inicio</p>
                         <span class="subheading">{{Course.dateStart}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de cierre</p>
                         <span class="subheading">{{Course.dateEnd}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Horario</p>
                         <span class="subheading">{{Course.timetable}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Destinado a</p>
                         <span class="subheading">{{Course.courseTo}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Modalidad</p>
                         <span class="subheading">{{Course.modality}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Estado del curso</p>
                         <span class="subheading">{{state}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Tipo del curso</p>
                         <span class="subheading">{{Course.typeCourse}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Aula</p>
                         <span class="subheading">{{Course.place}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic">Total de horas</p>
                         <span class="subheading">{{totalHours}}</span>
                     </v-flex>

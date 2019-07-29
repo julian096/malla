@@ -117,7 +117,9 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-layout row wrap>
-                                        <v-btn outline color="green" :disabled="invalid || !validated" @click="step=2">Siguiente</v-btn>
+                                        <v-flex xs12 sm3>
+                                            <v-btn outline block color="green" :disabled="invalid || !validated" @click="step=2">Siguiente</v-btn>
+                                        </v-flex>
                                     </v-layout>
                                 </v-card-actions>
                             </v-form>
@@ -173,9 +175,13 @@
                                     </v-layout>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-layout row justify-space-around>
-                                        <v-btn outline color="light-blue lighten-2" @click="step=1">atras</v-btn>
-                                        <v-btn outline color="green" :disabled="invalid || !validated" @click="step=3">Siguiente</v-btn>
+                                    <v-layout row wrap>
+                                        <v-flex xs12 sm3>
+                                            <v-btn outline block color="light-blue lighten-2" @click="step=1">atras</v-btn>
+                                        </v-flex>
+                                        <v-flex xs12 sm3>
+                                            <v-btn outline block color="green" :disabled="invalid || !validated" @click="step=3">Siguiente</v-btn>
+                                        </v-flex>
                                     </v-layout>
                                 </v-card-actions>
                             </v-form>
@@ -262,10 +268,16 @@
                                             </ValidationProvider>
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout row justify-space-around>
-                                        <v-btn outline color="light-blue lighten-2" @click="step=2">Atras</v-btn>
-                                        <v-btn outline color="green" :disabled="invalid || !validated || !btnDisable" @click="send">Enviar</v-btn>
-                                        <v-btn outline color="orange" :disabled="btnDisable" :to="{name: 'MiCurso'}">Volver al curso</v-btn>
+                                    <v-layout row wrap>
+                                        <v-flex xs12 sm4>
+                                            <v-btn outline block color="light-blue lighten-2" }@click="step=2">Atras</v-btn>
+                                        </v-flex>
+                                        <v-flex xs12 sm4>
+                                            <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisable" @click="send">Enviar</v-btn>
+                                        </v-flex>
+                                        <v-flex xs12 sm4>
+                                            <v-btn outline block color="orange" :disabled="btnDisable" :to="{name: 'MiCurso'}">Volver al curso</v-btn>
+                                        </v-flex>
                                     </v-layout>
                                 </v-card-text>
                             </v-form>

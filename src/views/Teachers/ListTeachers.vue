@@ -6,7 +6,7 @@
         
         <!-- Simbologia de colores -->
         <span class="title">Simbología de colores</span>    
-        <v-layout row justify-space-around class="mt-3">
+        <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">
                 <v-flex xs2>
                     <div class="green lighten-1 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Administrador</span></div>
                 </v-flex>
@@ -20,10 +20,24 @@
                     <div class="red lighten-2 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Docente</span></div>
                 </v-flex>
         </v-layout>
+        <v-layout row wrap class="mt-3" v-else>
+                <v-flex xs12>
+                    <div class="green lighten-1 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Administrador</span></div>
+                </v-flex>
+                <v-flex xs12>
+                    <div class="blue lighten-1 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Jefe de departamento</span></div>
+                </v-flex>
+                <v-flex xs12>
+                    <div class="yellow darken-2 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Comunicación</span></div>
+                </v-flex>
+                <v-flex xs12>
+                    <div class="red lighten-2 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Docente</span></div>
+                </v-flex>
+        </v-layout>
         
         <!-- aqui va el select para seleccionar el departamento -->
         <v-layout row justify-center>
-            <v-flex xs12 sm6 md3 lg3>
+            <v-flex xs12 sm5>
                 <v-select v-model="department"
                           :items="departments"
                           label="Seleccione un departamento o tipo de usuario"
@@ -46,7 +60,8 @@ export default {
     data() {
         return {
             department:"",
-            departments:['Ciencias Básicas','Desarrollo Académico','Económico-Administrativo','Ingenierías','Ingeniería Industrial','Sistemas y Computación','Comunicación','Externo']
+            departments:['Ciencias Básicas','Desarrollo Académico','Económico-Administrativo','Ingenierías','Ingeniería Industrial','Sistemas y Computación','Comunicación','Externo'],
+            breakpoint: this.$vuetify.breakpoint
         }
     },
     computed:{

@@ -3,6 +3,7 @@
         <Navigation/>
         <p class="display-1">Datos del membrete {{$route.params.letterheadName}}</p>
 
+        <!-- Form para ver los datos del membrete -->
         <v-card elevation="10" v-if="update == 'No'">
             <v-card-text>
                 <v-layout row wrap>
@@ -33,6 +34,7 @@
             </v-card-actions>
         </v-card>
 
+        <!-- Form para actualizar los datos -->
         <v-card elevation="10" v-else>
             <v-card-text>
                 <v-form>
@@ -99,9 +101,13 @@
                 </v-form>
             </v-card-text>
             <v-card-actions>
-                <v-layout row justify-space-around class="mb-1">
-                    <v-btn color="green" outline @click="dialog = true">Guardar</v-btn>
-                    <v-btn color="red" outline @click="backDataLetterhead">Cancelar</v-btn>
+                <v-layout row wrap class="mb-1">
+                    <v-flex xs12 sm3>
+                        <v-btn color="green" block outline @click="dialog = true">Guardar</v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm3>
+                        <v-btn color="red" block outline @click="backDataLetterhead">Cancelar</v-btn>
+                    </v-flex>
                 </v-layout>
             </v-card-actions>
         </v-card>

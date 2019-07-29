@@ -7,53 +7,53 @@
         <v-card elevation="10" class="mt-4" v-if="update == 'No'">
             <v-card-text>
                 <v-layout row wrap>
-                    <v-flex xs12 md6>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Nombre</p>
                         <span class="subheading">{{Teacher.name}} {{Teacher.fstSurname}} {{Teacher.sndSurname}}</span>
                     </v-flex>
-                    <v-flex xs12 md6>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">RFC</p>
                         <span class="subheading">{{Teacher.rfc}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Email</p>
                         <span class="subheading">{{Teacher.email}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Numero de teléfono</p>
                         <span class="subheading">{{Teacher.numberPhone}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Horario</p>
                         <span class="subheading">{{Teacher.schedule}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Departamento</p>
                         <span class="subheading">{{Teacher.departament}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Posición dentro del departamento</p>
                         <span class="subheading">{{Teacher.position}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Tipo de usuario</p>
                         <span class="subheading">{{Teacher.userType}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Grado de estudio</p>
                         <span class="subheading">{{Teacher.studyLevel}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Especialidad</p>
                         <span class="subheading">{{Teacher.speciality}}</span>
                     </v-flex>
-                    <v-flex xs12 md4>
+                    <v-flex xs12 sm4>
                         <p class="headline font-italic mt-4">Titulo</p>
                         <span class="subheading">{{Teacher.degree}}</span>
                     </v-flex>

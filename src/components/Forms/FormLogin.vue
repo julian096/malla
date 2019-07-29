@@ -41,8 +41,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-layout row justify-space-around>
-                                    <v-btn flat color="success" @click.prevent="login(user)" :disabled="invalid || !validated">Aceptar</v-btn>
-                                    <v-btn flat color="error" @click="closeLogin">Cancelar</v-btn>
+                                    <v-btn outline color="success" @click.prevent="login(user)" :disabled="invalid || !validated">Aceptar</v-btn>
+                                    <v-btn outline color="error" @click="closeLogin">Cancelar</v-btn>
                                 </v-layout>
                             </v-card-actions>
                         </v-form>

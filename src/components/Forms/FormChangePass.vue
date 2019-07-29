@@ -66,8 +66,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-layout row justify-space-around>
-                                    <v-btn flat color="success" @click.prevent="changePass(pass)" :disabled="!validated || !btnDisableChangePass">Aceptar</v-btn>
-                                    <v-btn flat color="error" @click="closeChangePass">Cancelar</v-btn>
+                                    <v-btn outline color="success" @click.prevent="changePass(pass)" :disabled="!validated || !btnDisableChangePass">Aceptar</v-btn>
+                                    <v-btn outline color="error" @click="closeChangePass">Cancelar</v-btn>
                                 </v-layout>
                             </v-card-actions>
                         </v-form>

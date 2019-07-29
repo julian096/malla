@@ -143,8 +143,14 @@
                             </v-layout>
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn flat color="green" :disabled="invalid || !validated || !btnDisableUserExt"  @click="send">Enviar</v-btn>
-                            <v-btn flat color="orange" :disabled="btnDisableUserExt" @click="newUser">Nuevo</v-btn>
+                            <v-layout row wrap>
+                                <v-flex xs12 sm3>
+                                    <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisableUserExt" @click="send">Enviar</v-btn>
+                                </v-flex>
+                                <v-flex xs12 sm3>
+                                    <v-btn outline block color="orange" :disabled="btnDisableUserExt" @click="newUser">Nuevo</v-btn>
+                                </v-flex>
+                            </v-layout>
                         </v-card-actions>
                     </v-form>
                 </v-card>
@@ -246,7 +252,9 @@
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-layout row wrap>
-                                            <v-btn outline color="green" :disabled="invalid || !validated"     @click="step=2">Siguiente</v-btn>
+                                            <v-flex xs12 sm3>
+                                                <v-btn outline block color="green" :disabled="invalid || !validated" @click="step=2">Siguiente</v-btn>
+                                            </v-flex>
                                         </v-layout>
                                     </v-card-actions>
                                 </v-form>
@@ -309,9 +317,13 @@
                                         </v-layout>
                                     </v-card-text>
                                     <v-card-actions>
-                                        <v-layout row justify-space-around>
-                                            <v-btn outline color="light-blue lighten-2" @click="step=1">atras</v-btn>
-                                            <v-btn outline color="green" :disabled="invalid || !validated"     @click="step=3">Siguiente</v-btn>
+                                        <v-layout row wrap>
+                                            <v-flex xs12 sm3>
+                                                <v-btn outline block color="light-blue lighten-2" @click="step=1">atras</v-btn>
+                                            </v-flex>
+                                            <v-flex xs12 sm3>
+                                                <v-btn outline block color="green" :disabled="invalid || !validated" @click="step=3">Siguiente</v-btn>
+                                            </v-flex>
                                         </v-layout>
                                     </v-card-actions>
                                 </v-form>
@@ -326,7 +338,7 @@
                                 <v-form>
                                     <v-card-text>
                                         <v-layout row wrap>
-                                            <v-flex xs6>
+                                            <v-flex xs12 sm6>
                                                 <ValidationProvider name="userType" rules="required">
                                                     <v-select slot-scope="{errors, valid}"
                                                               :items="typeUsers"
@@ -337,7 +349,7 @@
                                                               required />
                                                 </ValidationProvider>
                                             </v-flex>
-                                            <v-flex xs6>
+                                            <v-flex xs12 sm6>
                                                 <ValidationProvider name="departments" rules="required" v-if="Teacher.userType != 'Comunicación'">
                                                     <v-select slot-scope="{errors, valid}"
                                                               :items="departments"
@@ -456,10 +468,16 @@
                                         </v-layout>
                                     </v-card-text>
                                     <v-card-actions>
-                                        <v-layout row justify-space-around>
-                                            <v-btn outline color="light-blue lighten-2" @click="step=2">Atras</v-btn>
-                                            <v-btn outline color="green" :disabled="invalid || !validated || !btnDisableUserInt" @click.prevent="send">Enviar</v-btn>
-                                            <v-btn outline color="orange" :disabled="btnDisableUserInt"   @click="newUser">Nuevo</v-btn>
+                                        <v-layout row wrap>
+                                            <v-flex xs12 sm4>
+                                                <v-btn outline block color="light-blue lighten-2" @click="step=2">Atras</v-btn>
+                                            </v-flex>
+                                            <v-flex xs12 sm4>
+                                                <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisableUserInt" @click.prevent="send">Enviar</v-btn>
+                                            </v-flex>
+                                            <v-flex xs12 sm4>
+                                                <v-btn outline block color="orange" :disabled="btnDisableUserInt" @click="newUser">Nuevo</v-btn>
+                                            </v-flex>
                                         </v-layout>
                                     </v-card-actions>
                                 </v-form>

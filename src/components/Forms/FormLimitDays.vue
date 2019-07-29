@@ -27,8 +27,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-layout row justify-space-around>
-                                    <v-btn flat color="green" :disabled="!validated" @click="establisLimitDays">Aceptar</v-btn>
-                                    <v-btn flat color="red" @click="closeLimitDays">Cancelar</v-btn>
+                                    <v-btn outline color="green" :disabled="!validated" @click="establisLimitDays">Aceptar</v-btn>
+                                    <v-btn outline color="red" @click="closeLimitDays">Cancelar</v-btn>
                                 </v-layout>
                             </v-card-actions>
                         </v-form>

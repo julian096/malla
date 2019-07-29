@@ -53,7 +53,6 @@
                                                             :error-messages="errors"
                                                             :success="valid"
                                                             label="Descripción"
-                                                            clearable
                                                             rows="3"
                                                             required />
                                             </ValidationProvider>
@@ -73,7 +72,11 @@
                                     </v-layout>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn outline color="green" :disabled="invalid || !validated" @click="step=2">Siguiente</v-btn>
+                                    <v-layout row wrap>
+                                        <v-flex xs12 sm4>
+                                            <v-btn outline block color="green" :disabled="invalid || !validated" @click="step=2">Siguiente</v-btn>
+                                        </v-flex>
+                                    </v-layout>
                                 </v-card-actions>
                             </v-form>
                         </v-card>
@@ -223,8 +226,14 @@
                                         </v-layout>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn outline color="light-blue lighten-2" @click="step=1">Atras</v-btn>
-                                    <v-btn outline color="green" :disabled="invalid || !validated" @click="step=3">Siguiente</v-btn>
+                                    <v-layout row wrap>
+                                        <v-flex xs12 sm6>
+                                            <v-btn outline block color="light-blue lighten-2" @click="step=1">Atras</v-btn>
+                                        </v-flex>
+                                        <v-flex xs12 sm6>
+                                            <v-btn outline block color="green" :disabled="invalid || !validated" @click="step=3">Siguiente</v-btn>
+                                        </v-flex>
+                                    </v-layout>
                                 </v-card-actions>
                             </v-form>
                         </v-card>
@@ -277,9 +286,17 @@
                                     </v-layout>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn outline color="light-blue lighten-2" @click="step=2">Atras</v-btn>
-                                    <v-btn outline color="green" :disabled="invalid || !validated || !btnDisableCourse" @click.prevent="send">Enviar</v-btn>
-                                    <v-btn outline color="orange" :disabled="btnDisableCourse" @click="newCourse">Nuevo</v-btn>
+                                    <v-layout row wrap>
+                                        <v-flex xs12 sm4>
+                                            <v-btn outline block color="light-blue lighten-2" @click="step=2">Atras</v-btn>
+                                        </v-flex>
+                                        <v-flex xs12 sm4>
+                                            <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisableCourse" @click.prevent="send">Enviar</v-btn>
+                                        </v-flex>
+                                        <v-flex xs12 sm4>
+                                            <v-btn outline block color="orange" :disabled="btnDisableCourse" @click="newCourse">Nuevo</v-btn>
+                                        </v-flex>
+                                    </v-layout>
                                 </v-card-actions>
                             </v-form>
                         </v-card>
@@ -301,7 +318,7 @@ export default {
     data() {
         return {
             timeout:2500,
-            step:2,
+            step:1,
             btnDisables:true,
             menuDateStart:false,
             menuDateEnd:false,
