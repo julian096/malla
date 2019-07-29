@@ -270,13 +270,13 @@
                                     </v-layout>
                                     <v-layout row wrap>
                                         <v-flex xs12 sm4>
-                                            <v-btn outline block color="light-blue lighten-2" }@click="step=2">Atras</v-btn>
+                                            <v-btn outline block color="light-blue lighten-2" @click="step=2">Atras</v-btn>
                                         </v-flex>
                                         <v-flex xs12 sm4>
                                             <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisable" @click="send">Enviar</v-btn>
                                         </v-flex>
                                         <v-flex xs12 sm4>
-                                            <v-btn outline block color="orange" :disabled="btnDisable" :to="{name: 'MiCurso'}">Volver al curso</v-btn>
+                                            <v-btn outline block color="orange" :disabled="btnDisable" :to="{name: 'Inicio'}">Volver al inicio</v-btn>
                                         </v-flex>
                                     </v-layout>
                                 </v-card-text>
@@ -302,6 +302,7 @@ export default {
             timeout: 2500,
             step: 1,
             btnDisable: true,
+            userType:sessionStorage.getItem("userType"),
             poll:{
                 one:0,
                 two:0,
@@ -332,15 +333,37 @@ export default {
         async send(){
             this.createKeyAuth();
             try {
-                const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCurso+"/poll",this.poll,this.keyAuth);
-                let name = "Encuesta"+this.$route.params.MiCurso.replace(" ","");
-                this.btnDisable = true;
-                let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
-                let link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = name;
-                link.target = '_blank';
-                link.click();
+                if(this.userType == 0){
+                    const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCursoAdmin+"/poll",this.poll,this.keyAuth);
+                    let name = "Encuesta"+this.$route.params.MiCursoAdmin.replace(" ","");
+                    this.btnDisable = true;
+                    let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = name;
+                    link.target = '_blank';
+                    link.click();
+                }else if(this.userType == 1){
+                    const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCursoJefe+"/poll",this.poll,this.keyAuth);
+                    let name = "Encuesta"+this.$route.params.MiCursoJefe.replace(" ","");
+                    this.btnDisable = true;
+                    let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = name;
+                    link.target = '_blank';
+                    link.click();
+                }else if(this.userType == 3){
+                    const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCurso+"/poll",this.poll,this.keyAuth);
+                    let name = "Encuesta"+this.$route.params.MiCurso.replace(" ","");
+                    this.btnDisable = true;
+                    let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = name;
+                    link.target = '_blank';
+                    link.click();
+                }
             } catch (error) {
                 console.error(error);
             }

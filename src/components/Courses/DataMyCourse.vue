@@ -63,15 +63,25 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-3">
-                    <v-flex xs12 sm3>
+            </v-card-text>
+            <v-card-actions>
+                <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">
+                    <v-flex xs3>
                         <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm3>
+                    <v-flex xs3>
                         <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
                     </v-flex>
                 </v-layout>
-            </v-card-text>
+                <v-layout row wrap class="mt-3" v-else>
+                    <v-flex xs12>
+                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card-actions>
         </v-card>
 
         <!-- confirmación de eliminacion del docente -->
@@ -109,6 +119,7 @@ export default {
     name: 'DataMyCourse',
     data() {
         return {
+            breakpoint: this.$vuetify.breakpoint,
             snack:null,
             timeout:5000,
             daysToPoll:0,

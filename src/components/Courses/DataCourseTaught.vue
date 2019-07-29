@@ -62,15 +62,25 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-3">
-                    <v-flex xs12 sm4>
+            </v-card-text>
+            <v-card-actions>
+                <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">
+                    <v-flex xs4>
                         <v-btn outline block color="orange" :disabled="availablePDFList" @click="getPDFList">Lista de asistencia</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm4>
+                    <v-flex xs4>
                         <v-btn outline block color="blue" :disabled="!availableButton" @click="openCalTeachers">Calificar docentes</v-btn>
                     </v-flex>
                 </v-layout>
-            </v-card-text>
+                <v-layout row wrap class="mt-3" v-else>
+                    <v-flex xs12>
+                        <v-btn outline block color="orange" :disabled="availablePDFList" @click="getPDFList">Lista de asistencia</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn outline block color="blue" :disabled="!availableButton" @click="openCalTeachers">Calificar docentes</v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card-actions>
         </v-card>
 
    </v-container> 
@@ -84,7 +94,8 @@ import router from '../../router';
 export default {
     name: 'DataCourseTaught',
     data() {
-        return {
+        return{
+            breakpoint: this.$vuetify.breakpoint,
             availableButton:null,
             availablePDFList:true,
             Course:{

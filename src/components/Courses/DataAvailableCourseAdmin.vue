@@ -130,6 +130,7 @@ export default {
                 this.Course.teacherName = dataCourse.data.teacherName;
                 console.log(dataCourse.data);
                 
+                // Habilita o deshabilita el boton de solicitar curso
                 const user = sessionStorage.getItem("user");
                 const infoCourse = await axios.get("http://localhost:5000/requestsTo/"+this.$route.params.cursoAdmin,this.keyAuth);
                 let arrayRFC = [];

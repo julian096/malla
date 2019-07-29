@@ -63,11 +63,25 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row justify-space-around class="mt-3">
-                    <v-btn outline color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
-                    <v-btn color="red" dark @click="dialog = true">Darse de baja</v-btn>
-                </v-layout>
             </v-card-text>
+            <v-card-actions>
+                <v-layout row justify-space-around class="mt-2" v-if="!breakpoint.xs">
+                    <v-flex xs3>
+                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap class="mt-2" v-else>
+                    <v-flex xs12 sm3>
+                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm3>
+                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card-actions>
         </v-card>
 
         <!-- confirmación de eliminacion del docente -->
@@ -105,6 +119,7 @@ export default {
     name: 'DataMyCourseAdmin',
     data() {
         return {
+            breakpoint:this.$vuetify.breakpoint,
             snack:null,
             timeout:5000,
             daysToPoll:0,
@@ -169,10 +184,9 @@ export default {
 
         // Abre la vista para la encuesta de satisfacción
         openFormPoll(){
-            router.push({name: 'Encuesta'});
+            router.push({name: 'EncuestaAdmin'});
         },
 
-        // pide un body que es redundante, decirle mañana
         async removeTeacherInCourse(){
             try {
                 await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCursoAdmin,this.keyAuth);

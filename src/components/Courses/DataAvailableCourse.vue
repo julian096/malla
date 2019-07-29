@@ -62,15 +62,25 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-3">
-                    <v-flex xs12 sm3>
+            </v-card-text>
+            <v-card-actions>
+                <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">
+                    <v-flex xs3>
                         <v-btn outline block color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm3>
+                    <v-flex xs3>
                         <v-btn dark block color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
                     </v-flex>
                 </v-layout>
-            </v-card-text>
+                <v-layout row wrap class="mt-3" v-else>
+                    <v-flex xs12>
+                        <v-btn outline block color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn dark block color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card-actions>
         </v-card>
     </v-container>
 </template>
@@ -84,6 +94,7 @@ export default {
     name: 'DataAvailableCourse',
     data() {
         return {
+            breakpoint: this.$vuetify.breakpoint,
             btnDisable:false,
             Course:{
                 courseName:"",

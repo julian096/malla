@@ -99,6 +99,15 @@ const router = new Router({
       }
     },
     {
+      path: '/mis-cursos/:MiCursoAdmin/encuesta',
+      name: 'EncuestaAdmin',
+      component: () => import('@/views/Teachers/Poll.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
       path: '/cursos-impartidos/',
       name: 'CursosImpartidosAdmin',
       component: () => import('@/views/Teachers/CoursesTaughtAdmin.vue'),
@@ -311,6 +320,15 @@ const router = new Router({
       path: '/mis-cursos/:MiCursoJefe',
       name: 'MiCursoJefe',
       component: () => import('@/views/Boss/DetailMyCourseBoss.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
+    {
+      path: '/mis-cursos/:MiCursoJefe/encuesta',
+      name: 'EncuestaJefe',
+      component: () => import('@/views/Boss/Poll.vue'),
       meta:{
         requiresAuth: true,
         requireBoss: true

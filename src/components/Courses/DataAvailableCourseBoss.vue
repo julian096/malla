@@ -127,10 +127,19 @@ export default {
                 this.Course.totalHours = response.data.totalHours;
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
+                console.log(response.data);
                 
-                const infoCourse = await axios.get("http://localhost:5000/course/"+this.$route.params.cursoDispJefe,this.keyAuth);
-                console.log(infoCourse);
-                console.log(response);
+                // Habilita o deshabilita el boton de solicitar curso
+                const user = sessionStorage.getItem("user");
+                const infoCourse = await axios.get("http://localhost:5000/requestsTo/"+this.$route.params.cursoDispJefe,this.keyAuth);
+                let arrayRFC = [];
+                for(let i of infoCourse.data){
+                    arrayRFC.push(i.rfc);
+                }
+                if(arrayRFC.includes(user) || response.data.teachersInCourse.includes(user) || response.data.teacherRFC == user){
+                    this.btnDisable = true;
+                    console.log("Ya no puedes solicitar el curso");
+                }
             } catch (error) {
                 console.error(error);
             }

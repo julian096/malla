@@ -58,17 +58,31 @@
                         <span class="subheading">{{Teacher.degree}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row justify-space-around>
-                    <v-btn outline color="orange" @click="update = 'Si'">Actualizar</v-btn>
-                    <v-btn dark color="red" @click="dialog = true">Eliminar</v-btn>
-                </v-layout>
             </v-card-text>
+            <v-card-actions>
+                <v-layout row justify-space-around v-if="!breakpoint.xs">
+                    <v-flex xs3>
+                        <v-btn outline block color="orange" @click="update = 'Si'">Actualizar</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn dark block color="red" @click="dialog = true">Eliminar</v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap v-else>
+                    <v-flex xs12>
+                        <v-btn outline block color="orange" @click="update = 'Si'">Actualizar</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn dark block color="red" @click="dialog = true">Eliminar</v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card-actions>
         </v-card>
 
         <!-- Aqui poner el formulario si se selecciona actualizar docente -->
         <v-card elevation="10" class="mt-4" v-else>
-            <v-card-text>
-                <v-form>
+            <v-form>
+                <v-card-text>
                     <v-layout row wrap>
                         <v-flex xs12 sm4>
                             <ValidationProvider name="name" rules="required">
@@ -243,12 +257,26 @@
                             </ValidationProvider>
                         </v-flex>
                     </v-layout>
-                    <v-layout row justify-space-around>
-                        <v-btn outline color="green" @click="updateTeacher">Guardar</v-btn>
-                        <v-btn outline color="red" @click="update = 'No'">Cancelar</v-btn>
+                </v-card-text>
+                <v-card-actions>
+                    <v-layout row justify-space-around v-if="!breakpoint.xs">
+                        <v-flex xs3>
+                            <v-btn outline block color="green" @click="updateTeacher">Guardar</v-btn>
+                        </v-flex>
+                        <v-flex xs3>
+                            <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
+                        </v-flex>
                     </v-layout>
-                </v-form>
-            </v-card-text>
+                    <v-layout row wrap v-else>
+                        <v-flex xs12>
+                            <v-btn outline block color="green" @click="updateTeacher">Guardar</v-btn>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-card-actions>
+            </v-form>
         </v-card>
 
         <v-dialog v-model="dialog" max-width="350" persistent>
@@ -287,6 +315,7 @@ export default {
     components:{ValidationProvider},
     data() {
         return {
+            breakpoint: this.$vuetify.breakpoint,
             update:'No',
             dialog:false,
             userType:['Administrador','Jefe de departamento','Comunicación','Docente'],

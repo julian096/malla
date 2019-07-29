@@ -101,7 +101,15 @@
                 </v-form>
             </v-card-text>
             <v-card-actions>
-                <v-layout row wrap class="mb-1">
+                <v-layout row justify-space-around class="mb-1" v-if="!breakpoint.xs">
+                    <v-flex xs3>
+                        <v-btn color="green" block outline @click="dialog = true">Guardar</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn color="red" block outline @click="backDataLetterhead">Cancelar</v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap class="mb-1" v-else>
                     <v-flex xs12 sm3>
                         <v-btn color="green" block outline @click="dialog = true">Guardar</v-btn>
                     </v-flex>
@@ -125,8 +133,8 @@
                                 <span class="subheading">¿Estas seguro que quieres actualizar la información del membrete?</span>
                             </v-flex>
                             <v-flex class="mt-4">
-                                <v-btn flat color="green" @click="updateLetterhead">Aceptar</v-btn>
-                                <v-btn flat color="red" @click="dialog = false">Cancelar</v-btn>
+                                <v-btn outline color="green" @click="updateLetterhead">Aceptar</v-btn>
+                                <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
                     </v-card-text>
@@ -149,6 +157,7 @@ export default {
     components:{Navigation,ValidationProvider},
     data() {
         return {
+            breakpoint:this.$vuetify.breakpoint,
             update:'No',
             dialog:false,
             menuEmitDate:false,
