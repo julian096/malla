@@ -31,7 +31,7 @@
 
         <v-layout class="mt-5" row justify-center v-else>
             <v-flex xs12>
-                <span class="title">No hay peticiones para este curso</span>
+                <span class="title">No impartes ningún curso</span>
             </v-flex>
         </v-layout>
     </v-container>

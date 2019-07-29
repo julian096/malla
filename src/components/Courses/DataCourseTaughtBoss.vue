@@ -122,7 +122,7 @@ export default {
         // Obtiene los datos del curso 
         async getDataCourseTaught(){
             this.createKeyAuth();
-            await axios.get('http://localhost:5000/course/'+this.$route.params.CursoImpartidoAdmin,this.keyAuth)
+            await axios.get('http://localhost:5000/course/'+this.$route.params.CursoImpartidoJefe,this.keyAuth)
             .then(response => {
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
@@ -146,7 +146,7 @@ export default {
 
         // obtiene la lista de docentes del curso
         async getTeachersList(){
-            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartidoAdmin,this.keyAuth)
+            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartidoJefe,this.keyAuth)
             .then(response => {
                 this.availablePDFList = false;
             })
@@ -157,10 +157,10 @@ export default {
 
         // Obtiene el PDF de la lista de asistencia del curso
         async getPDFList(){
-            await axios.get("http://localhost:5000/course/"+this.$route.params.CursoImpartidoAdmin+"/assistantList",this.keyAuth)
+            await axios.get("http://localhost:5000/course/"+this.$route.params.CursoImpartidoJefe+"/assistantList",this.keyAuth)
             .then(response => {
                 console.log("PDF descargado");
-                let name = "ListaAsistencia"+this.$route.params.CursoImpartidoAdmin.replace(" ","");
+                let name = "ListaAsistencia"+this.$route.params.CursoImpartidoJefe.replace(" ","");
                 this.btnDisable = true;
                 let blob = new Blob([response.data], { type:'application/pdf' } );
                 let link = document.createElement('a');
@@ -176,7 +176,7 @@ export default {
 
         // Abre la vista para calificar los docentes
         openCalTeachers(){
-            router.push({name: 'CalDocentesAdmin'});
+            router.push({name: 'CalDocentesJefe'});
         }
     },
     created() {

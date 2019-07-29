@@ -126,6 +126,15 @@ const router = new Router({
       }
     },
     {
+      path: '/cursos-impartidos/:CursoImpartidoAdmin/calificar-docentes',
+      name: 'CalDocentesAdmin',
+      component: () => import('@/views/Teachers/CalTeachers.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
       path: '/docentes',
       name: 'Docentes',
       component: () => import('@/views/Teachers/ListTeachers.vue'),
@@ -342,7 +351,25 @@ const router = new Router({
         requiresAuth: true,
         requireBoss: true
       }
-    }
+    },
+    {
+      path: '/cursos-impartidos/:CursoImpartidoJefe',
+      name: 'CursoImpartidoJefe',
+      component: () => import('@/views/Boss/DetailCourseTaughtBoss.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
+    {
+      path: '/cursos-impartidos/:CursoImpartidoJefe/calificar-docentes',
+      name: 'CalDocentesJefe',
+      component: () => import('@/views/Boss/CalTeachers.vue'),
+      meta:{
+        requiresAuth: true,
+        requireBoss: true
+      }
+    },
   ]
 })
 

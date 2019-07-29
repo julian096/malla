@@ -31,7 +31,7 @@
 
         <v-layout class="mt-5" row justify-center v-else>
             <v-flex xs12>
-                <span class="title">No has impartido ningun curso carnal</span>
+                <span class="title">No impartes ningún curso</span>
             </v-flex>
         </v-layout>
     </v-container>
