@@ -47,7 +47,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-layout row justify-space-around>
-                                    <v-btn outline color="green" :disabled="!validated" @click="sendSerial">Aceptar</v-btn>
+                                    <v-btn outline color="green" :disabled="!validated || btnDisable" @click="sendSerial">Aceptar</v-btn>
                                     <v-btn outline color="red" @click="closeChangeSerial">Cancelar</v-btn>
                                 </v-layout>
                             </v-card-actions>
@@ -65,7 +65,7 @@ import EventBus from '@/bus.js';
 
 export default {
     name: 'FormChangeSerial',
-    props:['displayChangeSerial'],
+    props:['displayChangeSerial','btnDisable'],
     components:{ValidationObserver, ValidationProvider},
     data() {
         return {

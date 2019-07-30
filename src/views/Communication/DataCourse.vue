@@ -1,27 +1,24 @@
 <template>
     <v-container text-xs-center grid-list-lg>
         <Navigation/>
-
-        <span class="display-2">Datos del curso</span>
-
+        <p class="display-2">Datos del curso</p>
+        <v-snackbar v-model="showAlert" top color="gray" class="light-green--text text--accent-3">Folio actualizado correctamente</v-snackbar>
         <v-card elevation="10" class="mt-4">
             <v-card-text>
                 <v-layout row wrap>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">Nombre</p>
                         <span class="subheading">{{Course.courseName}}</span>
                     </v-flex>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">Folio</p>
                         <span class="subheading">{{Course.serial}}</span>
                     </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">Instructor</p>
                         <span class="subheading">{{teacherName}}</span>
                     </v-flex>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">RFC del instructor</p>
                         <span class="subheading">{{Course.teacherRFC}}</span>
                     </v-flex>
@@ -96,7 +93,8 @@ export default {
     components:{Navigation, FormChangeSerial},
     data() {
         return {
-            btnValue:false,
+            showAlert:false,
+            btnValue:null,
             showFormSerial:false,
             totalHours:0,
             state:"",
@@ -151,29 +149,24 @@ export default {
                 console.error(error);
             }
         },
-        // Cambia el folio del curso
-        async editSerial(){
-            commit('createKeyAuth');
-            try {
-                axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,this.serialCourse,  this.keyAuth);
-                this.btnValue = true;
-            } catch (error) {
-                console.error(error);
-            }
-        },
 
         openChangeSerial(){
             this.showFormSerial = true;
         }
     },
-    mounted() {
-        this.getDataCourse();this.dataSeria
+    created() {
+        this.getDataCourse();
 
         EventBus.$on('sendSerial', async (dataSerial) => {
             try {
-                await axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,dataSerial,this.keyAuth);
+                const a = await axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,dataSerial,this.keyAuth);
                 this.Course.serial = dataSerial.serial;
-                console.log(dataSerial)
+                this.showAlert = true;
+                this.btnValue = true;
+                setTimeout(() => {
+                    this.showAlert = false;
+                    this.showFormSerial = false;
+                }, 2000);
             } catch (error) {
                 console.error(error);
             }
