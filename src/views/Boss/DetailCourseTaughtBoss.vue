@@ -1,8 +1,8 @@
 <template>
-    <v-container>
+    <div>
         <Navigation/>
         <DataCourseTaughtBoss/>
-    </v-container>
+    </div>
 </template>
 
 <script>

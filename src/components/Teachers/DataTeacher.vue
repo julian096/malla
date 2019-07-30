@@ -1,10 +1,10 @@
 <template>
     <v-container grid-list-xl text-xs-center>
 
-        <span class="display-2">Datos del docente</span>
+        <p class="display-1">Datos del docente</p>
 
         <!-- datos del docente -->
-        <v-card elevation="10" class="mt-4" v-if="update == 'No'">
+        <v-card elevation="10" v-if="update == 'No'">
             <v-card-text>
                 <v-layout row wrap>
                     <v-flex xs12 sm6>
@@ -18,43 +18,43 @@
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Email</p>
+                        <p class="headline font-italic">Email</p>
                         <span class="subheading">{{Teacher.email}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Numero de teléfono</p>
+                        <p class="headline font-italic">Numero de teléfono</p>
                         <span class="subheading">{{Teacher.numberPhone}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Horario</p>
+                        <p class="headline font-italic">Horario</p>
                         <span class="subheading">{{Teacher.schedule}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Departamento</p>
+                        <p class="headline font-italic">Departamento</p>
                         <span class="subheading">{{Teacher.departament}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Posición dentro del departamento</p>
+                        <p class="headline font-italic">Posición dentro del departamento</p>
                         <span class="subheading">{{Teacher.position}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Tipo de usuario</p>
+                        <p class="headline font-italic">Tipo de usuario</p>
                         <span class="subheading">{{Teacher.userType}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Grado de estudio</p>
+                        <p class="headline font-italic">Grado de estudio</p>
                         <span class="subheading">{{Teacher.studyLevel}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Especialidad</p>
+                        <p class="headline font-italic">Especialidad</p>
                         <span class="subheading">{{Teacher.speciality}}</span>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <p class="headline font-italic mt-4">Titulo</p>
+                        <p class="headline font-italic">Titulo</p>
                         <span class="subheading">{{Teacher.degree}}</span>
                     </v-flex>
                 </v-layout>
@@ -80,7 +80,7 @@
         </v-card>
 
         <!-- Aqui poner el formulario si se selecciona actualizar docente -->
-        <v-card elevation="10" class="mt-4" v-else>
+        <v-card elevation="10" v-else>
             <v-form>
                 <v-card-text>
                     <v-layout row wrap>
@@ -289,14 +289,20 @@
                     <v-card-text>
                         <v-layout row wrap>
                             <v-flex xs12>
-                                <span class="subheading">¿Estas seguro que quieres eliminar este docente?</span>
-                            </v-flex>
-                            <v-flex class="mt-4">
-                                <v-btn flat color="green" @click="deleteTeacher">Aceptar</v-btn>
-                                <v-btn flat color="red" @click="dialog = false">Cancelar</v-btn>
+                                <p class="subheading">¿Estas seguro que quieres eliminar este docente?</p>
                             </v-flex>
                         </v-layout>
                     </v-card-text>
+                    <v-card-actions>
+                        <v-layout row wrap>
+                            <v-flex>
+                                <v-btn outline color="green" @click="deleteTeacher">Aceptar</v-btn>
+                            </v-flex>
+                            <v-flex>
+                                <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-actions>
                 </v-container>
             </v-card>
         </v-dialog>

@@ -1,9 +1,9 @@
 <template>
 <v-container grid-list-lg text-xs-center>
         <v-snackbar v-model="snack" :timeout="timeout" top color="amber darken-3" class="white--text">Te quedan {{daysToPoll}} dias para realizar la encuesta</v-snackbar>
-        <span class="display-2">Datos del curso</span>
+        <p class="display-1">Datos del curso</p>
         
-        <v-card elevation="10" class="mt-4">
+        <v-card elevation="10">
             <v-card-text>
                 <v-layout row wrap>
                     <v-flex xs12 sm6>
@@ -21,7 +21,7 @@
                         <span class="subheading">{{Course.description}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de inicio</p>
                         <span class="subheading">{{Course.dateStart}}</span>
@@ -35,7 +35,7 @@
                         <span class="subheading">{{Course.timetable}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Destinado a</p>
                         <span class="subheading">{{Course.courseTo}}</span>
@@ -49,7 +49,7 @@
                         <span class="subheading">{{Course.state}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Tipo del curso</p>
                         <span class="subheading">{{Course.typeCourse}}</span>
@@ -63,7 +63,7 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row justify-space-around class="mt-3">
+                <v-layout row justify-space-around>
                     <v-btn outline color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
                     <v-btn color="red" dark @click="dialog = true">Darse de baja</v-btn>
                 </v-layout>
@@ -81,10 +81,14 @@
                     <v-card-text>
                         <v-layout row wrap>
                             <v-flex xs12>
-                                <span class="subheading">¿Estas seguro que quieres darte de baja del curso?</span>
+                                <p class="subheading">¿Estas seguro que quieres darte de baja del curso?</p>
                             </v-flex>
-                            <v-flex class="mt-4">
+                        </v-layout>
+                        <v-layout row justify-space-around>
+                            <v-flex>
                                 <v-btn outline color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
+                            </v-flex>
+                            <v-flex>
                                 <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>

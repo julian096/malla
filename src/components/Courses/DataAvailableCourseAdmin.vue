@@ -1,8 +1,8 @@
 <template>
     <v-container grid-list-lg text-xs-center>
-        <span class="display-2">Datos del curso</span>
+        <p class="display-1">Datos del curso</p>
 
-        <v-card elevation="10" class="mt-4">
+        <v-card elevation="10">
             <v-card-text>
                 <v-layout row wrap>
                     <v-flex xs12 sm6>
@@ -20,7 +20,7 @@
                         <span class="subheading">{{Course.description}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de inicio</p>
                         <span class="subheading">{{Course.dateStart}}</span>
@@ -34,7 +34,7 @@
                         <span class="subheading">{{Course.timetable}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Destinado a</p>
                         <span class="subheading">{{Course.courseTo}}</span>
@@ -48,7 +48,7 @@
                         <span class="subheading">{{Course.state}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Tipo del curso</p>
                         <span class="subheading">{{Course.typeCourse}}</span>
@@ -62,7 +62,7 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-3">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <v-btn outline block color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
@@ -82,7 +82,6 @@
 import axios from 'axios';
 import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
-import { arch } from 'os';
 
 export default {
     name: 'DataAvailableCourseAdmin',

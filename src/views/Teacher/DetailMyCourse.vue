@@ -1,8 +1,8 @@
 <template>
-    <v-container grid-list-lg text-xs-center>
+    <div>
         <Navigation/>
         <DataMyCourse/>
-    </v-container>
+    </div>
 </template>
 
 <script>

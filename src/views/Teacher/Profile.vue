@@ -2,8 +2,8 @@
     <v-container grid-list-lg text-xs-center>
         <Navigation />
         
-        <span class="display-2">Mi perfil</span>
-        <v-card elevation="20" class="mt-3">
+        <p class="display-1">Mi perfil</p>
+        <v-card elevation="20">
             <v-card-text>
                 <v-layout row wrap>
                     <v-flex xs12 sm6 md6>
@@ -17,47 +17,47 @@
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Email</p>
+                        <p class="headline font-italic">Email</p>
                         <span class="subheading">{{Teacher.email}}</span>
                     </v-flex>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Numero de teléfono</p>
+                        <p class="headline font-italic">Numero de teléfono</p>
                         <span class="subheading">{{Teacher.numberPhone}}</span>
                     </v-flex>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Horario</p>
+                        <p class="headline font-italic">Horario</p>
                         <span class="subheading">{{Teacher.schedule}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Departamento</p>
+                        <p class="headline font-italic">Departamento</p>
                         <span class="subheading">{{Teacher.departament}}</span>
                     </v-flex>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Posición en el departamento</p>
+                        <p class="headline font-italic">Posición en el departamento</p>
                         <span class="subheading">{{Teacher.position}}</span>
                     </v-flex>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Tipo de usuario</p>
+                        <p class="headline font-italic">Tipo de usuario</p>
                         <span class="subheading">{{Teacher.userType}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Grado de estudio</p>
+                        <p class="headline font-italic">Grado de estudio</p>
                         <span class="subheading">{{Teacher.studyLevel}}</span>
                     </v-flex>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Especialidad</p>
+                        <p class="headline font-italic">Especialidad</p>
                         <span class="subheading">{{Teacher.speciality}}</span>
                     </v-flex>
                     <v-flex xs12 sm4 md4>
-                        <p class="headline font-italic mt-4">Titulo</p>
+                        <p class="headline font-italic">Titulo</p>
                         <span class="subheading">{{Teacher.degree}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row justify-center class="mt-3">
+                <v-layout row justify-center>
                     <v-btn outline color="orange" @click="openChangePass">Actualizar contraseña</v-btn>
                 </v-layout>
             </v-card-text>

@@ -1,8 +1,8 @@
 <template>
     <v-container grid-list-lg text-xs-center>
-        <span class="display-2">Datos del curso</span>
+        <p class="display-1">Datos del curso</p>
         
-        <v-card elevation="10" class="mt-4">
+        <v-card elevation="10">
             <v-card-text>
                 <v-layout row wrap>
                     <v-flex xs12 sm6>
@@ -20,7 +20,7 @@
                         <span class="subheading">{{Course.description}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de inicio</p>
                         <span class="subheading">{{Course.dateStart}}</span>
@@ -34,7 +34,7 @@
                         <span class="subheading">{{Course.timetable}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Destinado a</p>
                         <span class="subheading">{{Course.courseTo}}</span>
@@ -48,7 +48,7 @@
                         <span class="subheading">{{Course.state}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Tipo del curso</p>
                         <span class="subheading">{{Course.typeCourse}}</span>
@@ -64,7 +64,7 @@
                 </v-layout>
             </v-card-text>
             <v-card-actions>
-                <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">
+                <v-layout row justify-space-around v-if="!breakpoint.xs">
                     <v-flex xs3>
                         <v-btn outline block color="orange" :disabled="availablePDFList" @click="getPDFList">Lista de asistencia</v-btn>
                     </v-flex>
@@ -72,7 +72,7 @@
                         <v-btn outline block color="blue" :disabled="!availableButton" @click="openCalTeachers">Calificar docentes</v-btn>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-3" v-else>
+                <v-layout row wrap v-else>
                     <v-flex xs12>
                         <v-btn outline block color="orange" :disabled="availablePDFList" @click="getPDFList">Obtener lista de asistencia</v-btn>
                     </v-flex>

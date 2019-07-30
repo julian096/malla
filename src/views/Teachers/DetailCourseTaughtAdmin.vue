@@ -1,8 +1,8 @@
 <template>
-    <v-container>
+    <div>
         <Navigation/>
         <DataCourseTaughtAdmin/>
-    </v-container>
+    </div>
 </template>
 
 <script>

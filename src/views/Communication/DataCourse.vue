@@ -1,9 +1,9 @@
 <template>
     <v-container text-xs-center grid-list-lg>
         <Navigation/>
-        <p class="display-2">Datos del curso</p>
+        <p class="display-1">Datos del curso</p>
         <v-snackbar v-model="showAlert" top color="gray" class="light-green--text text--accent-3">Folio actualizado correctamente</v-snackbar>
-        <v-card elevation="10" class="mt-4">
+        <v-card elevation="10">
             <v-card-text>
                 <v-layout row wrap>
                     <v-flex xs12 sm3>
@@ -71,7 +71,7 @@
                         <span class="subheading">{{totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row justify-space-around class="mt-3">
+                <v-layout row justify-space-around>
                     <v-btn outline color="orange" @click="openChangeSerial">Asignar folio</v-btn>
                 </v-layout>
             </v-card-text>

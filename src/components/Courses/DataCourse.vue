@@ -1,26 +1,24 @@
 <template>
     <v-container grid-list-xl text-xs-center>
 
-        <span class="display-2">Datos del curso</span>
+        <p class="display-1">Datos del curso</p>
             <!-- Formulario de datos -->
-        <v-card elevation="10" v-if="update=='No'" class="mt-4">
+        <v-card elevation="10" v-if="update=='No'">
             <v-card-text>
                 <v-layout row wrap>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">Nombre</p>
                         <span class="subheading">{{Course.courseName}}</span>
                     </v-flex>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">Descripción</p>
                         <span class="subheading">{{Course.description}}</span>
                     </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">Instructor</p>
                         <span class="subheading">{{teacherName}}</span>
                     </v-flex>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm3>
                         <p class="headline font-italic">RFC del instructor</p>
                         <span class="subheading">{{Course.teacherRFC}}</span>
                     </v-flex>
@@ -84,7 +82,7 @@
         </v-card>
 
             <!-- Formulario para actualizar datos del usuario -->
-        <v-card elevation="10" class="mt-4" v-else>
+        <v-card elevation="10" v-else>
             <v-form>
                 <v-card-text>
                     <v-layout row wrap>
@@ -302,14 +300,20 @@
                     <v-card-text>
                         <v-layout row wrap>
                             <v-flex xs12>
-                                <span class="subheading">¿Estas seguro que quieres eliminar el curso?</span>
-                            </v-flex>
-                            <v-flex class="mt-4">
-                                <v-btn outline color="green" @click="deleteCourse">Aceptar</v-btn>
-                                <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
+                                <p class="subheading">¿Estas seguro que quieres eliminar el curso?</p>
                             </v-flex>
                         </v-layout>
                     </v-card-text>
+                    <v-card-actions>
+                        <v-layout row wrap>
+                            <v-flex>
+                                <v-btn outline color="green" @click="deleteCourse">Aceptar</v-btn>
+                            </v-flex>
+                            <v-flex>
+                                <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-actions>
                 </v-container>
             </v-card>
         </v-dialog>

@@ -7,11 +7,11 @@
         <v-card elevation="10" v-if="update == 'No'">
             <v-card-text>
                 <v-layout row wrap>
-                    <v-flex xs12 sm9>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Titulo general del membrete</p>
                         <span class="subheading">{{Letterhead.nameDocument}}</span>
                     </v-flex>
-                    <v-flex xs12 sm3>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Versión</p>
                         <span class="subheading">{{Letterhead.version}}</span>
                     </v-flex>

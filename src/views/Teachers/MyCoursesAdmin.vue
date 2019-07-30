@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-lg text-xs-center>
         <Navigation/>
-        <span class="display-1">Mis cursos</span>
+        <p class="display-1">Mis cursos</p>
 
         <p class="title mt-4">Simbología de colores</p>   
         <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">

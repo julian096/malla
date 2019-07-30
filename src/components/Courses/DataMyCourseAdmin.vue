@@ -1,9 +1,9 @@
 <template>
 <v-container grid-list-lg text-xs-center>
         <v-snackbar v-model="snack" :timeout="timeout" top color="amber darken-3" class="white--text">Te quedan {{daysToPoll}} dias para realizar la encuesta</v-snackbar>
-        <span class="display-2">Datos del curso</span>
+        <p class="display-1">Datos del curso</p>
         
-        <v-card elevation="10" class="mt-4">
+        <v-card elevation="10">
             <v-card-text>
                 <v-layout row wrap>
                     <v-flex xs12 sm6>
@@ -21,7 +21,7 @@
                         <span class="subheading">{{Course.description}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Fecha de inicio</p>
                         <span class="subheading">{{Course.dateStart}}</span>
@@ -35,7 +35,7 @@
                         <span class="subheading">{{Course.timetable}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Destinado a</p>
                         <span class="subheading">{{Course.courseTo}}</span>
@@ -49,7 +49,7 @@
                         <span class="subheading">{{Course.state}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-4">
+                <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <p class="headline font-italic">Tipo del curso</p>
                         <span class="subheading">{{Course.typeCourse}}</span>
@@ -65,7 +65,7 @@
                 </v-layout>
             </v-card-text>
             <v-card-actions>
-                <v-layout row justify-space-around class="mt-2" v-if="!breakpoint.xs">
+                <v-layout row justify-space-around v-if="!breakpoint.xs">
                     <v-flex xs3>
                         <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
                     </v-flex>
@@ -73,7 +73,7 @@
                         <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
                     </v-flex>
                 </v-layout>
-                <v-layout row wrap class="mt-2" v-else>
+                <v-layout row wrap v-else>
                     <v-flex xs12 sm3>
                         <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
                     </v-flex>
