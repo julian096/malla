@@ -87,6 +87,7 @@ export default {
     name: 'DataAvailableCourseBoss',
     data() {
         return {
+            alertSeEmpalma:true,
             btnDisable:false,
             Course:{
                 courseName:"",
