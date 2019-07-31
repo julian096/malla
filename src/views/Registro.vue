@@ -1,16 +1,15 @@
 <template>
     <v-container>
         <Navigation />
-        <!-- aqui va el navbar -->
         <v-layout column align-center>
             <p class="display-1">Página de registros</p>
         </v-layout>
         <v-layout row justify-center>
             <v-flex xs12 sm6 md4>
                 <v-select :items="['Usuarios','Cursos']"
-                          solo
+                          v-model="opt"
                           label="Seleccione una opción"
-                          v-model="opt"/>
+                          solo/>
             </v-flex>
         </v-layout>
         

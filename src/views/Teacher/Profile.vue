@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-lg text-xs-center>
         <Navigation />
-        
+        <v-snackbar v-model="snackSuccPass" top color="success" class="light-green--text text--accent-3">Limite de dias establecido correctamente</v-snackbar>
         <p class="display-1">Mi perfil</p>
         <v-card elevation="20">
             <v-card-text>
@@ -79,6 +79,7 @@ export default {
     components:{Navigation,FormChangePass},
     data() {
         return {
+            snackSuccPass:false,
             visible:null,
             Teacher:{
                 rfc:"",
@@ -109,8 +110,8 @@ export default {
 
         async getDataTeacher(){
             this.createKeyAuth();
-            await axios.get("http://localhost:5000/teacher/"+this.userLoged.rfc,this.keyAuth)
-            .then(response => {
+            try {
+                const response = await axios.get("http://localhost:5000/teacher/"+this.userLoged.rfc,this.keyAuth);
                 this.Teacher.rfc = response.data.rfc;
                 this.Teacher.name = response.data.name;
                 this.Teacher.fstSurname = response.data.fstSurname;
@@ -124,10 +125,9 @@ export default {
                 this.Teacher.userType = response.data.userType;
                 this.Teacher.degree = response.data.degree;
                 this.Teacher.position = response.data.position;
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error(error);
-            })
+            }
         },
     },
     mounted(){

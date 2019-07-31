@@ -126,20 +126,17 @@ mutations: {
 actions: {
     //login del usuario
     async login({commit},dataUser){
-        commit('showSnackbars', {value:false,form:"login",res:"error"});
-        await axios.post('http://localhost:5000/login', dataUser)
-        .then(response => {
+        try {
+            const response = await axios.post("http://localhost:5000/login",dataUser)
             sessionStorage.setItem("token", response.data.data.access_token);
             commit('saveUserLogin',response);
             commit('createKeyAuth');
             commit('restartDataCourses');
             router.push("/inicio");
             console.log(response);
-        })
-        .catch(error => {
-            console.error(error);
-            commit('snackbars', {value:true,form:"login",res:"error"});
-        });
+        } catch (error) {
+            return error.response.data.data.message
+        }
     },
     //logout del usuario
     async logout({commit,state}){
@@ -171,14 +168,12 @@ actions: {
     },
     async changePass({commit,state},pass){
         commit('createKeyAuth');
-        await axios.post("http://localhost:5000/changePassword",pass,state.keyAuth)
-        .then(response => {
-            console.log("contraseña actualizada");
-            commit('enableButtonNew',{form:'pass',value:true})
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        try {
+            await axios.post("http://localhost:5000/changePassword",pass,state.keyAuth)
+            return true;
+        } catch (error) {
+            return error.response.data.message;
+        }
     },
     //guarda un usuario al sistema
     async saveUser({commit,state},dataUser){
@@ -187,15 +182,16 @@ actions: {
         commit('enableButtonNew',{form:"teacherExt",value:false});
         commit('showSnackbars', {value:false,form:"teacher",res:"succ"});
         commit('showSnackbars', {value:false,form:"teacher",res:"error"});
-        await axios.post("http://localhost:5000/teachers",dataUser,state.keyAuth)
-        .then(response => {
+        try {
+            await axios.post("http://localhost:5000/teachers",dataUser,state.keyAuth);
             commit('enableButtonNew',{form:"teacher",value:true});
             commit('enableButtonNew',{form:"teacherExt",value:true});
             commit('showSnackbars', {value:true,form:"teacher",res:"succ"});
-        })
-        .catch(error => {
+            return true;
+        } catch (error) {
             commit('showSnackbars', {value:true,form:"teacher",res:"error"});
-        });
+            return error.response.data.message;
+        }
     },
     //obtencion de cursos
     async getCourses({commit,state}){

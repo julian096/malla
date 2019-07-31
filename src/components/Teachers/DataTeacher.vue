@@ -379,9 +379,8 @@ export default {
         //obtiene los datos de un solo docente
         async getDataTeacher(){
             this.createKeyAuth();
-            axios.get("http://localhost:5000/teacher/"+this.$route.params.docente,this.keyAuth)
-            .then(response => {
-                console.log(response);
+            try {
+                const response = axios.get("http://localhost:5000/teacher/"+this.$route.params.docente,this.keyAuth);
                 this.Teacher.rfc = response.data.rfc;
                 this.Teacher.name = response.data.name;
                 this.Teacher.fstSurname = response.data.fstSurname;
@@ -397,22 +396,20 @@ export default {
                 this.Teacher.position = response.data.position;
                 this.hourStart = response.data.schedule.substr(0,5);
                 this.hourEnd = response.data.schedule.substr(6);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error(error);
-            })
+            }
         },
 
         //borra el docente
         async deleteTeacher(){
-            await axios.delete("http://localhost:5000/teacher/"+this.$route.params.docente,this.keyAuth)
-            .then(response => {
+            try {
+                await axios.delete("http://localhost:5000/teacher/"+this.$route.params.docente,this.keyAuth);
                 this.dialog = false
                 router.push({name:"Docentes"})
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error(error);
-            })
+            }
         }
     },
     mounted() {

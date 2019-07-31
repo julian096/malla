@@ -1,12 +1,14 @@
 <template>
     <v-container text-xs-center grid-list-lg>
-        <v-snackbar :value="snackbars.snackbarSuTeacher" :timeout="timeout" top color="gray" class="light-green--text text--accent-3">Usuario registrado con éxito</v-snackbar>
-        <v-snackbar :value="snackbars.snackbarErTeacher" :timeout="timeout" top color="red darken-4" class="white--text">Error, verifique correctamente los datos</v-snackbar>
+        <!-- <v-snackbar :value="snackbars.snackbarSuTeacher" :timeout="timeout" top color="gray" class="light-green--text text--accent-3">Usuario registrado con éxito</v-snackbar>
+        <v-snackbar :value="snackbars.snackbarErTeacher" :timeout="timeout" top color="red darken-4" class="white--text">Error, verifique correctamente los datos</v-snackbar> -->
+        <v-snackbar v-model="snackSu" top color="success" class="white--text">Usuario registrado con éxito</v-snackbar>
+        <v-snackbar v-model="snackEr" top color="error" class="white--text">{{textError}}</v-snackbar>
 
-        <v-layout row justify-center>
+        <v-layout row justify-start>
             <v-flex xs12>
                 <p class="headline ml-5">¿El usuario a registrar será interno o externo a la institución?</p>
-                <v-radio-group v-model="isInternal" row class="ml-5">
+                <v-radio-group v-model="isInternal" row>
                     <v-radio label="Interno" value="Interno"/>
                     <v-radio label="Externo" value="Externo"/>
                 </v-radio-group>
@@ -157,6 +159,7 @@
             </ValidationObserver>
         </div>
 
+        <!-- Formulario de asesor interno -->
         <v-stepper v-model="step" v-else-if="internal">
             <v-stepper-header>
                 <v-stepper-step color="red lighten-2" :complete="step > 1" step="1">Información Personal</v-stepper-step>
@@ -470,13 +473,13 @@
                                     <v-card-actions>
                                         <v-layout row wrap>
                                             <v-flex xs12 sm4>
-                                                <v-btn outline block color="light-blue lighten-2" @click="step=2">Atras</v-btn>
+                                                <v-btn outline block color="light-blue lighten-2" @click="step=2" :disabled="!buttonDis">Atras</v-btn>
                                             </v-flex>
                                             <v-flex xs12 sm4>
-                                                <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisableUserInt" @click.prevent="send">Enviar</v-btn>
+                                                <v-btn outline block color="green" :disabled="invalid || !validated || !buttonDis" @click.prevent="send">Enviar</v-btn>
                                             </v-flex>
                                             <v-flex xs12 sm4>
-                                                <v-btn outline block color="orange" :disabled="btnDisableUserInt" @click="newUser">Nuevo</v-btn>
+                                                <v-btn outline block color="orange" :disabled="buttonDis" @click="newUser">Nuevo</v-btn>
                                             </v-flex>
                                         </v-layout>
                                     </v-card-actions>
@@ -495,12 +498,17 @@
 import {ValidationObserver, ValidationProvider} from 'vee-validate';
 import {mapActions, mapState, mapMutations} from 'vuex';
 import axios from 'axios';
+import { setTimeout } from 'timers';
 
 export default {
     name:'FormUsers',
     components:{ValidationObserver,ValidationProvider},
     data() {
         return {
+            snackSu:false,
+            snackEr:false,
+            textError:"",
+            buttonDis: true,
             step:1,
             isInternal:"Interno",
             timeout:2500,
@@ -549,8 +557,6 @@ export default {
         }
     },
     computed: {
-        ...mapState(['snackbars','btnDisableUserInt','btnDisableUserExt']),
-
         //muestra un formulario u otro dependiendo el tipo de usuario
         internal(){
             if(this.isInternal == 'Interno'){
@@ -570,22 +576,33 @@ export default {
     methods: {
         allowedMinutes: v => v < 1 && v <= 11,
 
-        ...mapMutations(['enableButtonNew']),
-
         ...mapActions(['saveUser']),
 
         //Este metodo ejecuta una accion que registra el docente
-        send(){
+        async send(){
             this.Teacher.schedule = this.scheduleStart + '-' + this.scheduleEnd;
 
-            if(this.Teacher.userType == 'Jefe de departamento'){
+            if(this.Teacher.userType === 'Jefe de departamento'){
                 this.Teacher.position = 'Jefe de departamento';
             }
 
-            if(this.isInternal=="Interno"){
+            if(this.isInternal==="Interno"){
                 //Aqui ejecuta la accion de guardar el usuario
-                this.saveUser(this.Teacher);
-            }else if(this.isInternal=="Externo"){
+                const value = await this.saveUser(this.Teacher);
+                if(typeof value === 'boolean'){
+                    this.snackSu = true;
+                    this.buttonDis = false;
+                    setTimeout(() => {
+                        this.snackSu = false;
+                    }, 2000);
+                }else if(typeof value === 'string'){
+                    this.textError = value
+                    this.snackEr = true;
+                    setTimeout(()=>{
+                        this.snackEr = false;
+                    },2000)
+                }
+            }else if(this.isInternal==="Externo"){
                 this.TeacherExt.userType = 'Docente';
                 this.saveUser(this.TeacherExt);
             }
@@ -599,7 +616,7 @@ export default {
                 this.clearFieldsExternal();
             }
             this.step = 1;
-            this.enableButtonNew({form:"teacher",value:false});
+            this.buttonDis = true;
         },
         clearFieldsExternal(){
             this.Teacher.rfc = "";
@@ -645,7 +662,7 @@ export default {
             valueItem = "0"+i+":00";
             this.itemsScheduleStart.push(valueItem);
         }
-        console.log(this.itemsScheduleStart);
+        // console.log(this.itemsScheduleStart);
         let newData = this.itemsScheduleStart.slice(3);
         this.itemsScheduleStart.splice(3,3);
         for(let j of newData){

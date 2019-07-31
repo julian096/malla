@@ -1,7 +1,7 @@
 <template>
     <v-container>
-        <v-snackbar v-model="snackOk" :timeout="timeout" top color="light-green--text text--accent-3" class="white--text">Contraseña actualizada correctamente</v-snackbar>
-        <v-snackbar v-model="snackEr" :timeout="timeout" top color="red darken-4" class="white--text">Contraseña incorrecta</v-snackbar>
+        <v-snackbar v-model="snackOk" top color="green" class="white--text">Contraseña actualizada correctamente</v-snackbar>
+        <v-snackbar v-model="snackEr" top color="error" class="white--text">{{textError}}</v-snackbar>
 
         <v-dialog v-model="displayChangePass" max-width="330" persistent>
             <ValidationObserver ref="obs">
@@ -23,7 +23,7 @@
                                                       prepend-icon="lock_open"
                                                       autofocus
                                                       type="password"
-                                                      @keyup.enter.prevent="changePass(pass)" />
+                                                      @keyup.enter.prevent="send" />
                                     </ValidationProvider>
                                 </v-flex>
                             </v-layout>
@@ -40,7 +40,7 @@
                                                       label="Nueva contraseña"
                                                       prepend-icon="lock_outline"
                                                       type="password"
-                                                      @keyup.enter.prevent="changePass(pass)"/>
+                                                      @keyup.enter.prevent="send"/>
                                     </ValidationProvider>
                                 </v-flex>
                             </v-layout>
@@ -58,14 +58,14 @@
                                                       label="Confirme nueva contraseña"
                                                       prepend-icon="lock_outline"
                                                       type="password"
-                                                      @keyup.enter.prevent="changePass(pass)"/>
+                                                      @keyup.enter.prevent="send"/>
                                     </ValidationProvider>
                                 </v-flex>
                             </v-layout>
                         </v-card-text>
                         <v-card-actions>
                             <v-layout row justify-space-around>
-                                <v-btn outline color="success" @click.prevent="changePass(pass)" :disabled="!validated || !btnDisableChangePass">Aceptar</v-btn>
+                                <v-btn outline color="success" @click.prevent="send" :disabled="!validated || !btnDisableChangePass">Aceptar</v-btn>
                                 <v-btn outline color="error" @click="closeChangePass">Cancelar</v-btn>
                                 </v-layout>
                         </v-card-actions>
@@ -89,7 +89,7 @@ export default {
         return {
             snackOk:false,
             snackEr:false,
-            timeout:2500,
+            textError:"",
             newPin:"",
             pass:{
                 pin:"",
@@ -105,6 +105,23 @@ export default {
 
         ...mapActions(['changePass']),
 
+        async send(){
+            const value = await this.changePass(this.pass);
+            if(typeof value === 'string'){
+                this.textError = value
+                this.snackEr = true;
+                setTimeout(() => {
+                    this.snackEr = false;
+                    this.textError = "";
+                }, 2000);
+            }else if(typeof value === 'boolean'){
+                this.snackOk = value;
+                setTimeout(()=>{
+                    this.snackOk = false;
+                    this.closeChangePass();
+                },2000);
+            }
+        },
         closeChangePass(){
             EventBus.$emit('closeChangePass');
             this.pass.pin = "";

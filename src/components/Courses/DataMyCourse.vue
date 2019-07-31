@@ -130,7 +130,7 @@ export default {
             daysToPoll:0,
             availableButton:null,
             teachersThatHaveDoneThePoll:[],
-            dialog:true,
+            dialog:false,
             Course:{
                 courseName:"",
                 courseTo:"",

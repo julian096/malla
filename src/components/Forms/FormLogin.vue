@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-snackbar :value="snackbars.snackbarErLogin" :timeout="timeout" top color="red darken-4" class="white--text">Ocurrió un problema al iniciar sesión</v-snackbar>
+        <v-snackbar v-model="snackEr" top color="red darken-4" class="white--text">{{msgError}}</v-snackbar>
         <v-dialog v-model="displayLogin" max-width="330" persistent>
             <ValidationObserver ref="obs">
                 <v-card slot-scope="{invalid, validated}">
@@ -56,27 +56,33 @@
 <script>
 import {ValidationObserver,ValidationProvider} from 'vee-validate';
 import EventBus from '@/bus.js';
-import axios from 'axios';
 import {mapState, mapActions} from 'vuex';
 
 export default {
     name: 'FormLogin',
-    components:{ValidationObserver,ValidationProvider},
     props:['displayLogin'],
+    components:{ValidationObserver,ValidationProvider},
     data() {
         return {
+            snackEr:false,
+            msgError:"",
             user:{
-                rfc:"",
+                rfc:"AAGJ961219FB8",
                 pin:"spartan96"
             },
             timeout:2500
         }
     },
     computed:{
-        ...mapState(['snackbars']),
+        ...mapState(['snackbars'])
     },
-    methods: {
+    methods:{
         ...mapActions(['login']),
+
+        async send(){
+            const res = await this.login(this.user);
+            console.log(res);
+        },
         // Envio evento al Navbar para cerrar el login
         closeLogin(){
             EventBus.$emit('closeLogin');
