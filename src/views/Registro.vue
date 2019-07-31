@@ -5,7 +5,7 @@
             <p class="display-1">Página de registros</p>
         </v-layout>
         <v-layout row justify-center>
-            <v-flex xs12 sm6 md4>
+            <v-flex xs12 sm3 md2>
                 <v-select :items="['Usuarios','Cursos']"
                           v-model="opt"
                           label="Seleccione una opción"

@@ -4,9 +4,11 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import router from './router';
 import jwt from 'vue-jwt-decode'
+import EventBus from './bus';
 
 Vue.use(Vuex)
 Vue.use(VueAxios,axios);
+
 
 export default new Vuex.Store({
   state: {
@@ -133,9 +135,8 @@ actions: {
             commit('createKeyAuth');
             commit('restartDataCourses');
             router.push("/inicio");
-            console.log(response);
         } catch (error) {
-            return error.response.data.data.message
+            EventBus.$emit('getErrorMsg',error.response.data.data.message);
         }
     },
     //logout del usuario
@@ -178,18 +179,10 @@ actions: {
     //guarda un usuario al sistema
     async saveUser({commit,state},dataUser){
         commit('createKeyAuth');
-        commit('enableButtonNew',{form:"teacher",value:false});
-        commit('enableButtonNew',{form:"teacherExt",value:false});
-        commit('showSnackbars', {value:false,form:"teacher",res:"succ"});
-        commit('showSnackbars', {value:false,form:"teacher",res:"error"});
         try {
             await axios.post("http://localhost:5000/teachers",dataUser,state.keyAuth);
-            commit('enableButtonNew',{form:"teacher",value:true});
-            commit('enableButtonNew',{form:"teacherExt",value:true});
-            commit('showSnackbars', {value:true,form:"teacher",res:"succ"});
             return true;
         } catch (error) {
-            commit('showSnackbars', {value:true,form:"teacher",res:"error"});
             return error.response.data.message;
         }
     },

@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-snackbar v-model="snackEr" top color="red darken-4" class="white--text">{{msgError}}</v-snackbar>
+
         <v-dialog v-model="displayLogin" max-width="330" persistent>
             <ValidationObserver ref="obs">
                 <v-card slot-scope="{invalid, validated}">
@@ -80,8 +81,8 @@ export default {
         ...mapActions(['login']),
 
         async send(){
-            const res = await this.login(this.user);
-            console.log(res);
+            await this.login(this.user);
+            // console.log(res);
         },
         // Envio evento al Navbar para cerrar el login
         closeLogin(){
@@ -90,6 +91,15 @@ export default {
             this.user.pin = "";
             this.$refs.obs.reset();
         }
-    }
+    },
+    mounted() {
+        EventBus.$on('getErrorMsg',text => {
+            this.msgError = text;
+            this.snackEr = true;
+            setTimeout(()=>{
+                this.snackEr = false;
+            },2000)
+        })
+    },
 }
 </script>
