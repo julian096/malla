@@ -1,5 +1,7 @@
 <template>
     <v-container grid-list-xl text-xs-center>
+        <v-snackbar v-model="snackSu" top color="success" class="white--text">Datos actualizados correctamente</v-snackbar>
+        <v-snackbar v-model="snackEr" top color="error" class="white--text">{{errorMsg}}</v-snackbar>
 
         <p class="display-1">Datos del curso</p>
             <!-- Formulario de datos -->
@@ -271,7 +273,7 @@
                 <v-card-actions>
                     <v-layout row justify-space-around v-if="!breakpoint.xs">
                         <v-flex xs3>
-                            <v-btn outline block color="green" @click="updateCourse">Guardar</v-btn>
+                            <v-btn outline block color="green" :disabled="buttonDis" @click="updateCourse">Guardar</v-btn>
                         </v-flex>
                         <v-flex xs3>
                             <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
@@ -279,7 +281,7 @@
                     </v-layout>
                     <v-layout row wrap v-else>
                         <v-flex xs12>
-                            <v-btn outline block color="green" @click="updateCourse">Guardar</v-btn>
+                            <v-btn outline block color="green" :disabled="buttonDis" @click="updateCourse">Guardar</v-btn>
                         </v-flex>
                         <v-flex xs12>
                             <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
@@ -333,9 +335,12 @@ export default {
     data() {
         return {
             breakpoint: this.$vuetify.breakpoint,
+            snackSu:false,
+            snackEr:false,
+            errorMsg:"",
+            buttonDis:false,
             availablePDFList:true,
             dialog:null,
-            timeout:2500,
             menuDateStart:false,
             menuDateEnd:false,
             menuHourStart:false,
@@ -383,14 +388,24 @@ export default {
         // Actualiza los datos del curso
         async updateCourse(){
             this.Course.timetable = this.hourStart + '-' + this.hourEnd;
-            await axios.put("http://localhost:5000/course/"+this.$route.params.curso,this.Course,this.keyAuth)
-            .then(response => {
-                this.update = 'No';
-                router.push("/cursos/"+this.Course.courseName);
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            try {
+                const res = await axios.put("http://localhost:5000/course/"+this.$route.params.curso,this.Course,this.keyAuth);
+                this.snackSu = true;
+                this.buttonDis = true;
+                setTimeout(() => {
+                    this.snackSu = false;
+                    this.getDataCourse();
+                    this.update = 'No';
+                    this.buttonDis = false;
+                }, 2000);
+            } catch (error) {
+                this.errorMsg = error.response.data.message;
+                this.snackEr = true;
+                setTimeout(() => {
+                    this.snackEr = false;
+                }, 2000);
+                // console.error(error.response.data.message);
+            }
         },
 
         //Obtiene la lista de asistencia del curso

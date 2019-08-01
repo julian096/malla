@@ -155,7 +155,7 @@ const router = new Router({
     {
       path: '/membretado',
       name: 'Membretados',
-      component: () => import('@/views/Teacher/Letterhead.vue'),
+      component: () => import('@/views/Teachers/Letterhead.vue'),
       meta:{
         requiresAuth: true,
         requireAdmin: true
@@ -164,7 +164,7 @@ const router = new Router({
     {
       path: '/membretado/:letterheadName',
       name: 'Membretado',
-      component: () => import('@/views/Teacher/DetailLetterhead.vue'),
+      component: () => import('@/views/Teachers/DetailLetterhead.vue'),
       meta:{
         requiresAuth: true,
         requireAdmin: true

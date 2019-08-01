@@ -1,8 +1,9 @@
 <template>
     <v-container grid-list-xl text-xs-center>
+        <v-snackbar v-model="snackSu" top color="success" class="white--text">Datos actualizados correctamente</v-snackbar>
+        <v-snackbar v-model="snackEr" top color="error" class="white--text">{{errorMsg}}</v-snackbar>
 
         <p class="display-1">Datos del docente</p>
-
         <!-- datos del docente -->
         <v-card elevation="10" v-if="update == 'No'">
             <v-card-text>
@@ -261,7 +262,7 @@
                 <v-card-actions>
                     <v-layout row justify-space-around v-if="!breakpoint.xs">
                         <v-flex xs3>
-                            <v-btn outline block color="green" @click="updateTeacher">Guardar</v-btn>
+                            <v-btn outline block color="green" :disabled="buttonDis" @click="updateTeacher">Guardar</v-btn>
                         </v-flex>
                         <v-flex xs3>
                             <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
@@ -269,7 +270,7 @@
                     </v-layout>
                     <v-layout row wrap v-else>
                         <v-flex xs12>
-                            <v-btn outline block color="green" @click="updateTeacher">Guardar</v-btn>
+                            <v-btn outline block color="green" :disabled="buttonDis" @click="updateTeacher">Guardar</v-btn>
                         </v-flex>
                         <v-flex xs12>
                             <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
@@ -314,7 +315,7 @@ import {ValidationProvider} from 'vee-validate';
 import axios from 'axios';
 import {mapState,mapMutations} from 'vuex';
 import router from '../../router';
-import { setTimeout } from 'timers';
+import { type } from 'os';
 
 export default {
     name: 'DataTeacher',
@@ -322,6 +323,10 @@ export default {
     data() {
         return {
             breakpoint: this.$vuetify.breakpoint,
+            snackSu:false,
+            snackEr:false,
+            errorMsg:"",
+            buttonDis:false,
             update:'No',
             dialog:false,
             userType:['Administrador','Jefe de departamento','Comunicación','Docente'],
@@ -366,21 +371,29 @@ export default {
                 this.Teacher.position = 'Jefe de departamento';
             }
             try {
-                axios.put("http://localhost:5000/teacher/"+this.$route.params.docente,this.Teacher,this.keyAuth)
+                const res = await axios.put("http://localhost:5000/teacher/"+this.$route.params.docente,this.Teacher,this.keyAuth);
+                this.snackSu = true;
+                this.buttonDis = true;
                 setTimeout(() => {
+                    this.snackSu = false;
                     this.getDataTeacher();
-                }, 1000);
+                    this.update = 'No';
+                    this.buttonDis = false;
+                }, 2000)
             } catch (error) {
-                console.error(error);
+                this.errorMsg = res;
+                this.snackEr = true;
+                setTimeout(() => {
+                    this.snackEr = false;
+                }, 2000);
             }
-            this.update = 'No';
         },
 
         //obtiene los datos de un solo docente
         async getDataTeacher(){
             this.createKeyAuth();
             try {
-                const response = axios.get("http://localhost:5000/teacher/"+this.$route.params.docente,this.keyAuth);
+                const response = await axios.get("http://localhost:5000/teacher/"+this.$route.params.docente,this.keyAuth);
                 this.Teacher.rfc = response.data.rfc;
                 this.Teacher.name = response.data.name;
                 this.Teacher.fstSurname = response.data.fstSurname;

@@ -65,7 +65,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-layout row justify-space-around>
-                                <v-btn outline color="success" @click.prevent="send" :disabled="!validated || !btnDisableChangePass">Aceptar</v-btn>
+                                <v-btn outline color="success" @click.prevent="send" :disabled="!validated || buttonDis">Aceptar</v-btn>
                                 <v-btn outline color="error" @click="closeChangePass">Cancelar</v-btn>
                                 </v-layout>
                         </v-card-actions>
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import {mapState,mapMutations,mapActions} from 'vuex';
+import {mapActions} from 'vuex';
 import EventBus from '@/bus.js';
 import {ValidationObserver, ValidationProvider} from 'vee-validate';
 
@@ -89,6 +89,7 @@ export default {
         return {
             snackOk:false,
             snackEr:false,
+            buttonDis:false,
             textError:"",
             newPin:"",
             pass:{
@@ -97,11 +98,7 @@ export default {
             }
         }
     },
-    computed:{
-        ...mapState(['btnDisableChangePass'])
-    },
     methods:{
-        ...mapMutations(['enableButtonNew']),
 
         ...mapActions(['changePass']),
 
@@ -116,8 +113,10 @@ export default {
                 }, 2000);
             }else if(typeof value === 'boolean'){
                 this.snackOk = value;
+                this.buttonDis = true;
                 setTimeout(()=>{
                     this.snackOk = false;
+                    this.buttonDis = false; 
                     this.closeChangePass();
                 },2000);
             }
@@ -128,11 +127,7 @@ export default {
             this.pass.newPin = "";
             this.newPin = "";
             this.$refs.obs.reset();
-            this.enableButtonNew({form:"pass",value:false});
         }
-    },
-    created() {
-        this.enableButtonNew({form:"pass",value:false});
-    },
+    }
 }
 </script>

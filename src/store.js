@@ -155,17 +155,12 @@ actions: {
     //registro de cursos
     async saveCourse({state, commit},dataCourse){
         commit('createKeyAuth');
-        commit('enableButtonNew',{form:"course",value:false});
-        commit('showSnackbars', {value:false,form:"course",res:"succ"});
-        commit('showSnackbars', {value:false,form:"course",res:"error"});
-        await axios.post("http://localhost:5000/courses",dataCourse,state.keyAuth)
-        .then(response => {
-            commit('enableButtonNew',{form:"course",value:true});
-            commit('showSnackbars', {value:true,form:"course",res:"succ"});
-        })
-        .catch(error => {
-            commit('showSnackbars', {value:true,form:"course",res:"error"});
-        })
+        try {
+            await axios.post("http://localhost:5000/courses",dataCourse,state.keyAuth);
+            return true;
+        } catch (error) {
+            return error.response.data.message
+        }
     },
     async changePass({commit,state},pass){
         commit('createKeyAuth');

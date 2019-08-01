@@ -1,6 +1,7 @@
 <template>
     <v-container grid-list-lg text-xs-center>
-        <Navigation/>
+
+        <v-snackbar v-model="snackSu" top color="success" class="white--text">Datos actualizados correctamente</v-snackbar>
         <p class="display-1">Datos del membrete {{$route.params.letterheadName}}</p>
 
         <!-- Form para ver los datos del membrete -->
@@ -133,7 +134,7 @@
                                 <span class="subheading">¿Estas seguro que quieres actualizar la información del membrete?</span>
                             </v-flex>
                             <v-flex class="mt-4">
-                                <v-btn outline color="green" @click="updateLetterhead">Aceptar</v-btn>
+                                <v-btn outline color="green" :disabled="buttonDis" @click="updateLetterhead">Aceptar</v-btn>
                                 <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
@@ -158,6 +159,8 @@ export default {
     data() {
         return {
             breakpoint:this.$vuetify.breakpoint,
+            snackSu:false,
+            buttonDis:false,
             update:'No',
             dialog:false,
             menuEmitDate:false,
@@ -165,7 +168,8 @@ export default {
                 emitDate:"",
                 nameDocument:"",
                 typeDocument:"",
-                version:""
+                version:"",
+                shortName:""
             }
         }
     },
@@ -184,6 +188,7 @@ export default {
                 this.Letterhead.nameDocument = dataLetterhead.data.nameDocument;
                 this.Letterhead.typeDocument = dataLetterhead.data.typeDocument;
                 this.Letterhead.version = dataLetterhead.data.version;
+                this.Letterhead.shortName = dataLetterhead.data.shortName;
             } catch (error) {
                 console.error(error);
             }
@@ -194,9 +199,15 @@ export default {
             this.createKeyAuth();
             try {
                 await axios.put("http://localhost:5000/metadata/"+this.$route.params.letterheadName,this.Letterhead,this.keyAuth);
-                this.update = 'No';
-                this.dialog = false;
-                router.push({name: 'Membretado'});
+                this.snackSu = true;
+                this.buttonDis = true;
+                setTimeout(() => {
+                    this.snackSu = false;
+                    this.update = 'No';
+                    this.dialog = false;
+                    this.buttonDis = false;
+                    // router.push({name: 'Membretado'});
+                }, 2000);
             } catch (error) {
                 console.error(error);
             }

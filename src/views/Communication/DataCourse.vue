@@ -2,7 +2,7 @@
     <v-container text-xs-center grid-list-lg>
         <Navigation/>
         <p class="display-1">Datos del curso</p>
-        <v-snackbar v-model="showAlert" top color="gray" class="light-green--text text--accent-3">Folio actualizado correctamente</v-snackbar>
+        
         <v-card elevation="10">
             <v-card-text>
                 <v-layout row wrap>
@@ -93,7 +93,6 @@ export default {
     components:{Navigation, FormChangeSerial},
     data() {
         return {
-            showAlert:false,
             btnValue:null,
             showFormSerial:false,
             totalHours:0,
@@ -156,24 +155,27 @@ export default {
     },
     created() {
         this.getDataCourse();
+    },
+    mounted() {
+        EventBus.$on('closeChangeSerial', () => {
+            this.btnValue = false;
+            this.showFormSerial = false;
+        })
 
         EventBus.$on('sendSerial', async (dataSerial) => {
             try {
                 const a = await axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,dataSerial,this.keyAuth);
                 this.Course.serial = dataSerial.serial;
-                this.showAlert = true;
+                this.snackSu = true;
                 this.btnValue = true;
                 setTimeout(() => {
-                    this.showAlert = false;
+                    this.snackSu = false;
                     this.showFormSerial = false;
+                    this.btnValue = false;
                 }, 2000);
             } catch (error) {
                 console.error(error);
             }
-        })
-
-        EventBus.$on('closeChangeSerial', () => {
-            this.showFormSerial = false;
         })
     },
 }

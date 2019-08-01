@@ -525,7 +525,7 @@
 
 <script>
 import {ValidationObserver, ValidationProvider} from 'vee-validate';
-import {mapMutations} from 'vuex';
+import {mapActions} from 'vuex';
 import axios from 'axios';
 
 export default {

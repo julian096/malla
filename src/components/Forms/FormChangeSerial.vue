@@ -1,5 +1,7 @@
 <template>
     <v-container>
+        <v-snackbar v-model="snackSu" top color="success" class="white--text">Folio actualizado correctamente</v-snackbar>
+
         <v-dialog v-model="displayChangeSerial" max-width="330" persistent>
             <ValidationObserver ref="obs">
                 <v-card slot-scope="{validated}">
@@ -47,7 +49,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-layout row justify-space-around>
-                                    <v-btn outline color="green" :disabled="!validated || btnDisable" @click="sendSerial">Aceptar</v-btn>
+                                    <v-btn outline color="green" :disabled="!validated || buttonDis" @click="sendSerial">Aceptar</v-btn>
                                     <v-btn outline color="red" @click="closeChangeSerial">Cancelar</v-btn>
                                 </v-layout>
                             </v-card-actions>
@@ -62,13 +64,16 @@
 <script>
 import { ValidationObserver, ValidationProvider} from 'vee-validate';
 import EventBus from '@/bus.js';
+import axios from 'axios';
 
 export default {
     name: 'FormChangeSerial',
-    props:['displayChangeSerial','btnDisable'],
+    props:['displayChangeSerial'],
     components:{ValidationObserver, ValidationProvider},
     data() {
         return {
+            snackSu:false,
+            buttonDis:false,
             confirmSerial:"",
             dataSerial:{
                 serial:""
@@ -76,14 +81,29 @@ export default {
         }
     },
     methods:{
-        sendSerial(){
-            EventBus.$emit('sendSerial',this.dataSerial);
+        async sendSerial(){
+            console.log(this.dataSerial);
+            try {
+                console.log("alv")
+                await axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,this.dataSerial,this.keyAuth);
+                // this.Course.serial = dataSerial.serial;
+                // this.snackSu = true;
+                // this.buttonDis = true;
+                // setTimeout(() => {
+                //     this.snackSu = false;
+                //     this.closeChangeSerial();
+                //     this.buttonDis = false;
+                // }, 2000);
+            } catch (error) {
+                console.error(error);
+            }
         },
 
         closeChangeSerial(){
             EventBus.$emit('closeChangeSerial');
             this.confirmSerial = "",
             this.dataSerial.serial = "";
+            this.$refs.obs.reset();
         }
     }
 }

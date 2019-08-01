@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-snackbar v-model="showAlert" top color="gray" class="light-green--text text--accent-3">Limite de dias establecido correctamente</v-snackbar>
+        <v-snackbar v-model="showAlert" top color="success" class="white--text">Limite de dias establecido correctamente</v-snackbar>
         <v-dialog v-model="showDialog" max-width="330" persistent>
             <ValidationObserver ref="obs">
                 <v-card slot-scope="{validated}">

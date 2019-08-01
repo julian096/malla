@@ -1,7 +1,7 @@
 <template>
     <v-container text-xs-center grid-list-lg>
-        <v-snackbar :value="snackbars.snackbarSuCourse" :timeout="timeout" top color="gray" class="light-green--text text--accent-3">Curso registrado con éxito</v-snackbar>
-        <v-snackbar :value="snackbars.snackbarErCourse" :timeout="timeout" top color="red darken-4" class="white--text">Error, verifique correctamente los datos</v-snackbar>
+        <v-snackbar v-model="snackSu" top color="success" class="white--text">Curso creado correctamente</v-snackbar>
+        <v-snackbar v-model="snackEr" top color="error" class="white--text">{{errorMsg}}</v-snackbar>
 
         <v-stepper v-model="step">
             <v-stepper-header>
@@ -288,13 +288,13 @@
                                 <v-card-actions>
                                     <v-layout row wrap>
                                         <v-flex xs12 sm4>
-                                            <v-btn outline block color="light-blue lighten-2" @click="step=2">Atras</v-btn>
+                                            <v-btn outline block color="light-blue lighten-2" @click="step=2" :disabled="!buttonDis">Atras</v-btn>
                                         </v-flex>
                                         <v-flex xs12 sm4>
-                                            <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisableCourse" @click.prevent="send">Enviar</v-btn>
+                                            <v-btn outline block color="green" :disabled="invalid || !validated || !buttonDis" @click.prevent="send">Enviar</v-btn>
                                         </v-flex>
                                         <v-flex xs12 sm4>
-                                            <v-btn outline block color="orange" :disabled="btnDisableCourse" @click="newCourse">Nuevo</v-btn>
+                                            <v-btn outline block color="orange" :disabled="buttonDis" @click="newCourse">Nuevo</v-btn>
                                         </v-flex>
                                     </v-layout>
                                 </v-card-actions>
@@ -310,16 +310,19 @@
 <script>
 import {ValidationObserver, ValidationProvider} from 'vee-validate';
 import axios from 'axios';
-import {mapState, mapActions, mapMutations} from 'vuex';
+import {mapActions} from 'vuex';
+import { setTimeout } from 'timers';
 
 export default {
     name:'FormCourses',
     components:{ValidationObserver,ValidationProvider},
     data() {
         return {
-            timeout:2500,
+            snackSu:false,
+            snackEr:false,
+            errorMsg:"",
             step:1,
-            btnDisables:true,
+            buttonDis:true,
             menuDateStart:false,
             menuDateEnd:false,
             menuHourStart:false,
@@ -344,26 +347,34 @@ export default {
             }
         }
     },
-    computed:{
-        ...mapState(['snackbars','btnDisableCourse'])
-    },
     methods: {
         //permite escoger horas exactas para los timePickers
         allowedMinutes: v => v < 1 && v <= 11,
 
-        ...mapMutations(['enableButtonNew','showSnackbars']),
-
         ...mapActions(['saveCourse']),
 
-        send(){
+        async send(){
             this.Course.timetable = this.hourStart + "-" + this.hourEnd;
-            this.saveCourse(this.Course);
+            const res = await this.saveCourse(this.Course);
+            if(typeof res === 'boolean'){
+                this.snackSu = true;
+                this.buttonDis = false;
+                setTimeout(() => {
+                    this.snackSu = false;
+                }, 2000);
+            }else if(typeof res === 'string'){
+                this.errorMsg = res;
+                this.snackEr = true;
+                setTimeout(()=>{
+                    this.snackEr = false;
+                    this.errorMsg = "";
+                },2000)
+            }
         },
         newCourse(){
             this.step = 1;
             this.clearFields();
-            this.showSnackbars({value:true,form:"course",res:"succ"});
-            this.enableButtonNew({form:"course",value:false});
+            this.buttonDis = true;
         },
         clearFields(){
             this.Course.courseName = "";
