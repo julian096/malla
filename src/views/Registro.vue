@@ -5,7 +5,7 @@
             <p class="display-1">Página de registros</p>
         </v-layout>
         <v-layout row justify-center>
-            <v-flex xs12 sm3 md2>
+            <v-flex xs12 sm3 md3>
                 <v-select :items="['Usuarios','Cursos']"
                           v-model="opt"
                           label="Seleccione una opción"
@@ -13,8 +13,8 @@
             </v-flex>
         </v-layout>
         
-        <FormUsers v-if="opt == 'Usuarios'"/>
-        <FormCourses v-if="opt == 'Cursos'"/>
+        <FormUsers v-if="opt === 'Usuarios'"/>
+        <FormCourses v-if="opt === 'Cursos'"/>
     </v-container>
 </template>
 

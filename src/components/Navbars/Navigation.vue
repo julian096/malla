@@ -86,6 +86,15 @@
                     </v-list-tile-content>
                 </v-list-tile>
 
+                <v-list-tile v-ripple @click="getConcentredFile">
+                    <v-list-tile-action>
+                        <v-icon>file_download</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Concentrado de datos</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
                 <v-list-tile v-ripple @click="logout">
                     <v-list-tile-action>
                         <v-icon>exit_to_app</v-icon>
@@ -316,7 +325,7 @@ export default {
 		};
     },
     methods:{
-        ...mapActions(['logout']),
+        ...mapActions(['logout','getConcentredFile']),
     },
     created() {
         this.userType = sessionStorage.getItem("userType");
