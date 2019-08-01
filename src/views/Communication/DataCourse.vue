@@ -77,7 +77,7 @@
             </v-card-text>
         </v-card>
 
-        <FormChangeSerial :displayChangeSerial="showFormSerial" :btnDisable="btnValue"/>
+        <FormChangeSerial :displayChangeSerial="showFormSerial"/>
     </v-container>
 </template>
 
@@ -93,16 +93,12 @@ export default {
     components:{Navigation, FormChangeSerial},
     data() {
         return {
-            btnValue:null,
             showFormSerial:false,
             totalHours:0,
             state:"",
             teacherName:"",
             hourStart:"",
             hourEnd:"",
-            serialCourse:{
-                serial:""
-            },
             Course:{
                 courseName:"",
                 courseTo:"",
@@ -162,20 +158,8 @@ export default {
             this.showFormSerial = false;
         })
 
-        EventBus.$on('sendSerial', async (dataSerial) => {
-            try {
-                const a = await axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,dataSerial,this.keyAuth);
-                this.Course.serial = dataSerial.serial;
-                this.snackSu = true;
-                this.btnValue = true;
-                setTimeout(() => {
-                    this.snackSu = false;
-                    this.showFormSerial = false;
-                    this.btnValue = false;
-                }, 2000);
-            } catch (error) {
-                console.error(error);
-            }
+        EventBus.$on('sendSerial',serial=>{
+            this.Course.serial = serial;
         })
     },
 }

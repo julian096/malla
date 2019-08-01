@@ -24,8 +24,7 @@
                                                           v-validate="'length:10|alpha_num'"
                                                           v-model="dataSerial.serial"
                                                           label="Folio"
-                                                          prepend-icon="done"
-                                                          @keyup.enter.prevent="sendSerial"/>
+                                                          prepend-icon="done"/>
                                         </ValidationProvider>
                                     </v-flex>
                                 </v-layout>
@@ -65,6 +64,7 @@
 import { ValidationObserver, ValidationProvider} from 'vee-validate';
 import EventBus from '@/bus.js';
 import axios from 'axios';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
     name: 'FormChangeSerial',
@@ -80,22 +80,25 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapState(['keyAuth'])
+    },
     methods:{
+        ...mapMutations(['createKeyAuth']),
+
         async sendSerial(){
-            console.log(this.dataSerial);
             try {
-                console.log("alv")
                 await axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,this.dataSerial,this.keyAuth);
-                // this.Course.serial = dataSerial.serial;
-                // this.snackSu = true;
-                // this.buttonDis = true;
-                // setTimeout(() => {
-                //     this.snackSu = false;
-                //     this.closeChangeSerial();
-                //     this.buttonDis = false;
-                // }, 2000);
+                EventBus.$emit('sendSerial',this.dataSerial.serial);
+                this.snackSu = true;
+                this.buttonDis = true;
+                setTimeout(() => {
+                    this.snackSu = false;
+                    this.closeChangeSerial();
+                    this.buttonDis = false;
+                }, 2000);
             } catch (error) {
-                console.error(error);
+                console.error(error.response);
             }
         },
 
@@ -105,6 +108,9 @@ export default {
             this.dataSerial.serial = "";
             this.$refs.obs.reset();
         }
+    },
+    created(){
+        this.createKeyAuth()
     }
 }
 </script>

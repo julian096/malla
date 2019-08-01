@@ -163,8 +163,8 @@ export default {
         //obtiene los datos del curso
         async getDataCourse(){
             this.createKeyAuth();
-            await axios.get('http://localhost:5000/course/'+this.$route.params.MiCurso,this.keyAuth)
-            .then(response => {
+            try {
+                const response = await axios.get('http://localhost:5000/course/'+this.$route.params.MiCurso,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -182,10 +182,9 @@ export default {
                 this.daysToPoll = response.data.leftDays;
                 this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
                 console.log(response);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error(error);
-            })
+            }
         },
 
         // Abre la vista para la encuesta de satisfacción
@@ -195,15 +194,13 @@ export default {
 
         // pide un body que es redundante, decirle mañana
         async removeTeacherInCourse(){
-            this.createKeyAuth();
-            await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCurso,this.keyAuth)
-            .then(response => {
+            try {
+                await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCurso,this.keyAuth)
                 console.log("Dado de baja con éxito");
                 router.push({name: 'MisCursos'})
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error(error);
-            })
+            }
         }
     },
     created(){

@@ -1,10 +1,13 @@
 <template>
     <v-container grid-list-lg>
+        <v-snackbar v-model="snackbar" top color="success" class="white--text">Encuesta de satisfacción completa</v-snackbar>
+
         <v-layout row justify-center>
             <p class="display-1">Encuesta de satisfacción para participantes inscritos</p>
         </v-layout>
+
         <p class="body-2 font-italic">Instrucciones: Seleccione del 1 - 5 en base a su opinión, el nivel de satisfacción obtenida a lo largo del curso, donde 1 significa nada satisfecho y 5 significa muy satisfecho.</p>
-        <v-snackbar v-model="snackbar" :timeout="timeout" top color="gray" class="light-green--text text--accent-3">Encuesta de satisfacción completa</v-snackbar>
+
         <v-stepper v-model="step">
             <v-stepper-header>
                 <v-stepper-step color="red lighten-2" :complete="step > 1" step="1">Evento</v-stepper-step>
@@ -15,6 +18,7 @@
 
                 <v-stepper-step color="red lighten-2" step="3">Desarrollo laboral</v-stepper-step>
             </v-stepper-header>
+
             <v-stepper-items>
                 <!-- Formulario 1 -->
                 <v-stepper-content step="1">
@@ -254,7 +258,7 @@
                                                             v-model="poll.reason"
                                                             label="¿Por qué?"
                                                             rows="3"/>
-                                            </v-flex>
+                                        </v-flex>
                                     </v-layout>
                                     <v-layout row wrap>
                                         <v-flex xs12>
@@ -270,13 +274,13 @@
                                     </v-layout>
                                     <v-layout row wrap>
                                         <v-flex xs12 sm4>
-                                            <v-btn outline block color="light-blue lighten-2" @click="step=2">Atras</v-btn>
+                                            <v-btn outline block color="light-blue lighten-2" @click="step=2" :disabled="!btnDisable">Atras</v-btn>
                                         </v-flex>
                                         <v-flex xs12 sm4>
                                             <v-btn outline block color="green" :disabled="invalid || !validated || !btnDisable" @click="send">Enviar</v-btn>
                                         </v-flex>
                                         <v-flex xs12 sm4>
-                                            <v-btn outline block color="orange" :disabled="btnDisable" :to="{name: 'Inicio'}">Volver al inicio</v-btn>
+                                            <v-btn outline block color="orange" :disabled="btnDisable" @click="backHome">Volver al inicio</v-btn>
                                         </v-flex>
                                     </v-layout>
                                 </v-card-text>
@@ -292,10 +296,12 @@
 <script>
 import {ValidationObserver, ValidationProvider} from 'vee-validate';
 import {mapState, mapMutations} from 'vuex';
+import router from '../../router';
 import axios from 'axios';
 
 export default {
     name: 'FormPoll',
+    components:{ValidationObserver,ValidationProvider},
     data() {
         return {
             snackbar: false,
@@ -336,44 +342,54 @@ export default {
                 if(this.userType == 0){
                     const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCursoAdmin+"/poll",this.poll,this.keyAuth);
                     let name = "Encuesta"+this.$route.params.MiCursoAdmin.replace(" ","");
-                    this.btnDisable = true;
                     let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
                     let link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
                     link.download = name;
                     link.target = '_blank';
                     link.click();
+                    this.snackbar = true;
+                    this.btnDisable = false;
+                    setTimeout(() => {
+                        this.snackbar = false;
+                    }, 2000);
                 }else if(this.userType == 1){
                     const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCursoJefe+"/poll",this.poll,this.keyAuth);
                     let name = "Encuesta"+this.$route.params.MiCursoJefe.replace(" ","");
-                    this.btnDisable = true;
                     let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
                     let link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
                     link.download = name;
                     link.target = '_blank';
                     link.click();
+                    this.snackbar = true;
+                    this.btnDisable = false;
+                    setTimeout(() => {
+                        this.snackbar = false;
+                    }, 2000);
                 }else if(this.userType == 3){
                     const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCurso+"/poll",this.poll,this.keyAuth);
                     let name = "Encuesta"+this.$route.params.MiCurso.replace(" ","");
-                    this.btnDisable = true;
                     let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
                     let link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
                     link.download = name;
                     link.target = '_blank';
                     link.click();
+                    this.snackbar = true;
+                    this.btnDisable = false;
+                    setTimeout(() => {
+                        this.snackbar = false;
+                    }, 2000);
                 }
             } catch (error) {
                 console.error(error);
             }
+        },
+        backHome(){
             this.btnDisable = false;
-            this.snackbar = true;
+            router.push({name: 'Inicio'});
         }
-    },
-    components:{
-        ValidationObserver,
-        ValidationProvider
     }
 }
 </script>
