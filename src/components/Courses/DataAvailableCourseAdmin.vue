@@ -117,7 +117,6 @@ export default {
     },
     mounted(){
         EventBus.$on('getDataCourse',async dataCourse=>{
-            // console.log(dataCourse);
             this.Course.courseName = dataCourse.data.courseName;
             this.Course.courseTo = dataCourse.data.courseTo;
             this.Course.dateStart = dataCourse.data.dateStart.replace("T00:00:00+00:00","");

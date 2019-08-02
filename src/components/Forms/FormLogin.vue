@@ -68,7 +68,7 @@ export default {
             snackEr:false,
             msgError:"",
             user:{
-                rfc:"AAGJ961219FB8",
+                rfc:"AAAAAAAAAAAAA",
                 pin:"spartan96"
             },
             timeout:2500

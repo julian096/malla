@@ -225,9 +225,11 @@ actions: {
         }
     },
     // Peticiones a un curso
-    async requestsTo({state},courseName){
+    async requestsTo({commit,state},courseName){
+        commit('createKeyAuth');
         try {
             const response = await axios.get(`${url}/requestsTo/${courseName}`,state.keyAuth);
+            EventBus.$emit('suRequestsTo',response);
             return response;
         } catch (error) {
             
@@ -239,8 +241,30 @@ actions: {
             await axios.get(`${url}/courseRequest/${courseName}`,state.keyAuth);
             const response = await axios.get(`${url}/inscriptionDocument/${courseName}`,state.keyAuth);
             EventBus.$emit('suRequestCourse',response);
+            
+        } catch (error) {
+            EventBus.$emit('erRequestCourse',error.response.data.message);
+        }
+    },
+
+    // Obtiene los docentes que no han solicitado un curso
+    async getTeachersByDep({commit,state},courseName){
+        commit('createKeyAuth');
+        try {
+            const response = await axios.get(`${url}/teachersByDep/${courseName}`,state.keyAuth);
+            EventBus.$emit('getTeachersByDep',response);
         } catch (error) {
             
+        }
+    },
+    // Recomienda un docente a un curso
+    async recTeacher({state},{nameCourse,body}){
+        try {
+            await axios.post(`${url}/courseRequest/${nameCourse}`,body,state.keyAuth);
+            EventBus.$emit('suRecTeacher');
+            console.log('que pedo')
+        } catch (error) {
+            console.error(error);
         }
     },
     // Actualiza el curso
@@ -315,6 +339,24 @@ actions: {
         try {
             await axios.get(`${url}/removeTeacherinCourse/${nameCourse}`,state.keyAuth);
             EventBus.$emit('suRemoveTeacher');
+        } catch (error) {
+            
+        }
+    },
+    // Acepta las peticiones de los docentes
+    async acceptPetitionTeacher({state},{nameCourse,body}){
+        try {
+            await axios.post(`${url}/addTeacherinCourse/${nameCourse}`,body,state.keyAuth);
+            EventBus.$emit('suAcceptPetition');
+        } catch (error) {
+            
+        }
+    },
+    // Rechaza las peticiones de los docentes
+    async rejectPetitionTeacher({state},{nameCourse,body}){
+        try {
+            await axios.post(`${url}/rejectTeacherOfCourse/${nameCourse}`,body,state.keyAuth);
+            EventBus.$emit('suRejectPetition');
         } catch (error) {
             
         }

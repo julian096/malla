@@ -15,7 +15,7 @@
                                 </v-list-tile-content>
                                 <v-list-tile-action>
                                     <v-layout row wrap>
-                                        <v-btn class="pl-2 pr-2" round outline color="blue" @click="recTeacher(item.rfc,index)">Recomendar</v-btn>
+                                        <v-btn class="pl-2 pr-2" round outline color="blue" @click="recommTeacher(item.rfc,index)">Recomendar</v-btn>
                                     </v-layout>
                                 </v-list-tile-action>
                             </v-list-tile>
@@ -36,48 +36,38 @@
 
 <script>
 import Navigation from '@/components/Navbars/Navigation.vue';
-import { mapState, mapMutations } from 'vuex';
-import axios from 'axios';
+import { mapActions } from 'vuex';
+import EventBus from '../../bus';
 
 export default {
     name: 'RecTeacher',
     components:{Navigation},
     data() {
         return {
+            indice:0,
             arrayTeachers:[]
         }
     },
-    computed:{
-        ...mapState(['keyAuth'])
-    },
     methods:{
-        ...mapMutations(['createKeyAuth']),
-
-        // Obtiene la lista de docentes del departamento que no hayan seleccionado el curso
-        async getTeachers(){
-            this.createKeyAuth();
-            try {
-                const teachers = await axios.get("http://localhost:5000/teachersByDep/"+this.$route.params.recDocente,this.keyAuth)
-                this.arrayTeachers = teachers.data.teachers;
-                
-            } catch (error) {
-                console.error(error);
-            }
-        },
+        ...mapActions(['getTeachersByDep','recTeacher']),
 
         // Recomienda el docente seleccionado al curso
-        async recTeacher(rfc, ind){
-            try {
-                await axios.post("http://localhost:5000/courseRequest/"+this.$route.params.recDocente,{"rfc":rfc},this.keyAuth);
-                console.log("Docente recomendado");
-                this.arrayTeachers.splice(ind,1)
-            } catch (error) {
-                console.error(error);
-            }
+        async recommTeacher(rfc, ind){
+            this.indice = ind;
+            this.recTeacher({nameCourse:this.$route.params.recDocente,body:{"rfc":rfc}});
         }
     },
     created(){
-        this.getTeachers();
-    }
+        this.getTeachersByDep(this.$route.params.recDocente);
+    },
+    mounted() {
+        EventBus.$on('getTeachersByDep',response=>{
+            this.arrayTeachers = response.data.teachers;
+        });
+
+        EventBus.$on('suRecTeacher',()=>{
+            this.arrayTeachers.splice(this.indice,1);
+        })
+    },
 }
 </script>

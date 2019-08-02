@@ -37,63 +37,49 @@
 
 <script>
 import Navigation from '@/components/Navbars/Navigation.vue';
-import axios from 'axios';
-import router from '../../router';
-import {mapState,mapMutations} from 'vuex';
+import {mapActions} from 'vuex';
+import EventBus from '../../bus';
 
 export default {
     name: 'PetitionCourse',
     components:{Navigation},
     data() {
         return {
+            indice:0,
             arrayTeachers:[]
         }
     },
-    computed:{
-        ...mapState(['keyAuth'])
-    },
     methods:{
-        ...mapMutations(['createKeyAuth']),
-
-        //obtiene la lista de los docentes que solicitaron el curso
-        async getList(){
-            this.createKeyAuth();
-            await axios.get("http://localhost:5000/requestsTo/"+this.$route.params.listaPeticion,this.keyAuth)
-            .then(response => {
-                this.arrayTeachers = response.data;
-                console.log(this.arrayTeachers);
-            })
-            .catch(error => {
-                console.error(error);
-            })
-        },
-
+        ...mapActions(['requestsTo','acceptPetitionTeacher','rejectPetitionTeacher']),
+    
         //acepta el docente en el curso
         async acceptTeacherInCourse(rfc,ind){
-            await axios.post("http://localhost:5000/addTeacherinCourse/"+this.$route.params.listaPeticion,{"rfc":rfc},this.keyAuth)
-            .then(response => {
-                console.log("docente aceptado");
-                this.arrayTeachers.splice(ind,1);
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            this.indice = ind;
+            this.acceptPetitionTeacher({nameCourse:this.$route.params.listaPeticion,body:{"rfc":rfc}});
         },
 
         //rechaza el docente en el curso
         async rejectTeacherOfCourse(rfc,ind){
-            await axios.post("http://localhost:5000/rejectTeacherOfCourse/"+this.$route.params.listaPeticion,{"rfc":rfc},this.keyAuth)
-            .then(response => {
-                console.log("docente rechazado");
-                this.arrayTeachers.splice(ind,1);
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            this.indice = ind;
+            this.rejectPetitionTeacher({nameCourse:this.$route.params.listaPeticion,body:{"rfc":rfc}});
         }
     },
     created() {
-        this.getList()
+        this.requestsTo(this.$route.params.listaPeticion);
+    },
+    mounted() {
+        EventBus.$on('suRequestsTo',response=>{
+            this.arrayTeachers = response.data;
+            console.log(this.arrayTeachers);
+        });
+
+        EventBus.$on('suAcceptPetition',()=>{
+            this.arrayTeachers.splice(this.indice,1);
+        });
+
+        EventBus.$on('suRejectPetition',()=>{
+            this.arrayTeachers.splice(this.indice,1);
+        })
     },
 }
 </script>
