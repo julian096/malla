@@ -121,7 +121,7 @@ export default {
         // Obtiene los datos del curso disponible
         async getDataAvailableCourse(){
             this.createKeyAuth();
-            await axios.get('http://localhost:5000/course/'+this.$route.params.cursoDisp,this.keyAuth)
+            await axios.get('/course/'+this.$route.params.cursoDisp,this.keyAuth)
             .then(response => {
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
@@ -144,7 +144,7 @@ export default {
 
         // Registra al docente en un curso y descarga el PDF de inscripcion
         async requestCourse(){
-            await axios.get("http://localhost:5000/courseRequest/"+this.$route.params.cursoDisp,this.keyAuth)
+            await axios.get("/courseRequest/"+this.$route.params.cursoDisp,this.keyAuth)
             .then(response => {
                 console.log("Peticion enviada");
             })
@@ -152,7 +152,7 @@ export default {
                 console.error(error);
             })
 
-            await axios.get("http://localhost:5000/inscriptionDocument/"+this.$route.params.cursoDisp,this.keyAuth)
+            await axios.get("/inscriptionDocument/"+this.$route.params.cursoDisp,this.keyAuth)
             .then(response => {
                 let name = "inscripcion"+this.$route.params.cursoDisp.replace(" ","");
                 this.btnDisable = true;

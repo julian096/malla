@@ -147,7 +147,7 @@ export default {
 
         // obtiene la lista de docentes del curso
         async getTeachersList(){
-            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartido,this.keyAuth)
+            await axios.get("/teacherListToQualify/"+this.$route.params.CursoImpartido,this.keyAuth)
             .then(response => {
                 this.availablePDFList = false;
             })
@@ -158,7 +158,7 @@ export default {
 
         // Obtiene el PDF de la lista de asistencia del curso
         async getPDFList(){
-            await axios.get("http://localhost:5000/course/"+this.$route.params.CursoImpartido+"/assistantList",this.keyAuth)
+            await axios.get("/course/"+this.$route.params.CursoImpartido+"/assistantList",this.keyAuth)
             .then(response => {
                 console.log("PDF descargado");
                 let name = "ListaAsistencia"+this.$route.params.CursoImpartido.replace(" ","");

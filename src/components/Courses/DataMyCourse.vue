@@ -164,7 +164,7 @@ export default {
         async getDataCourse(){
             this.createKeyAuth();
             try {
-                const response = await axios.get('http://localhost:5000/course/'+this.$route.params.MiCurso,this.keyAuth);
+                const response = await axios.get('/course/'+this.$route.params.MiCurso,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -195,7 +195,7 @@ export default {
         // pide un body que es redundante, decirle mañana
         async removeTeacherInCourse(){
             try {
-                await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCurso,this.keyAuth)
+                await axios.get("/removeTeacherinCourse/"+this.$route.params.MiCurso,this.keyAuth)
                 console.log("Dado de baja con éxito");
                 router.push({name: 'MisCursos'})
             } catch (error) {

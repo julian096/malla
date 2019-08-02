@@ -88,7 +88,7 @@ export default {
 
         async sendSerial(){
             try {
-                await axios.put("http://localhost:5000/editSerial/"+this.$route.params.cursoFolio,this.dataSerial,this.keyAuth);
+                await axios.put("/editSerial/"+this.$route.params.cursoFolio,this.dataSerial,this.keyAuth);
                 EventBus.$emit('sendSerial',this.dataSerial.serial);
                 this.snackSu = true;
                 this.buttonDis = true;

@@ -122,7 +122,7 @@ export default {
         // Obtiene los datos del curso 
         async getDataCourseTaught(){
             this.createKeyAuth();
-            await axios.get('http://localhost:5000/course/'+this.$route.params.CursoImpartidoJefe,this.keyAuth)
+            await axios.get('/course/'+this.$route.params.CursoImpartidoJefe,this.keyAuth)
             .then(response => {
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
@@ -146,7 +146,7 @@ export default {
 
         // obtiene la lista de docentes del curso
         async getTeachersList(){
-            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartidoJefe,this.keyAuth)
+            await axios.get("/teacherListToQualify/"+this.$route.params.CursoImpartidoJefe,this.keyAuth)
             .then(response => {
                 this.availablePDFList = false;
             })
@@ -157,7 +157,7 @@ export default {
 
         // Obtiene el PDF de la lista de asistencia del curso
         async getPDFList(){
-            await axios.get("http://localhost:5000/course/"+this.$route.params.CursoImpartidoJefe+"/assistantList",this.keyAuth)
+            await axios.get("/course/"+this.$route.params.CursoImpartidoJefe+"/assistantList",this.keyAuth)
             .then(response => {
                 console.log("PDF descargado");
                 let name = "ListaAsistencia"+this.$route.params.CursoImpartidoJefe.replace(" ","");

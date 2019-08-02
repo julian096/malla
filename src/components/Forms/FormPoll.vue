@@ -340,7 +340,7 @@ export default {
             this.createKeyAuth();
             try {
                 if(this.userType == 0){
-                    const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCursoAdmin+"/poll",this.poll,this.keyAuth);
+                    const pdfPoll = await axios.post("/course/"+this.$route.params.MiCursoAdmin+"/poll",this.poll,this.keyAuth);
                     let name = "Encuesta"+this.$route.params.MiCursoAdmin.replace(" ","");
                     let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
                     let link = document.createElement('a');
@@ -354,7 +354,7 @@ export default {
                         this.snackbar = false;
                     }, 2000);
                 }else if(this.userType == 1){
-                    const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCursoJefe+"/poll",this.poll,this.keyAuth);
+                    const pdfPoll = await axios.post("/course/"+this.$route.params.MiCursoJefe+"/poll",this.poll,this.keyAuth);
                     let name = "Encuesta"+this.$route.params.MiCursoJefe.replace(" ","");
                     let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
                     let link = document.createElement('a');
@@ -368,7 +368,7 @@ export default {
                         this.snackbar = false;
                     }, 2000);
                 }else if(this.userType == 3){
-                    const pdfPoll = await axios.post("http://localhost:5000/course/"+this.$route.params.MiCurso+"/poll",this.poll,this.keyAuth);
+                    const pdfPoll = await axios.post("/course/"+this.$route.params.MiCurso+"/poll",this.poll,this.keyAuth);
                     let name = "Encuesta"+this.$route.params.MiCurso.replace(" ","");
                     let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
                     let link = document.createElement('a');

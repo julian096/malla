@@ -58,7 +58,7 @@ export default {
         // Obtiene la lista completa de los docentes dentro del curso
         async getListTeacher(){
             this.createKeyAuth();
-            await axios.get("http://localhost:5000/teacherListToQualify/"+this.$route.params.CursoImpartido,this.keyAuth)
+            await axios.get("/teacherListToQualify/"+this.$route.params.CursoImpartido,this.keyAuth)
             .then(response => {
                 this.listTeacher = response.data.teachers;
                 this.arrayTeachers = response.data.teachers;
@@ -72,7 +72,7 @@ export default {
         // Función que envia el rfc del docente seleccionado para aprobarlo
         async approvedTeacher(rfc,ind){
             try {
-                await axios.put("http://localhost:5000/approvedCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)    
+                await axios.put("/approvedCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)    
                 console.log("Aprobado "+rfc);
                 this.arrayTeachers.splice(ind,1);
             } catch (error) {
@@ -83,7 +83,7 @@ export default {
         // Elimina el item del docente seleccionado de la lista
         async repproveTeacher(rfc,ind){
             try {
-                await axios.put("http://localhost:5000/failedCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)
+                await axios.put("/failedCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)
                 console.log("Reprobado "+rfc);
                 this.arrayTeachers.splice(ind,1);
             } catch (error) {

@@ -122,7 +122,7 @@ export default {
 
         async getDataCourse(){
             try {
-                const response = await axios.get('http://localhost:5000/course/'+this.$route.params.cursoFolio,this.keyAuth);
+                const response = await axios.get('/course/'+this.$route.params.cursoFolio,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");

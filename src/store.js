@@ -5,10 +5,13 @@ import VueAxios from 'vue-axios';
 import router from './router';
 import jwt from 'vue-jwt-decode'
 import EventBus from './bus';
-const url = 'http://192.168.0.7:5000'
+const url = 'http://10.10.20.205:5000'
 
 Vue.use(Vuex)
 Vue.use(VueAxios,axios);
+
+// axios.defaults.baseURL = 'http://10.10.20.205:5000';
+// axios.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('token')}`;
 
 export default new Vuex.Store({
   state: {
@@ -79,7 +82,7 @@ actions: {
     //login del usuario
     async login({commit},dataUser){
         try {
-            const response = await axios.post(`${url}/login`,dataUser)
+            const response = await axios.post(`/login`,dataUser)
             sessionStorage.setItem("token", response.data.data.access_token);
             commit('saveUserLogin',response);
             commit('createKeyAuth');
@@ -93,7 +96,7 @@ actions: {
     async logout({commit,state}){
         commit('createKeyAuth');
         try {
-            await axios.get(`${url}/logoutA`,state.keyAuth);
+            await axios.get(`/logoutA`,state.keyAuth);
             sessionStorage.clear()
             router.push('/login');
         } catch (error) {
@@ -104,7 +107,7 @@ actions: {
     async getDataProfile({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/teacher/${state.userLoged.rfc}`,state.keyAuth);
+            const response = await axios.get(`/teacher/${state.userLoged.rfc}`,state.keyAuth);
             EventBus.$emit('getDataProfile',response);
         } catch (error) {
             
@@ -114,7 +117,7 @@ actions: {
     async getDataTeacher({commit,state},rfc){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/teacher/${rfc}`,state.keyAuth);
+            const response = await axios.get(`/teacher/${rfc}`,state.keyAuth);
             EventBus.$emit('getDataTeacher',response);
         } catch (error) {
             
@@ -123,7 +126,7 @@ actions: {
     // Elimina un docente
     async deleteTeacher({state},rfc){
         try {
-            await axios.delete(`${url}/teacher/${rfc}`,state.keyAuth);
+            await axios.delete(`/teacher/${rfc}`,state.keyAuth);
             EventBus.$emit('deleteTeacher');     
         } catch (error) {
             
@@ -132,7 +135,7 @@ actions: {
     // Actualiza un docente
     async updateTeacher({state},{rfc,body}){
         try {
-            await axios.put(`${url}/teacher/${rfc}`,body,state.keyAuth);
+            await axios.put(`/teacher/${rfc}`,body,state.keyAuth);
             EventBus.$emit('suUpdateTeacher');
         } catch (error) {
             EventBus.$emit('erUpdateTeacher', error.response.data.message);
@@ -142,7 +145,7 @@ actions: {
     async saveCourse({state, commit},dataCourse){
         commit('createKeyAuth');
         try {
-            await axios.post(`${url}/courses`,dataCourse,state.keyAuth);
+            await axios.post(`/courses`,dataCourse,state.keyAuth);
             return true;
         } catch (error) {
             return error.response.data.message
@@ -152,7 +155,7 @@ actions: {
     async getDataCourse({commit,state},nameCourse){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/course/${nameCourse}`,state.keyAuth);
+            const response = await axios.get(`/course/${nameCourse}`,state.keyAuth);
             EventBus.$emit('getDataCourse',response);
         } catch (error) {
             
@@ -162,7 +165,7 @@ actions: {
     async teacherListToQualify({commit,state},nameCourse){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/teacherListToQualify/${nameCourse}`,state.keyAuth)
+            const response = await axios.get(`/teacherListToQualify/${nameCourse}`,state.keyAuth)
             EventBus.$emit('suGetTeacherListToQualify',response);
         } catch (error) {
             
@@ -171,7 +174,7 @@ actions: {
     // Aprueba el docente
     async approvedTeacher({state},{nameCourse,body}){
         try {
-            await axios.put(`${url}/approvedCourse/${nameCourse}`,body,state.keyAuth);
+            await axios.put(`/approvedCourse/${nameCourse}`,body,state.keyAuth);
             EventBus.$emit('suApprovedTeacher');
         } catch (error) {
             
@@ -180,7 +183,7 @@ actions: {
     // Reorueba el docente
     async repprovedTeacher({state},{nameCourse,body}){
         try {
-            await axios.put(`${url}/failedCourse/${nameCourse}`,body,state.keyAuth);
+            await axios.put(`/failedCourse/${nameCourse}`,body,state.keyAuth);
             EventBus.$emit('suRepprovedTeacher');
         } catch (error) {
             
@@ -190,7 +193,7 @@ actions: {
     async getDataLetterhead({commit,state},shortName){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/metadata/${shortName}`,state.keyAuth);
+            const response = await axios.get(`/metadata/${shortName}`,state.keyAuth);
             EventBus.$emit('getDataLetterhead',response);
         } catch (error) {
             
@@ -199,7 +202,7 @@ actions: {
     // Actualiza los metadatos de un documento
     async updateLetterhead({state},{shortName,body}){
         try {
-            await axios.put(`${url}/metadata/${shortName}`,body,state.keyAuth);
+            await axios.put(`/metadata/${shortName}`,body,state.keyAuth);
             EventBus.$emit('suUpdateLetterhead');
         } catch (error) {
             
@@ -209,7 +212,7 @@ actions: {
     async establishLimitDaysOfPoll({commit,state},body){
         commit('createKeyAuth');
         try {
-            await axios.put(`${url}/establishLimitDaysOfPoll`,body,state.keyAuth);
+            await axios.put(`/establishLimitDaysOfPoll`,body,state.keyAuth);
             EventBus.$emit('suEstablishLimitDaysOfPoll');
         } catch (error) {
             
@@ -218,7 +221,7 @@ actions: {
     // Regresa valor para saber si hay docentes inscritos al curso
     async getTeachersList({state},nameCourse){
         try {
-            await axios.get(`${url}/teacherList/${nameCourse}`,state.keyAuth);
+            await axios.get(`/teacherList/${nameCourse}`,state.keyAuth);
             EventBus.$emit('suGetTeachersList');
         } catch (error) {
             
@@ -228,7 +231,7 @@ actions: {
     async requestsTo({commit,state},courseName){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/requestsTo/${courseName}`,state.keyAuth);
+            const response = await axios.get(`/requestsTo/${courseName}`,state.keyAuth);
             EventBus.$emit('suRequestsTo',response);
             return response;
         } catch (error) {
@@ -238,7 +241,7 @@ actions: {
     // Solicita un curso
     async requestCourse({state},courseName){
         try {
-            await axios.get(`${url}/courseRequest/${courseName}`,state.keyAuth);
+            await axios.get(`/courseRequest/${courseName}`,state.keyAuth);
             const response = await axios.get(`${url}/inscriptionDocument/${courseName}`,state.keyAuth);
             EventBus.$emit('suRequestCourse',response);
             
@@ -251,7 +254,7 @@ actions: {
     async getTeachersByDep({commit,state},courseName){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/teachersByDep/${courseName}`,state.keyAuth);
+            const response = await axios.get(`/teachersByDep/${courseName}`,state.keyAuth);
             EventBus.$emit('getTeachersByDep',response);
         } catch (error) {
             
@@ -260,9 +263,8 @@ actions: {
     // Recomienda un docente a un curso
     async recTeacher({state},{nameCourse,body}){
         try {
-            await axios.post(`${url}/courseRequest/${nameCourse}`,body,state.keyAuth);
+            await axios.post(`/courseRequest/${nameCourse}`,body,state.keyAuth);
             EventBus.$emit('suRecTeacher');
-            console.log('que pedo')
         } catch (error) {
             console.error(error);
         }
@@ -270,7 +272,7 @@ actions: {
     // Actualiza el curso
     async updateCourse({state},{nameCourse,body}){
         try {
-            await axios.put(`${url}/course/${nameCourse}`,body,state.keyAuth);
+            await axios.put(`/course/${nameCourse}`,body,state.keyAuth);
             EventBus.$emit('suUpdateCourse');      
         } catch (error) {
             EventBus.$emit('erUpdateCourse',error.response.data.message);
@@ -279,7 +281,7 @@ actions: {
     // Elimina un curso
     async deleteCourse({state},nameCourse){
         try {
-            await axios.delete(`${url}/course/${nameCourse}`,state.keyAuth);
+            await axios.delete(`/course/${nameCourse}`,state.keyAuth);
             EventBus.$emit('suDeleteCourse');
         } catch (error) {
             
@@ -288,7 +290,7 @@ actions: {
     // Obtiene el PDF de lista de asistencia
     async getPDFList({state},nameCourse){
         try {
-            const response = await axios.get(`${url}/course/${nameCourse}/assistantList`,state.keyAuth)
+            const response = await axios.get(`/course/${nameCourse}/assistantList`,state.keyAuth)
             EventBus.$emit('getPDFList',response)
         } catch (error) {
             
@@ -298,7 +300,7 @@ actions: {
     async changePass({commit,state},pass){
         commit('createKeyAuth');
         try {
-            await axios.post(`${url}/changePassword`,pass,state.keyAuth)
+            await axios.post(`/changePassword`,pass,state.keyAuth)
             return true;
         } catch (error) {
             return error.response.data.message;
@@ -308,7 +310,7 @@ actions: {
     async saveUser({commit,state},dataUser){
         commit('createKeyAuth');
         try {
-            await axios.post(`${url}/teachers`,dataUser,state.keyAuth);
+            await axios.post(`/teachers`,dataUser,state.keyAuth);
             return true;
         } catch (error) {
             return error.response.data.message;
@@ -318,7 +320,7 @@ actions: {
     async getCourses({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/courses`,state.keyAuth);
+            const response = await axios.get(`/courses`,state.keyAuth);
             commit('saveCourses',response.data[0]);
         } catch (error) {
 
@@ -328,7 +330,7 @@ actions: {
     async getTeachers({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/teachers`,state.keyAuth);
+            const response = await axios.get(`/teachers`,state.keyAuth);
             commit('saveTeachers',response.data);
         } catch (error) {
 
@@ -337,7 +339,7 @@ actions: {
     // Elimina docente del curso
     async removeTeacher({state},nameCourse){
         try {
-            await axios.get(`${url}/removeTeacherinCourse/${nameCourse}`,state.keyAuth);
+            await axios.get(`/removeTeacherinCourse/${nameCourse}`,state.keyAuth);
             EventBus.$emit('suRemoveTeacher');
         } catch (error) {
             
@@ -346,7 +348,7 @@ actions: {
     // Acepta las peticiones de los docentes
     async acceptPetitionTeacher({state},{nameCourse,body}){
         try {
-            await axios.post(`${url}/addTeacherinCourse/${nameCourse}`,body,state.keyAuth);
+            await axios.post(`/addTeacherinCourse/${nameCourse}`,body,state.keyAuth);
             EventBus.$emit('suAcceptPetition');
         } catch (error) {
             
@@ -355,7 +357,7 @@ actions: {
     // Rechaza las peticiones de los docentes
     async rejectPetitionTeacher({state},{nameCourse,body}){
         try {
-            await axios.post(`${url}/rejectTeacherOfCourse/${nameCourse}`,body,state.keyAuth);
+            await axios.post(`/rejectTeacherOfCourse/${nameCourse}`,body,state.keyAuth);
             EventBus.$emit('suRejectPetition');
         } catch (error) {
             
@@ -365,7 +367,7 @@ actions: {
     async getPeriods({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/periods`,state.keyAuth);
+            const response = await axios.get(`/periods`,state.keyAuth);
             commit('savePeriods',response.data.message);
         } catch (error) {
 
@@ -375,7 +377,7 @@ actions: {
     async getAvailableCourses({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/availableCourses`,state.keyAuth);
+            const response = await axios.get(`/availableCourses`,state.keyAuth);
             commit('saveAvailableCourses',response.data.courses);
         } catch (error) {
 
@@ -385,7 +387,7 @@ actions: {
     async getMyCourses({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/myCourses`,state.keyAuth);
+            const response = await axios.get(`/myCourses`,state.keyAuth);
             commit('saveMyCourses',response.data.courses);
         } catch (error) {
 
@@ -395,7 +397,7 @@ actions: {
     async getCoursesTaught({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/myCoursesWillTeach`,state.keyAuth);
+            const response = await axios.get(`/myCoursesWillTeach`,state.keyAuth);
             commit('saveCoursesTaught',response.data.courses);
         } catch (error) {
 
@@ -405,7 +407,7 @@ actions: {
     async getLetterheads({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/metadata`,state.keyAuth)
+            const response = await axios.get(`/metadata`,state.keyAuth)
             commit('saveLetterheads',response.data);
         } catch (error) {   
 
@@ -415,7 +417,7 @@ actions: {
     async getConcentredFile({commit,state}){
         commit('createKeyAuth');
         try {
-            const response = await axios.get(`${url}/dataConcentrated`,state.keyAuth);
+            const response = await axios.get(`/dataConcentrated`,state.keyAuth);
             let name = "ConcentradoDeDatos";
             let blob = new Blob([response.data], { type:'application/pdf' } );
             let link = document.createElement('a');
