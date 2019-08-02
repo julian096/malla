@@ -5,10 +5,10 @@ import VueAxios from 'vue-axios';
 import router from './router';
 import jwt from 'vue-jwt-decode'
 import EventBus from './bus';
+const url = 'http://192.168.0.7:5000'
 
 Vue.use(Vuex)
 Vue.use(VueAxios,axios);
-
 
 export default new Vuex.Store({
   state: {
@@ -25,17 +25,6 @@ export default new Vuex.Store({
     teachers:null,
     periods:null,
     letterheads:null,
-    btnDisableUserInt: true,
-    btnDisableUserExt: true,
-    btnDisableCourse: true,
-    btnDisableChangePass:true,
-    snackbars:{
-        snackbarErLogin: null,
-        snackbarSuCourse: null,
-        snackbarErCourse: null,
-        snackbarSuTeacher: null,
-        snackbarErTeacher: null
-    }
 },
 mutations: {
     //guarda los datos del usuario logeado
@@ -49,45 +38,6 @@ mutations: {
         state.userLoged.token = sessionStorage.getItem("token");
         state.userLoged.rfc = sessionStorage.getItem("user");
         state.keyAuth = {headers: {'Authorization': 'Bearer '+ sessionStorage.getItem("token")}};
-    },
-    // activa el boton nuevo en los formularios
-    enableButtonNew(state,{form,value}){
-        if(form=="teacher" && value==true){
-            state.btnDisableUserInt = false;
-        }else if(form=="teacher" && value==false){
-            state.btnDisableUserInt = true;
-        }else if(form=="teacherExt" && value==true){
-            state.btnDisableUserExt = false;
-        }else if(form=="teacherExt" && value==false){
-            state.btnDisableUserExt = true;
-        }
-        if(form=="course" && value==true){
-            state.btnDisableCourse = false;
-        }else if(form=="course" && value==false){
-            state.btnDisableCourse = true;
-        }
-        if(form=="pass" && value==true){
-            state.btnDisableChangePass = false;
-        }else if(form=="pass" && value==false){
-            state.btnDisableChangePass = true;
-        }
-    },
-    //activa o no el snackbar de los formularios
-    showSnackbars(state,{value,form,res}){
-        if(form=="login" && res=="error"){
-            return (value) ? state.snackbars.snackbarErLogin=true : state.snackbars.snackbarErLogin=false;
-        }
-        if(form=="course" && res=="succ"){
-            return (value) ? state.snackbars.snackbarSuCourse=true : state.snackbars.snackbarSuCourse=false;
-        }else if(form=="course" && res=="error"){
-            return (value) ? state.snackbars.snackbarErCourse=true : state.snackbars.snackbarErCourse=false; 
-        }
-        if(form=="teacher" && res=="succ"){
-            // state.btnDisable = false;
-            return (value) ? state.snackbars.snackbarSuTeacher=true : state.snackbars.snackbarSuTeacher=false;
-        }else if(form=="teacher" && res=="error"){
-            return (value) ? state.snackbars.snackbarErTeacher=true : state.snackbars.snackbarErTeacher=false;
-        }
     },
     //guarda los cursos en el estado
     saveCourses(state,data){
@@ -129,7 +79,7 @@ actions: {
     //login del usuario
     async login({commit},dataUser){
         try {
-            const response = await axios.post("http://localhost:5000/login",dataUser)
+            const response = await axios.post(`${url}/login`,dataUser)
             sessionStorage.setItem("token", response.data.data.access_token);
             commit('saveUserLogin',response);
             commit('createKeyAuth');
@@ -142,30 +92,132 @@ actions: {
     //logout del usuario
     async logout({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/logoutA",state.keyAuth)
-        .then(response => {
-            console.log("Cerrando sesión");
+        try {
+            await axios.get(`${url}/logoutA`,state.keyAuth);
             sessionStorage.clear()
             router.push('/login');
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        } catch (error) {
+
+        }
+    },
+    // Obtiene los datos del usuario
+    async getDataProfile({commit,state}){
+        commit('createKeyAuth');
+        try {
+            const response = await axios.get(`${url}/teacher/${state.userLoged.rfc}`,state.keyAuth);
+            EventBus.$emit('getDataProfile',response);
+        } catch (error) {
+            
+        }
+    },
+    // Obtiene los datos de un docente
+    async getDataTeacher({commit,state},rfc){
+        commit('createKeyAuth');
+        try {
+            const response = await axios.get(`${url}/teacher/${rfc}`,state.keyAuth);
+            EventBus.$emit('getDataTeacher',response);
+        } catch (error) {
+            
+        }
+    },
+    // Elimina un docente
+    async deleteTeacher({state},rfc){
+        try {
+            await axios.delete(`${url}/teacher/${rfc}`,state.keyAuth);
+            EventBus.$emit('deleteTeacher');     
+        } catch (error) {
+            
+        }
+    },
+    // Actualiza un docente
+    async updateTeacher({state},{rfc,body}){
+        try {
+            await axios.put(`${url}/teacher/${rfc}`,body,state.keyAuth);
+            EventBus.$emit('suUpdateTeacher');
+        } catch (error) {
+            EventBus.$emit('erUpdateTeacher', error.response.data.message);
+        }
     },
     //registro de cursos
     async saveCourse({state, commit},dataCourse){
         commit('createKeyAuth');
         try {
-            await axios.post("http://localhost:5000/courses",dataCourse,state.keyAuth);
+            await axios.post(`${url}/courses`,dataCourse,state.keyAuth);
             return true;
         } catch (error) {
             return error.response.data.message
         }
     },
+    // Obtiene los datos del curso
+    async getDataCourse({commit,state},nameCourse){
+        commit('createKeyAuth');
+        try {
+            const response = await axios.get(`${url}/course/${nameCourse}`,state.keyAuth);
+            EventBus.$emit('getDataCourse',response);
+        } catch (error) {
+            
+        }
+    },
+    // Regresa valor para saber si hay docentes inscritos al curso
+    async getTeachersList({state},nameCourse){
+        try {
+            await axios.get(`${url}/teacherList/${nameCourse}`,state.keyAuth);
+            EventBus.$emit('suGetTeachersList');
+        } catch (error) {
+            
+        }
+    },
+    // Peticiones a un curso
+    async requestsTo({state},courseName){
+        try {
+            const response = await axios.get(`${url}/requestsTo/${courseName}`,state.keyAuth);
+            return response;
+        } catch (error) {
+            
+        }
+    },
+    // Solicita un curso
+    async requestCourse({state},courseName){
+        try {
+            await axios.get(`${url}/courseRequest/${courseName}`,state.keyAuth);
+            const response = await axios.get(`${url}/inscriptionDocument/${courseName}`,state.keyAuth);
+            EventBus.$emit('suRequestCourse',response);
+        } catch (error) {
+            
+        }
+    },
+    // Actualiza el curso
+    async updateCourse({state},{nameCourse,body}){
+        try {
+            await axios.put(`${url}/course/${nameCourse}`,body,state.keyAuth);
+            EventBus.$emit('suUpdateCourse');      
+        } catch (error) {
+            EventBus.$emit('erUpdateCourse',error.response.data.message);
+        }
+    },
+    // Elimina un curso
+    async deleteCourse({state},nameCourse){
+        try {
+            await axios.delete(`${url}/course/${nameCourse}`,state.keyAuth);
+            EventBus.$emit('suDeleteCourse');
+        } catch (error) {
+            
+        }
+    },
+    // Obtiene el PDF de lista de asistencia
+    async getPDFList({state},nameCourse){
+        try {
+            const response = await axios.get(`${url}/course/${nameCourse}/assistantList`,state.keyAuth)
+            EventBus.$emit('getPDFList',response)
+        } catch (error) {
+            
+        }
+    },
+    // Cambia la contraseña del usuario
     async changePass({commit,state},pass){
         commit('createKeyAuth');
         try {
-            await axios.post("http://localhost:5000/changePassword",pass,state.keyAuth)
+            await axios.post(`${url}/changePassword`,pass,state.keyAuth)
             return true;
         } catch (error) {
             return error.response.data.message;
@@ -175,7 +227,7 @@ actions: {
     async saveUser({commit,state},dataUser){
         commit('createKeyAuth');
         try {
-            await axios.post("http://localhost:5000/teachers",dataUser,state.keyAuth);
+            await axios.post(`${url}/teachers`,dataUser,state.keyAuth);
             return true;
         } catch (error) {
             return error.response.data.message;
@@ -184,92 +236,78 @@ actions: {
     //obtencion de cursos
     async getCourses({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/courses",state.keyAuth)
-        .then(response => {
+        try {
+            const response = await axios.get(`${url}/courses`,state.keyAuth);
             commit('saveCourses',response.data[0]);
-            console.log(response);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        } catch (error) {
+
+        }
     },
     //obtencion de docentes
     async getTeachers({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/teachers",state.keyAuth)
-        .then(response => {
-            console.log(response);
+        try {
+            const response = await axios.get(`${url}/teachers`,state.keyAuth);
             commit('saveTeachers',response.data);
-        })
-        .catch(error => {
-            console.error(error)
-        })
+        } catch (error) {
+
+        }
     },
     //obtiene los periodos de todos los cursos
     async getPeriods({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/periods",state.keyAuth)
-        .then(response => {
+        try {
+            const response = await axios.get(`${url}/periods`,state.keyAuth);
             commit('savePeriods',response.data.message);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        } catch (error) {
+
+        }
     },
     //obtiene los cursos disponibles para solicitar
     async getAvailableCourses({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/availableCourses",state.keyAuth)
-        .then(response => {
+        try {
+            const response = await axios.get(`${url}/availableCourses`,state.keyAuth);
             commit('saveAvailableCourses',response.data.courses);
-            console.log(response.data.courses);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        } catch (error) {
+
+        }
     },
     //obtiene una lista de los cursos a los que esta inscrito el docente
     async getMyCourses({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/myCourses",state.keyAuth)
-        .then(response => {
-            console.log(response.data.courses);
+        try {
+            const response = await axios.get(`${url}/myCourses`,state.keyAuth);
             commit('saveMyCourses',response.data.courses);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        } catch (error) {
+
+        }
     },
     //obtiene los cursos impartidos por un docente
     async getCoursesTaught({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/myCoursesWillTeach",state.keyAuth)
-        .then(response => {
-            console.log(response.data.courses);
+        try {
+            const response = await axios.get(`${url}/myCoursesWillTeach`,state.keyAuth);
             commit('saveCoursesTaught',response.data.courses);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        } catch (error) {
+
+        }
     },
     // Obtiene los membretados de los documentos
     async getLetterheads({commit,state}){
         commit('createKeyAuth');
-        await axios.get("http://localhost:5000/metadata",state.keyAuth)
-        .then(response => {
-            console.log(response.data);
+        try {
+            const response = await axios.get(`${url}/metadata`,state.keyAuth)
             commit('saveLetterheads',response.data);
-        })
-        .catch(error => {
-            console.error(error);
-            
-        })
+        } catch (error) {   
+
+        }
     },
     // Obtiene el PDF de los datos concentrados
     async getConcentredFile({commit,state}){
         commit('createKeyAuth');
         try {
-            await axios.get("http://localhost:5000/dataConcentrated",state.keyAuth);
+            const response = await axios.get(`${url}/dataConcentrated`,state.keyAuth);
             let name = "ConcentradoDeDatos";
             let blob = new Blob([response.data], { type:'application/pdf' } );
             let link = document.createElement('a');

@@ -52,7 +52,7 @@ export default {
         // Cacho el evento para cerrar el login
         EventBus.$on('closeLogin', () => {
             this.visible = false;
-        })
+        });
     },
 }
 </script>
