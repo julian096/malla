@@ -134,7 +134,6 @@ export default {
             // Habilita o deshabilita el boton de solicitar curso
             const user = sessionStorage.getItem("user");
             const infoCourse = await this.requestsTo(this.$route.params.cursoAdmin);
-            console.log(infoCourse);
             let arrayRFC = [];
             for(let i of infoCourse.data){
                 arrayRFC.push(i.rfc);

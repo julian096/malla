@@ -158,6 +158,63 @@ actions: {
             
         }
     },
+    // Obtiene la lista de docentes a calificar
+    async teacherListToQualify({commit,state},nameCourse){
+        commit('createKeyAuth');
+        try {
+            const response = await axios.get(`${url}/teacherListToQualify/${nameCourse}`,state.keyAuth)
+            EventBus.$emit('suGetTeacherListToQualify',response);
+        } catch (error) {
+            
+        }
+    },
+    // Aprueba el docente
+    async approvedTeacher({state},{nameCourse,body}){
+        try {
+            await axios.put(`${url}/approvedCourse/${nameCourse}`,body,state.keyAuth);
+            EventBus.$emit('suApprovedTeacher');
+        } catch (error) {
+            
+        }
+    },
+    // Reorueba el docente
+    async repprovedTeacher({state},{nameCourse,body}){
+        try {
+            await axios.put(`${url}/failedCourse/${nameCourse}`,body,state.keyAuth);
+            EventBus.$emit('suRepprovedTeacher');
+        } catch (error) {
+            
+        }
+    },
+    // Obtiene los metadatos de un documento
+    async getDataLetterhead({commit,state},shortName){
+        commit('createKeyAuth');
+        try {
+            const response = await axios.get(`${url}/metadata/${shortName}`,state.keyAuth);
+            EventBus.$emit('getDataLetterhead',response);
+        } catch (error) {
+            
+        }
+    },
+    // Actualiza los metadatos de un documento
+    async updateLetterhead({state},{shortName,body}){
+        try {
+            await axios.put(`${url}/metadata/${shortName}`,body,state.keyAuth);
+            EventBus.$emit('suUpdateLetterhead');
+        } catch (error) {
+            
+        }
+    },
+    // Establece el limite de dias para realizar la encuesta
+    async establishLimitDaysOfPoll({commit,state},body){
+        commit('createKeyAuth');
+        try {
+            await axios.put(`${url}/establishLimitDaysOfPoll`,body,state.keyAuth);
+            EventBus.$emit('suEstablishLimitDaysOfPoll');
+        } catch (error) {
+            
+        }
+    },
     // Regresa valor para saber si hay docentes inscritos al curso
     async getTeachersList({state},nameCourse){
         try {
@@ -251,6 +308,15 @@ actions: {
             commit('saveTeachers',response.data);
         } catch (error) {
 
+        }
+    },
+    // Elimina docente del curso
+    async removeTeacher({state},nameCourse){
+        try {
+            await axios.get(`${url}/removeTeacherinCourse/${nameCourse}`,state.keyAuth);
+            EventBus.$emit('suRemoveTeacher');
+        } catch (error) {
+            
         }
     },
     //obtiene los periodos de todos los cursos

@@ -98,7 +98,7 @@
                                 <span class="subheading">¿Estas seguro que quieres darte de baja del curso?</span>
                             </v-flex>
                             <v-flex class="mt-4">
-                                <v-btn outline color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
+                                <v-btn outline color="green" @click="removeTeacher($route.params.MiCursoAdmin)">Aceptar</v-btn>
                                 <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
@@ -111,9 +111,9 @@
 </template>
 
 <script>
-import axios from 'axios';
-import {mapState, mapMutations} from 'vuex';
+import {mapState,mapActions} from 'vuex';
 import router from '../../router';
+import EventBus from '../../bus';
 
 export default {
     name: 'DataMyCourseAdmin',
@@ -143,7 +143,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(['keyAuth','userLoged']),
+        ...mapState(['userLoged']),
 
         // Devuelve un booleano para habilitar encuesta
         findTeacher(){
@@ -153,51 +153,39 @@ export default {
         }
     },
     methods:{
-        ...mapMutations(['createKeyAuth']),
-
-        //obtiene los datos del curso
-        async getDataCourse(){
-            this.createKeyAuth();
-            try {
-                const response = await axios.get('http://localhost:5000/course/'+this.$route.params.MiCursoAdmin,this.keyAuth);
-                this.Course.courseName = response.data.courseName;
-                this.Course.courseTo = response.data.courseTo;
-                this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
-                this.Course.dateEnd = response.data.dateEnd.replace("T00:00:00+00:00","");
-                this.Course.description = response.data.description;
-                this.Course.modality = response.data.modality;
-                this.Course.place = response.data.place;
-                this.Course.timetable = response.data.timetable;
-                this.Course.typeCourse = response.data.typeCourse;
-                this.Course.totalHours = response.data.totalHours;
-                this.Course.state = response.data.state;
-                this.Course.teacherName = response.data.teacherName;
-                this.availableButton = response.data.allowPoll;
-                this.snack = response.data.allowPoll;
-                this.daysToPoll = response.data.leftDays;
-                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
-                console.log(response);
-            } catch (error) {
-                console.error(error);
-            }
-        },
+        ...mapActions(['getDataCourse','removeTeacher']),
 
         // Abre la vista para la encuesta de satisfacción
         openFormPoll(){
             router.push({name: 'EncuestaAdmin'});
         },
-
-        async removeTeacherInCourse(){
-            try {
-                await axios.get("http://localhost:5000/removeTeacherinCourse/"+this.$route.params.MiCursoAdmin,this.keyAuth);
-                router.push({name: 'CursosDelAdmin'})
-            } catch (error) {
-                console.error(error);
-            }
-        }
     },
     created(){
-        this.getDataCourse();
+        this.getDataCourse(this.$route.params.MiCursoAdmin);
+    },
+    mounted(){
+        EventBus.$on('getDataCourse',response=>{
+            this.Course.courseName = response.data.courseName;
+            this.Course.courseTo = response.data.courseTo;
+            this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
+            this.Course.dateEnd = response.data.dateEnd.replace("T00:00:00+00:00","");
+            this.Course.description = response.data.description;
+            this.Course.modality = response.data.modality;
+            this.Course.place = response.data.place;
+            this.Course.timetable = response.data.timetable;
+            this.Course.typeCourse = response.data.typeCourse;
+            this.Course.totalHours = response.data.totalHours;
+            this.Course.state = response.data.state;
+            this.Course.teacherName = response.data.teacherName;
+            this.availableButton = response.data.allowPoll;
+            this.snack = response.data.allowPoll;
+            this.daysToPoll = response.data.leftDays;
+            this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
+        });
+
+        EventBus.$on('suRemoveTeacher',()=>{
+            router.push({name: 'CursosDelAdmin'})
+        })
     }
 }
 </script>

@@ -134,7 +134,7 @@
                                 <span class="subheading">¿Estas seguro que quieres actualizar la información del membrete?</span>
                             </v-flex>
                             <v-flex class="mt-4">
-                                <v-btn outline color="green" :disabled="buttonDis" @click="updateLetterhead">Aceptar</v-btn>
+                                <v-btn outline color="green" :disabled="buttonDis" @click="upLetterhead">Aceptar</v-btn>
                                 <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
@@ -148,14 +148,13 @@
 
 <script>
 import {ValidationProvider} from 'vee-validate';
-import Navigation from '@/components/Navbars/Navigation.vue';
-import {mapState, mapMutations} from 'vuex';
-import axios from 'axios';
+import {mapActions} from 'vuex';
 import router from '../../router';
+import EventBus from '../../bus';
 
 export default {
     name: 'DataLetterhead',
-    components:{Navigation,ValidationProvider},
+    components:{ValidationProvider},
     data() {
         return {
             breakpoint:this.$vuetify.breakpoint,
@@ -173,56 +172,44 @@ export default {
             }
         }
     },
-    computed:{
-        ...mapState(['keyAuth'])
-    },
     methods:{
-        ...mapMutations(['createKeyAuth']),
-
-        // crear la funcion que me obtendra los datos de un solo membrete
-        async getDataLetterhead(){
-            this.createKeyAuth();
-            try {
-                const dataLetterhead = await axios.get("http://localhost:5000/metadata/"+this.$route.params.letterheadName,this.keyAuth);
-                this.Letterhead.emitDate = dataLetterhead.data.emitDate.replace("T00:00:00+00:00","");
-                this.Letterhead.nameDocument = dataLetterhead.data.nameDocument;
-                this.Letterhead.typeDocument = dataLetterhead.data.typeDocument;
-                this.Letterhead.version = dataLetterhead.data.version;
-                this.Letterhead.shortName = dataLetterhead.data.shortName;
-            } catch (error) {
-                console.error(error);
-            }
-        },
+        ...mapActions(['getDataLetterhead','updateLetterhead']),
 
         // Actualiza la información del membrete
-        async updateLetterhead(){
-            this.createKeyAuth();
-            try {
-                await axios.put("http://localhost:5000/metadata/"+this.$route.params.letterheadName,this.Letterhead,this.keyAuth);
-                this.snackSu = true;
-                this.buttonDis = true;
-                setTimeout(() => {
-                    this.snackSu = false;
-                    this.update = 'No';
-                    this.dialog = false;
-                    this.buttonDis = false;
-                    // router.push({name: 'Membretado'});
-                }, 2000);
-            } catch (error) {
-                console.error(error);
-            }
+        async upLetterhead(){
+            this.updateLetterhead({shortName:this.$route.params.letterheadName,body:this.Letterhead});
         },
 
         // Regresa a los datos del curso
         backDataLetterhead(){
-            this.getDataLetterhead();
+            this.getDataLetterhead(this.$route.params.letterheadName);
             this.update = 'No';
         },
 
         
     },
     created(){
-        this.getDataLetterhead();
-    }
+        this.getDataLetterhead(this.$route.params.letterheadName);
+    },
+    mounted() {
+        EventBus.$on('getDataLetterhead',dataLetterhead=>{
+            this.Letterhead.emitDate = dataLetterhead.data.emitDate.replace("T00:00:00+00:00","");
+            this.Letterhead.nameDocument = dataLetterhead.data.nameDocument;
+            this.Letterhead.typeDocument = dataLetterhead.data.typeDocument;
+            this.Letterhead.version = dataLetterhead.data.version;
+            this.Letterhead.shortName = dataLetterhead.data.shortName;
+        });
+
+        EventBus.$on('suUpdateLetterhead',()=>{
+            this.snackSu = true;
+            this.buttonDis = true;
+            setTimeout(() => {
+                this.snackSu = false;
+                this.update = 'No';
+                this.dialog = false;
+                this.buttonDis = false;
+            }, 2000);
+        })
+    },
 }
 </script>

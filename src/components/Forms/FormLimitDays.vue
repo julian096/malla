@@ -27,7 +27,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-layout row justify-space-around>
-                                    <v-btn outline color="green" :disabled="!validated" @click="establisLimitDays">Aceptar</v-btn>
+                                    <v-btn outline color="green" :disabled="!validated" @click="establishLimitDaysOfPoll(dataLimitDays)">Aceptar</v-btn>
                                     <v-btn outline color="red" @click="closeLimitDays">Cancelar</v-btn>
                                 </v-layout>
                             </v-card-actions>
@@ -42,9 +42,7 @@
 <script>
 import { ValidationObserver, ValidationProvider} from 'vee-validate';
 import EventBus from '@/bus.js';
-import { mapState } from 'vuex';
-import axios from 'axios';
-import { setTimeout } from 'timers';
+import { mapActions } from 'vuex';
 
 export default {
     name: 'FormLimitDays',
@@ -59,24 +57,8 @@ export default {
             }
         }
     },
-    computed:{
-        ...mapState(['keyAuth'])
-    },
     methods:{
-        // Establede un limite de dias para la encuesta
-        async establisLimitDays(){
-            try {
-                await axios.put("http://localhost:5000/establishLimitDaysOfPoll",this.dataLimitDays,this.keyAuth);
-                this.showAlert = true;
-                console.log("Limite establecido");
-                setTimeout(()=>{
-                    this.closeLimitDays();
-                    this.showAlert = false;
-                },2000);
-            } catch (error) {
-                console.error(error);
-            }
-        },
+        ...mapActions(['establishLimitDaysOfPoll']),
 
         closeLimitDays(){
             EventBus.$emit('closeLimitDays');
@@ -87,6 +69,15 @@ export default {
         for(let i=1; i<31; i++){
             this.items.push(i);
         }
+    },
+    mounted() {
+        EventBus.$on('suEstablishLimitDaysOfPoll',()=>{
+            this.showAlert = true;
+            setTimeout(()=>{
+                this.closeLimitDays();
+                this.showAlert = false;
+            },2000);
+        });
     },
 }
 </script>
