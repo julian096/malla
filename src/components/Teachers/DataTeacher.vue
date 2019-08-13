@@ -66,7 +66,7 @@
                         <v-btn outline block color="orange" @click="update = 'Si'">Actualizar</v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn dark block color="red" @click="dialog = true">Eliminar</v-btn>
+                        <v-btn dark block color="red" :disabled="isAdmin" @click="dialog = true">Eliminar</v-btn>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap v-else>
@@ -74,7 +74,7 @@
                         <v-btn outline block color="orange" @click="update = 'Si'">Actualizar</v-btn>
                     </v-flex>
                     <v-flex xs12>
-                        <v-btn dark block color="red" @click="dialog = true">Eliminar</v-btn>
+                        <v-btn dark block color="red" :disabled="isAdmin" @click="dialog = true">Eliminar</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-actions>
@@ -315,12 +315,14 @@ import {ValidationProvider} from 'vee-validate';
 import {mapActions} from 'vuex';
 import router from '../../router';
 import EventBus from '../../bus';
+import { log } from 'util';
 
 export default {
     name: 'DataTeacher',
     components:{ValidationProvider},
     data() {
         return {
+            user:sessionStorage.getItem('user'),
             breakpoint: this.$vuetify.breakpoint,
             snackSu:false,
             snackEr:false,
@@ -354,6 +356,10 @@ export default {
     computed:{
         isBoss(){
             return (this.Teacher.userType == 'Jefe de departamento') ? false : true;
+        },
+
+        isAdmin(){
+            return (this.user === this.Teacher.rfc) ? true : false;
         }
     },
     methods:{

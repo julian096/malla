@@ -12,7 +12,7 @@ Vue.use(Vuetify);
 Vue.use(VeeValidate);
 Vue.use(VueAxios,axios);
 
-axios.defaults.baseURL = 'http://10.10.20.205:5000';
+axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('token')}`;
 
 Vue.config.productionTip = false
