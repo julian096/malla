@@ -6,7 +6,7 @@
 
         <v-layout row justify-center v-else>
             <v-flex xs12>
-                <span class="title">No hay peticiones pendientes de cursos</span>
+                <span class="title">No hay solicitudes pendientes de cursos</span>
             </v-flex>
         </v-layout>
     </v-container>

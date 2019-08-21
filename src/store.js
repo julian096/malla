@@ -242,6 +242,7 @@ actions: {
     async requestCourse({state},courseName){
         try {
             await axios.get(`/courseRequest/${courseName}`,state.keyAuth);
+            console.log("peticion hecha");
             const response = await axios.get(`${url}/inscriptionDocument/${courseName}`,state.keyAuth);
             EventBus.$emit('suRequestCourse',response);
             

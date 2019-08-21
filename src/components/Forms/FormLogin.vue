@@ -69,7 +69,7 @@ export default {
             msgError:"",
             user:{
                 rfc:"",
-                pin:""
+                pin:"spartan96"
             },
             timeout:2500
         }

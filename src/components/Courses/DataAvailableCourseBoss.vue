@@ -65,19 +65,25 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row justify-space-around v-if="!breakpoint.xs">
-                    <v-flex xs12 sm3>
+                    <v-flex sm3>
                         <v-btn outline block color="green" @click="requestCourse($route.params.cursoDispJefe)" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm3>
+                    <v-flex sm3>
                         <v-btn outline block color="orange" @click="openRecTeachers">Recomendar docentes</v-btn>
+                    </v-flex>
+                    <v-flex sm3>
+                        <v-btn outline block color="indigo" :to="{name: 'CursosDisponiblesJefe'}" >Atras</v-btn>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap v-else>
-                    <v-flex xs12 sm3>
+                    <v-flex xs12>
                         <v-btn outline block color="green" @click="requestCourse($route.params.cursoDispJefe)" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm3>
+                    <v-flex xs12>
                         <v-btn outline block color="orange" @click="openRecTeachers">Recomendar docentes</v-btn>
+                    </v-flex>
+                    <v-flex sm12>
+                        <v-btn outline block color="indigo" :to="{name: 'CursosDisponiblesJefe'}">Atras</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-text>

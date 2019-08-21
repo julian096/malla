@@ -70,7 +70,7 @@
                         <v-btn outline block color="green" @click="openPetitions">Gestionar peticiones</v-btn>
                     </v-flex>
                     <v-flex xs12 sm4>
-                        <v-btn dark block color="blue" :to="{name:'CursosDisponiblesAdmin'}">Otros cursos</v-btn>
+                        <v-btn outline block color="indigo" :to="{name:'CursosDisponiblesAdmin'}">Atras</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-text>

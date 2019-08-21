@@ -66,7 +66,13 @@
                         <v-btn outline block color="orange" @click="update = 'Si'">Actualizar</v-btn>
                     </v-flex>
                     <v-flex xs3>
+                        <v-btn outline block color="blue" :to="{name: 'CursosTomados'}">Ver cursos tomados</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
                         <v-btn dark block color="red" :disabled="isAdmin" @click="dialog = true">Eliminar</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn outline block color="indigo" :to="{name:'Docentes'}">Atras</v-btn>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap v-else>
@@ -74,7 +80,13 @@
                         <v-btn outline block color="orange" @click="update = 'Si'">Actualizar</v-btn>
                     </v-flex>
                     <v-flex xs12>
+                        <v-btn outline block color="blue" :to="{name: 'CursosTomados'}">Ver cursos tomados</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
                         <v-btn dark block color="red" :disabled="isAdmin" @click="dialog = true">Eliminar</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn outline block color="indigo" :to="{name:'Docentes'}">Atras</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-actions>
@@ -315,7 +327,6 @@ import {ValidationProvider} from 'vee-validate';
 import {mapActions} from 'vuex';
 import router from '../../router';
 import EventBus from '../../bus';
-import { log } from 'util';
 
 export default {
     name: 'DataTeacher',

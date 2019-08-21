@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <div class="main">
+    <div>
       <video class="vid" src="../assets/login.mp4" preload loop autoplay></video>
     </div>
   </div>
@@ -17,12 +17,7 @@ export default {
 </script>
 
 <style scoped>
-  .main{
-    width: 100%;
-    height: 100%;
-  }
   .vid{
-    display: block;
     height: 100%;
     width: 100%;
   }

@@ -153,6 +153,15 @@ const router = new Router({
       }
     },
     {
+      path: '/docentes/:docente/cursos-tomados',
+      name: 'CursosTomados',
+      component: () => import('@/views/Teachers/CoursesOfTeacher.vue'),
+      meta:{
+        requiresAuth: true,
+        requireAdmin: true
+      }
+    },
+    {
       path: '/membretado',
       name: 'Membretados',
       component: () => import('@/views/Teachers/Letterhead.vue'),
