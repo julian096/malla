@@ -274,7 +274,7 @@
                 <v-card-actions>
                     <v-layout row justify-space-around v-if="!breakpoint.xs">
                         <v-flex xs3>
-                            <v-btn outline block color="green" :disabled="buttonDis" @click="upTeacher">Guardar</v-btn>
+                            <v-btn outline block color="green" :disabled="buttonDis" @click="updateTeacher">Guardar</v-btn>
                         </v-flex>
                         <v-flex xs3>
                             <v-btn outline block color="red" @click="backToDatateacher">Cancelar</v-btn>
@@ -309,7 +309,7 @@
                     <v-card-actions>
                         <v-layout row wrap>
                             <v-flex>
-                                <v-btn outline color="green" @click="deleteTeacher($route.params.docente)">Aceptar</v-btn>
+                                <v-btn outline color="green" @click="deleteTeacher">Aceptar</v-btn>
                             </v-flex>
                             <v-flex>
                                 <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
@@ -324,9 +324,9 @@
 
 <script>
 import {ValidationProvider} from 'vee-validate';
-import {mapActions} from 'vuex';
+import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
-import EventBus from '../../bus';
+import axios from 'axios';
 
 export default {
     name: 'DataTeacher',
@@ -365,6 +365,8 @@ export default {
         }
     },
     computed:{
+        ...mapState(['keyAuth']),
+
         isBoss(){
             return (this.Teacher.userType == 'Jefe de departamento') ? false : true;
         },
@@ -376,69 +378,75 @@ export default {
     methods:{
         allowedMinutes: v => v <= 1 && v <= 11,
 
-        ...mapActions(['getDataTeacher','deleteTeacher','updateTeacher']),
-        
-        backToDatateacher(){
-            this.getDataTeacher(this.$route.params.docente);
-            this.update = 'No'
+        ...mapMutations(['createKeyAuth']),
+
+        // Obtiene los datos del docente
+        async getTeacher(){
+            this.createKeyAuth();
+            try {
+                const response = await axios.get(`/teacher/${this.$route.params.docente}`,this.keyAuth);
+                this.Teacher.rfc = response.data.rfc;
+                this.Teacher.name = response.data.name;
+                this.Teacher.fstSurname = response.data.fstSurname;
+                this.Teacher.sndSurname = response.data.sndSurname;
+                this.Teacher.email = response.data.email;
+                this.Teacher.numberPhone = response.data.numberPhone;
+                this.Teacher.schedule = response.data.schedule;
+                this.Teacher.departament = response.data.departament;
+                this.Teacher.speciality = response.data.speciality;
+                this.Teacher.studyLevel = response.data.studyLevel;
+                this.Teacher.userType = response.data.userType;
+                this.Teacher.degree = response.data.degree;
+                this.Teacher.position = response.data.position;
+                this.hourStart = response.data.schedule.substr(0,5);
+                this.hourEnd = response.data.schedule.substr(6);
+            } catch (error) {
+            }
         },
-        
-        //actualiza los datos del docente
-        upTeacher(){
+
+        // Elimina al docente
+        async deleteTeacher(){
+            try {
+                await axios.delete(`/teacher/${this.$route.params.docente}`,this.keyAuth);
+                this.dialog = false
+                router.push({name:"Docentes"});
+            } catch (error) {
+            }
+        },
+
+        // Actualiza los datos del docente
+        async updateTeacher(){
             this.Teacher.schedule = this.hourStart + '-' + this.hourEnd;
             if(this.Teacher.userType == 'Jefe de departamento'){
                 this.Teacher.position = 'Jefe de departamento';
             }
-            this.updateTeacher({rfc:this.$route.params.docente,body:this.Teacher});
-        }
+            try {
+                await axios.put(`/teacher/${this.$route.params.docente}`,this.Teacher,this.keyAuth);
+                this.snackSu = true;
+                this.buttonDis = true;
+                setTimeout(() => {
+                    this.snackSu = false;
+                    this.getTeacher(this.$route.params.docente);
+                    this.update = 'No';
+                    this.buttonDis = false;
+                }, 2000)
+            } catch (error) {
+                this.errorMsg = error.response.data.message;
+                this.snackEr = true;
+                setTimeout(() => {
+                    this.snackEr = false;
+                }, 2000);
+            }
+        },
+        
+        // Cancela la actualizacion de datos
+        backToDatateacher(){
+            this.getTeacher();
+            this.update = 'No'
+        },
     },
     created() {
-        this.getDataTeacher(this.$route.params.docente);
-    },
-    mounted() {
-
-        EventBus.$on('getDataTeacher',response=>{
-            this.Teacher.rfc = response.data.rfc;
-            this.Teacher.name = response.data.name;
-            this.Teacher.fstSurname = response.data.fstSurname;
-            this.Teacher.sndSurname = response.data.sndSurname;
-            this.Teacher.email = response.data.email;
-            this.Teacher.numberPhone = response.data.numberPhone;
-            this.Teacher.schedule = response.data.schedule;
-            this.Teacher.departament = response.data.departament;
-            this.Teacher.speciality = response.data.speciality;
-            this.Teacher.studyLevel = response.data.studyLevel;
-            this.Teacher.userType = response.data.userType;
-            this.Teacher.degree = response.data.degree;
-            this.Teacher.position = response.data.position;
-            this.hourStart = response.data.schedule.substr(0,5);
-            this.hourEnd = response.data.schedule.substr(6);
-        });
-
-        EventBus.$on('deleteTeacher',()=>{
-            this.dialog = false
-            router.push({name:"Docentes"})
-        });
-
-        EventBus.$on('suUpdateTeacher',()=>{
-            router.push({name: 'Docente', params:{docente: this.Teacher.rfc}});
-            this.snackSu = true;
-            this.buttonDis = true;
-            setTimeout(() => {
-                this.snackSu = false;
-                this.getDataTeacher(this.$route.params.docente);
-                this.update = 'No';
-                this.buttonDis = false;
-            }, 2000)
-        });
-
-        EventBus.$on('erUpdateTeacher',error=>{
-            this.errorMsg = error;
-            this.snackEr = true;
-            setTimeout(() => {
-                this.snackEr = false;
-            }, 2000);
-        })
+        this.getTeacher();
     }
 }
 </script>

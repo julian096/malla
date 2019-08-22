@@ -2,7 +2,7 @@
   <div>
     <Navbar />
     <div>
-      <video class="vid" src="../assets/login.mp4" preload loop autoplay></video>
+      <video class="vid" src="../assets/tec.mp4" preload loop autoplay></video>
     </div>
   </div>
 </template>

@@ -5,6 +5,7 @@
         <v-snackbar v-model="snackEr" top color="error" class="white--text">{{textError}}</v-snackbar>
 
         <v-expansion-panel popout>
+            <!-- Formulario de interno -->
             <v-expansion-panel-content ripple>
                 <template v-slot:header>
                     <span class="subheading">Formulario para docente interno</span>
@@ -338,7 +339,8 @@
                     </v-stepper-items>
                 </v-stepper>
             </v-expansion-panel-content>
-        
+
+            <!-- Formulario de externo -->
             <v-expansion-panel-content ripple>
                 <template v-slot:header>
                     <span class="subheading">Formulario para docente externo</span>

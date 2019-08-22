@@ -63,9 +63,27 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
-                <v-layout row justify-space-around>
-                    <v-btn outline color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
-                    <v-btn color="red" dark @click="dialog = true">Darse de baja</v-btn>
+                <v-layout row justify-space-around v-if="!breakpoint.xs">
+                    <v-flex xs3>
+                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn outline color="indigo" block :to="{name: 'MisCursosJefe'}">Atras</v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap v-else>
+                    <v-flex xs12>
+                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn outline color="indigo" block :to="{name: 'MisCursosJefe'}">Atras</v-btn>
+                    </v-flex>
                 </v-layout>
             </v-card-text>
         </v-card>
@@ -109,6 +127,7 @@ export default {
     name: 'DataMyCourseAdmin',
     data() {
         return {
+            breakpoint:this.$vuetify.breakpoint,
             snack:null,
             timeout:5000,
             daysToPoll:0,

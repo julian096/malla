@@ -70,14 +70,17 @@
             </v-card-text>
             <v-card-actions>
                 <v-layout row wrap>
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm3>
                         <v-btn outline block color="orange" @click="update = 'Si'">Actualizar</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm4>
-                        <v-btn outline block color="blue" :disabled="availablePDFList" @click="getPDFList($route.params.curso)">Lista de asistencia</v-btn>
+                    <v-flex xs12 sm3>
+                        <v-btn outline block color="blue" :disabled="availablePDFList" @click="getPDFList">Lista de asistencia</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm3>
                         <v-btn dark block color="red" @click="dialog = true">Eliminar</v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm3>
+                        <v-btn outline block color="indigo" :to="{name: 'Cursos'}">Atras</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-actions>
@@ -273,7 +276,7 @@
                 <v-card-actions>
                     <v-layout row justify-space-around v-if="!breakpoint.xs">
                         <v-flex xs3>
-                            <v-btn outline block color="green" :disabled="buttonDis" @click="upCourse">Guardar</v-btn>
+                            <v-btn outline block color="green" :disabled="buttonDis" @click="updateCourse">Guardar</v-btn>
                         </v-flex>
                         <v-flex xs3>
                             <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
@@ -281,7 +284,7 @@
                     </v-layout>
                     <v-layout row wrap v-else>
                         <v-flex xs12>
-                            <v-btn outline block color="green" :disabled="buttonDis" @click="upCourse">Guardar</v-btn>
+                            <v-btn outline block color="green" :disabled="buttonDis" @click="updateCourse">Guardar</v-btn>
                         </v-flex>
                         <v-flex xs12>
                             <v-btn outline block color="red" @click="update = 'No'">Cancelar</v-btn>
@@ -309,7 +312,7 @@
                     <v-card-actions>
                         <v-layout row wrap>
                             <v-flex>
-                                <v-btn outline color="green" @click="deleteCourse($route.params.curso)">Aceptar</v-btn>
+                                <v-btn outline color="green" @click="deleteCourse">Aceptar</v-btn>
                             </v-flex>
                             <v-flex>
                                 <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
@@ -325,9 +328,9 @@
 
 <script>
 import {ValidationProvider} from 'vee-validate';
-import {mapActions} from 'vuex';
+import {mapMutations, mapState} from 'vuex';
 import router from '../../router';
-import EventBus from '../../bus';
+import axios from 'axios';
 
 export default {
     name: 'DataCourse',
@@ -365,77 +368,93 @@ export default {
             }
         }
     },
+    computed:{
+        ...mapState(['keyAuth'])
+    },
     methods:{
-        ...mapActions(['getDataCourse','getTeachersList','updateCourse','deleteCourse','getPDFList']),
-
+        ...mapMutations(['createKeyAuth']),
+        
         allowedMinutes: v => v <= 1 && v <= 11,
 
-        // Actualiza los datos del curso
-        upCourse(){
-            this.Course.timetable = this.hourStart + '-' + this.hourEnd;
-            this.updateCourse({nameCourse:this.$route.params.curso,body:this.Course});
+        // Obtiene los datos del curso y habilita o no descargar la lista de asistencia
+        async getCourse(){
+            this.createKeyAuth();
+            try {
+                const response = await axios.get(`/course/${this.$route.params.curso}`, this.keyAuth);
+                this.Course.courseName = response.data.courseName;
+                this.Course.courseTo = response.data.courseTo;
+                this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
+                this.Course.dateEnd = response.data.dateEnd.replace("T00:00:00+00:00","");
+                this.Course.description = response.data.description;
+                this.Course.modality = response.data.modality;
+                this.Course.place = response.data.place;
+                this.Course.teacherRFC = response.data.teacherRFC;
+                this.Course.timetable = response.data.timetable;
+                this.Course.typeCourse = response.data.typeCourse;
+                this.state = response.data.state;
+                this.totalHours = response.data.totalHours;
+                this.teacherName = response.data.teacherName;
+                this.hourStart = response.data.timetable.substr(0,5);
+                this.hourEnd = response.data.timetable.substr(6);
+    
+                await axios.get(`/teacherList/${this.$route.params.curso}`,this.keyAuth);
+                this.availablePDFList = false;
+                
+            } catch (error) {
+                console.error(error);
+            }
         },
+
+        // Actualiza los datos del curso
+        async updateCourse(){
+            this.Course.timetable = this.hourStart + '-' + this.hourEnd;
+            try {
+                await axios.put(`/course/${this.$route.params.curso}`, this.Course, this.keyAuth);
+                this.snackSu = true;
+                this.buttonDis = true;
+                setTimeout(() => {
+                    this.snackSu = false;
+                    this.getDataCourse(this.$route.params.curso);
+                    this.update = 'No';
+                    this.buttonDis = false;
+                }, 2000);
+            } catch (error) {
+                this.errorMsg = error.response.data.message;
+                this.snackEr = true;
+                setTimeout(() => {
+                    this.snackEr = false;
+                }, 2000);
+            }
+        },
+
+        // Elimina el curso
+        async deleteCourse(){
+            try {
+                await axios.delete(`/course/${this.$route.params.curso}`,this.keyAurh);
+                this.dialog = false
+                router.push({name:"Cursos"})
+            } catch (error) {
+            }
+        },
+
+        // descarga el PDF de la lista de asistencia
+        async getPDFList(){
+            try {
+                const response = await axios.get(`/course/${this.$route.params.curso}/assistantList`,this.keyAuth);
+                let name = "ListaAsistencia"+this.$route.params.curso.replace(" ","");
+                let blob = new Blob([response.data], { type:'application/pdf' } );
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.target = '_blank';
+                link.click();
+            } catch (error) {
+                
+            }
+        }
     },
     created(){
-        this.getDataCourse(this.$route.params.curso);
-        this.getTeachersList(this.$route.params.curso);
-    },
-    mounted(){
-        EventBus.$on('getDataCourse',response=>{
-            this.Course.courseName = response.data.courseName;
-            this.Course.courseTo = response.data.courseTo;
-            this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
-            this.Course.dateEnd = response.data.dateEnd.replace("T00:00:00+00:00","");
-            this.Course.description = response.data.description;
-            this.Course.modality = response.data.modality;
-            this.Course.place = response.data.place;
-            this.Course.teacherRFC = response.data.teacherRFC;
-            this.Course.timetable = response.data.timetable;
-            this.Course.typeCourse = response.data.typeCourse;
-            this.state = response.data.state;
-            this.totalHours = response.data.totalHours;
-            this.teacherName = response.data.teacherName;
-            this.hourStart = response.data.timetable.substr(0,5);
-            this.hourEnd = response.data.timetable.substr(6);
-        });
-
-        EventBus.$on('suGetTeachersList',()=>{
-            this.availablePDFList = false;
-        });
-
-        EventBus.$on('suUpdateCourse',()=>{
-            this.snackSu = true;
-            this.buttonDis = true;
-            setTimeout(() => {
-                this.snackSu = false;
-                this.getDataCourse(this.$route.params.curso);
-                this.update = 'No';
-                this.buttonDis = false;
-            }, 2000);
-        });
-
-        EventBus.$on('erUpdateCourse',error=>{
-            this.errorMsg = error;
-            this.snackEr = true;
-            setTimeout(() => {
-                this.snackEr = false;
-            }, 2000);
-        });
-
-        EventBus.$on('suDeleteCourse',()=>{
-            this.dialog = false
-            router.push({name:"Cursos"})
-        });
-
-        EventBus.$on('getPDFList',response=>{
-            let name = "ListaAsistencia"+this.$route.params.curso.replace(" ","");
-            let blob = new Blob([response.data], { type:'application/pdf' } );
-            let link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = name;
-            link.target = '_blank';
-            link.click();
-        })
+        this.getCourse();
     }
 }
 </script>

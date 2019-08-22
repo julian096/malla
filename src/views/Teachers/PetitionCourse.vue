@@ -37,8 +37,8 @@
 
 <script>
 import Navigation from '@/components/Navbars/Navigation.vue';
-import {mapActions} from 'vuex';
-import EventBus from '../../bus';
+import {mapActions, mapMutations, mapState} from 'vuex';
+import axios from 'axios';
 
 export default {
     name: 'PetitionCourse',
@@ -49,37 +49,38 @@ export default {
             arrayTeachers:[]
         }
     },
+    computed: {
+        ...mapState(['keyAuth'])
+    },
     methods:{
-        ...mapActions(['requestsTo','acceptPetitionTeacher','rejectPetitionTeacher']),
-    
+        ...mapMutations(['createKeyAuth']),
+
+        // Obtiene los docentes que solicitaron el curso
+        async requestsTo(){
+            this.createKeyAuth();
+            try {
+                const response = await axios.get(`/requestsTo/${this.$route.params.listaPeticion}`,this.keyAuth);
+                this.arrayTeachers = response.data;
+            } catch (error) {
+            }
+        },
+
         //acepta el docente en el curso
         async acceptTeacherInCourse(rfc,ind){
             this.indice = ind;
-            this.acceptPetitionTeacher({nameCourse:this.$route.params.listaPeticion,body:{"rfc":rfc}});
+            await axios.post(`/addTeacherinCourse/${this.$route.params.listaPeticion}`,{"rfc":rfc},this.keyAuth);
+            this.arrayTeachers.splice(this.indice,1);
         },
 
         //rechaza el docente en el curso
         async rejectTeacherOfCourse(rfc,ind){
             this.indice = ind;
-            this.rejectPetitionTeacher({nameCourse:this.$route.params.listaPeticion,body:{"rfc":rfc}});
+            await axios.post(`/rejectTeacherOfCourse/${this.$route.params.listaPeticion}`,{"rfc":rfc},this.keyAuth);
+            this.arrayTeachers.splice(this.indice,1);
         }
     },
     created() {
-        this.requestsTo(this.$route.params.listaPeticion);
-    },
-    mounted() {
-        EventBus.$on('suRequestsTo',response=>{
-            this.arrayTeachers = response.data;
-            console.log(this.arrayTeachers);
-        });
-
-        EventBus.$on('suAcceptPetition',()=>{
-            this.arrayTeachers.splice(this.indice,1);
-        });
-
-        EventBus.$on('suRejectPetition',()=>{
-            this.arrayTeachers.splice(this.indice,1);
-        })
-    },
+        this.requestsTo();
+    }
 }
 </script>

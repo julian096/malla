@@ -72,13 +72,19 @@
                     <v-flex xs3>
                         <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
                     </v-flex>
+                    <v-flex xs3>
+                        <v-btn outline color="indigo" block :to="{name: 'CursosDelAdmin'}">Atras</v-btn>
+                    </v-flex>
                 </v-layout>
                 <v-layout row wrap v-else>
-                    <v-flex xs12 sm3>
+                    <v-flex xs12>
                         <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm3>
+                    <v-flex xs12>
                         <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn outline color="indigo" block :to="{name: 'CursosDelAdmin'}">Atras</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-actions>
@@ -98,7 +104,7 @@
                                 <span class="subheading">¿Estas seguro que quieres darte de baja del curso?</span>
                             </v-flex>
                             <v-flex class="mt-4">
-                                <v-btn outline color="green" @click="removeTeacher($route.params.MiCursoAdmin)">Aceptar</v-btn>
+                                <v-btn outline color="green" @click="removeTeacher">Aceptar</v-btn>
                                 <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
@@ -111,8 +117,9 @@
 </template>
 
 <script>
-import {mapState,mapActions} from 'vuex';
+import {mapState,mapActions, mapMutations} from 'vuex';
 import router from '../../router';
+import axios from 'axios';
 import EventBus from '../../bus';
 
 export default {
@@ -143,7 +150,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(['userLoged']),
+        ...mapState(['userLoged','keyAuth']),
 
         // Devuelve un booleano para habilitar encuesta
         findTeacher(){
@@ -153,39 +160,46 @@ export default {
         }
     },
     methods:{
-        ...mapActions(['getDataCourse','removeTeacher']),
+        ...mapMutations(['createKeyAuth']),
 
+        async getCourse(){
+            this.createKeyAuth();
+            try {
+                const response = await axios.get(`/course/${this.$route.params.MiCursoAdmin}`,this.keyAuth);
+                this.Course.courseName = response.data.courseName;
+                this.Course.courseTo = response.data.courseTo;
+                this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
+                this.Course.dateEnd = response.data.dateEnd.replace("T00:00:00+00:00","");
+                this.Course.description = response.data.description;
+                this.Course.modality = response.data.modality;
+                this.Course.place = response.data.place;
+                this.Course.timetable = response.data.timetable;
+                this.Course.typeCourse = response.data.typeCourse;
+                this.Course.totalHours = response.data.totalHours;
+                this.Course.state = response.data.state;
+                this.Course.teacherName = response.data.teacherName;
+                this.availableButton = response.data.allowPoll;
+                this.snack = response.data.allowPoll;
+                this.daysToPoll = response.data.leftDays;
+                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
+            } catch (error) {        
+            }
+        },
+
+        async removeTeacher(){
+            try {
+                await axios.get(`/removeTeacherinCourse/${this.$route.params.MiCursoAdmin}`,this.keyAuth);
+                router.push({name: 'CursosDelAdmin'});
+            } catch (error) {
+            }
+        },
         // Abre la vista para la encuesta de satisfacción
         openFormPoll(){
             router.push({name: 'EncuestaAdmin'});
         },
     },
     created(){
-        this.getDataCourse(this.$route.params.MiCursoAdmin);
-    },
-    mounted(){
-        EventBus.$on('getDataCourse',response=>{
-            this.Course.courseName = response.data.courseName;
-            this.Course.courseTo = response.data.courseTo;
-            this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
-            this.Course.dateEnd = response.data.dateEnd.replace("T00:00:00+00:00","");
-            this.Course.description = response.data.description;
-            this.Course.modality = response.data.modality;
-            this.Course.place = response.data.place;
-            this.Course.timetable = response.data.timetable;
-            this.Course.typeCourse = response.data.typeCourse;
-            this.Course.totalHours = response.data.totalHours;
-            this.Course.state = response.data.state;
-            this.Course.teacherName = response.data.teacherName;
-            this.availableButton = response.data.allowPoll;
-            this.snack = response.data.allowPoll;
-            this.daysToPoll = response.data.leftDays;
-            this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
-        });
-
-        EventBus.$on('suRemoveTeacher',()=>{
-            router.push({name: 'CursosDelAdmin'})
-        })
+        this.getCourse();
     }
 }
 </script>

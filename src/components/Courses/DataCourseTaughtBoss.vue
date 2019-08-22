@@ -71,6 +71,9 @@
                     <v-flex xs3>
                         <v-btn outline block color="blue" :disabled="!availableButton" @click="openCalTeachers">Calificar docentes</v-btn>
                     </v-flex>
+                    <v-flex xs3>
+                        <v-btn outline block color="indigo" :to="{name: 'CursosImpartidosJefe'}">Atras</v-btn>
+                    </v-flex>
                 </v-layout>
                 <v-layout row wrap v-else>
                     <v-flex xs12>
@@ -137,7 +140,6 @@ export default {
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
                 this.availableButton = response.data.allowPoll;
-                console.log(response);
             })
             .catch(error => {
                 console.error(error);

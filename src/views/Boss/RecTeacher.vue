@@ -36,8 +36,8 @@
 
 <script>
 import Navigation from '@/components/Navbars/Navigation.vue';
-import { mapActions } from 'vuex';
-import EventBus from '../../bus';
+import {mapState, mapMutations} from 'vuex';
+import axios from 'axios';
 
 export default {
     name: 'RecTeacher',
@@ -48,26 +48,29 @@ export default {
             arrayTeachers:[]
         }
     },
+    computed: {
+        ...mapState(['keyAuth'])
+    },
     methods:{
-        ...mapActions(['getTeachersByDep','recTeacher']),
+        ...mapMutations(['createKeyAuth']),
 
+        async getTeachersByDep(){
+            this.createKeyAuth();
+            try {
+                const response = await axios.get(`/teachersByDep/${this.$route.params.recDocente}`,this.keyAuth);
+                this.arrayTeachers = response.data.teachers;
+            } catch (error) {
+            }
+        },
         // Recomienda el docente seleccionado al curso
         async recommTeacher(rfc, ind){
             this.indice = ind;
-            this.recTeacher({nameCourse:this.$route.params.recDocente,body:{"rfc":rfc}});
+            await axios.post(`/courseRequest/${this.$route.params.recDocente}`,{"rfc":rfc},this.keyAuth);
+            this.arrayTeachers.splice(this.indice,1);
         }
     },
     created(){
-        this.getTeachersByDep(this.$route.params.recDocente);
-    },
-    mounted() {
-        EventBus.$on('getTeachersByDep',response=>{
-            this.arrayTeachers = response.data.teachers;
-        });
-
-        EventBus.$on('suRecTeacher',()=>{
-            this.arrayTeachers.splice(this.indice,1);
-        })
-    },
+        this.getTeachersByDep();
+    }
 }
 </script>

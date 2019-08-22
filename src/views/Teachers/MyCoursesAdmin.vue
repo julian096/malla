@@ -4,7 +4,7 @@
         <p class="display-1">Mis cursos</p>
 
         <p class="title mt-4">Simbología de colores</p>   
-        <v-layout row justify-space-around class="mt-3" v-if="!breakpoint.xs">
+        <v-layout row justify-space-around v-if="!breakpoint.xs">
             <v-flex xs2>
                 <div class="green lighten-1 pt-1 pr-1 pb-1 pl-1"><span class="white--text body-2">Disponible</span></div>
             </v-flex>
@@ -29,7 +29,7 @@
 
         <CardMyCourses :data="myCourses" class="mt-4" v-if="myCourses.length"/>
 
-        <v-layout class="mt-5" row justify-center v-else>
+        <v-layout class="mt-3" row justify-center v-else>
             <v-flex xs12>
                 <span class="title">Aun no has cursado ningun curso</span>
             </v-flex>

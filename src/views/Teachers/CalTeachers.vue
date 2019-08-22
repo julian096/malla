@@ -29,7 +29,7 @@
 
         <v-layout class="mt-5" row justify-center v-else>
             <v-flex xs12>
-                <span class="title">No hay peticiones para este curso</span>
+                <span class="title">No hay docentes que calificar</span>
             </v-flex>
         </v-layout>
     </v-container>
@@ -37,8 +37,8 @@
 
 <script>
 import Navigation from '@/components/Navbars/Navigation.vue';
-import {mapActions} from 'vuex';
-import EventBus from '../../bus';
+import {mapState, mapMutations} from 'vuex';
+import axios from 'axios';
 
 export default {
     name: 'CalTeachers',
@@ -50,37 +50,39 @@ export default {
             arrayTeachers:[]
         }
     },
+    computed: {
+        ...mapState(['keyAuth'])
+    },
     methods:{
-        ...mapActions(['teacherListToQualify','approvedTeacher','repprovedTeacher']),
+        ...mapMutations(['createKeyAuth']),
+
+        // Obtiene los docentes a calificar
+        async teachersToQualify(){
+            this.createKeyAuth();
+            try {
+                const response = await axios.get(`/teacherListToQualify/${this.$route.params.CursoImpartidoAdmin}`,this.keyAuth);
+                this.listTeacher = response.data.teachers;
+                this.arrayTeachers = response.data.teachers;
+            } catch (error) {
+            }
+        },
 
         // Función que envia el rfc del docente seleccionado para aprobarlo
         async app(rfc,ind){
             this.indice = ind;
-            this.approvedTeacher({nameCourse:this.$route.params.CursoImpartidoAdmin,body:{"rfc":rfc}});
+            await axios.put(`/approvedCourse/${this.$route.params.CursoImpartidoAdmin}`,{"rfc":rfc},this.keyAuth);
+            this.arrayTeachers.splice(this.indice,1);
         },
 
         // Elimina el item del docente seleccionado de la lista
         async rep(rfc,ind){
             this.indice = ind;
-            this.repprovedTeacher({nameCourse:this.$route.params.CursoImpartidoAdmin,body:{"rfc":rfc}})
+            await axios.put(`/failedCourse/${this.$route.params.CursoImpartidoAdmin}`,{"rfc":rfc},this.keyAuth);
+            this.arrayTeachers.splice(this.indice,1);
         }
     },
     created() {
-        this.teacherListToQualify(this.$route.params.CursoImpartidoAdmin);
-    },
-    mounted() {
-        EventBus.$on('suGetTeacherListToQualify',response=>{
-            this.listTeacher = response.data.teachers;
-            this.arrayTeachers = response.data.teachers;
-        });
-
-        EventBus.$on('suApprovedCourse',()=>{
-            this.arrayTeachers.splice(this.indice,1);
-        });
-
-        EventBus.$on('suRepprovedCourse',()=>{
-            this.arrayTeachers.splice(this.indice,1);
-        })
-    },
+        this.teachersToQualify()
+    }
 }
 </script>

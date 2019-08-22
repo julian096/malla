@@ -104,33 +104,37 @@ export default {
     methods:{
         ...mapMutations(['createKeyAuth']),
 
-        ...mapActions(['getDataProfile']),
+        // Obtiene los datos del docente logeado
+        async getProfile(){
+            this.createKeyAuth();
+            try {
+                const response = await axios.get(`/teacher/${this.userLoged.rfc}`,this.keyAuth);
+                this.Teacher.rfc = response.data.rfc;
+                this.Teacher.name = response.data.name;
+                this.Teacher.fstSurname = response.data.fstSurname;
+                this.Teacher.sndSurname = response.data.sndSurname;
+                this.Teacher.email = response.data.email;
+                this.Teacher.numberPhone = response.data.numberPhone;
+                this.Teacher.schedule = response.data.schedule;
+                this.Teacher.departament = response.data.departament;
+                this.Teacher.speciality = response.data.speciality;
+                this.Teacher.studyLevel = response.data.studyLevel;
+                this.Teacher.userType = response.data.userType;
+                this.Teacher.degree = response.data.degree;
+                this.Teacher.position = response.data.position;
+            } catch (error) {
+            }
+        },
 
+        // Muestra el formulario de cambio de contraseña
         openChangePass(){
             this.visible = true;
         },
     },
     created() {
-        this.getDataProfile();
+        this.getProfile();
     },
     mounted(){
-        EventBus.$on('getDataProfile', response=>{
-            console.log(response);
-            this.Teacher.rfc = response.data.rfc;
-            this.Teacher.name = response.data.name;
-            this.Teacher.fstSurname = response.data.fstSurname;
-            this.Teacher.sndSurname = response.data.sndSurname;
-            this.Teacher.email = response.data.email;
-            this.Teacher.numberPhone = response.data.numberPhone;
-            this.Teacher.schedule = response.data.schedule;
-            this.Teacher.departament = response.data.departament;
-            this.Teacher.speciality = response.data.speciality;
-            this.Teacher.studyLevel = response.data.studyLevel;
-            this.Teacher.userType = response.data.userType;
-            this.Teacher.degree = response.data.degree;
-            this.Teacher.position = response.data.position;
-        })
-
         EventBus.$on('closeChangePass', () => {
             this.visible = false;
         })
