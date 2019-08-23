@@ -290,6 +290,24 @@ const router = new Router({
     },
     // Rutas para jefe de departamento
     {
+        path: '/docentes-del-departamento',
+        name: 'DocentesDelDep',
+        component: () => import('@/views/Boss/TeachersByDep.vue'),
+        meta:{
+            requiresAuth: true,
+            requireBoss: true
+        }
+    },
+    {
+        path: '/docentes-del-departamento/:CursosDelDocente/cursos-tomados',
+        name: 'CursosDelDocente',
+        component: () => import('@/views/Boss/CoursesOfTeacher.vue'),
+        meta:{
+            requiresAuth: true,
+            requireBoss: true
+        }
+    },
+    {
       path: '/cursos-disponibles',
       name: 'CursosDisponiblesJefe',
       component: () => import('@/views/Boss/AvailableCoursesBoss.vue'),
@@ -379,6 +397,34 @@ const router = new Router({
         requireBoss: true
       }
     },
+    // Rutas para docente externo
+    {
+        path: '/cursos-impartidos',
+        name: 'CursosImpartidosExt',
+        component: () => import('@/views/Ext/CoursesTaughtExt.vue'),
+        meta:{
+          requiresAuth: true,
+          requireTeacher: true
+        }
+      },
+      {
+        path: '/cursos-impartidos/:CursoImpartidoExterno',
+        name: 'CursoImpartidoExt',
+        component: () => import('@/views/Ext/DetailCourseTaughtExt.vue'),
+        meta:{
+          requiresAuth: true,
+          requireTeacher: true
+        }
+      },
+      {
+        path: '/cursos-impartidos/:CursoImpartidoExterno/calificar-docentes',
+        name: 'CalDocentesExt',
+        component: () => import('@/views/Ext/CalTeachers.vue'),
+        meta:{
+          requiresAuth: true,
+          requireTeacher: true
+        }
+      }
   ]
 })
 

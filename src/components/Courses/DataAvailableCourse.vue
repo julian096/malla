@@ -69,7 +69,7 @@
                         <v-btn outline block color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn dark block color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
+                        <v-btn outline block color="indigo" @click="showAvailableCourses">Atras</v-btn>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap v-else>
@@ -77,7 +77,7 @@
                         <v-btn outline block color="orange" @click="requestCourse" :disabled="btnDisable">Solicitar curso</v-btn>
                     </v-flex>
                     <v-flex xs12>
-                        <v-btn dark block color="blue" @click="showAvailableCourses">Otros cursos</v-btn>
+                        <v-btn outline block color="indigo" @click="showAvailableCourses">Atras</v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-actions>
@@ -121,8 +121,8 @@ export default {
         // Obtiene los datos del curso disponible
         async getDataAvailableCourse(){
             this.createKeyAuth();
-            await axios.get('/course/'+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
+            try {
+                const response = await axios.get('/course/'+this.$route.params.cursoDisp,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -135,25 +135,16 @@ export default {
                 this.Course.totalHours = response.data.totalHours;
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
-                console.log(response);
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            } catch (error) {   
+            }
         },
 
         // Registra al docente en un curso y descarga el PDF de inscripcion
         async requestCourse(){
-            await axios.get("/courseRequest/"+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
-                console.log("Peticion enviada");
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            try {
+                await axios.get("/courseRequest/"+this.$route.params.cursoDisp,this.keyAuth);
 
-            await axios.get("/inscriptionDocument/"+this.$route.params.cursoDisp,this.keyAuth)
-            .then(response => {
+                const response = await axios.get("/inscriptionDocument/"+this.$route.params.cursoDisp,this.keyAuth);
                 let name = "inscripcion"+this.$route.params.cursoDisp.replace(" ","");
                 this.btnDisable = true;
                 let blob = new Blob([response.data], { type:'application/pdf' } );
@@ -162,10 +153,8 @@ export default {
                 link.download = name;
                 link.target = '_blank';
                 link.click();
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            } catch (error) {   
+            }
         },
 
         // Redirecciona a los cursos disponibles

@@ -54,8 +54,12 @@ export default {
     methods:{
         ...mapActions(['getAvailableCourses'])
     },
-    mounted() {
+    created() {
         this.getAvailableCourses();
+        
+    },
+    mounted() {
+        console.log(this.availableCourses)
     },
 }
 </script>

@@ -33,8 +33,9 @@ function isComm(){
 
 function isTeacher(){
     let token = jwt.decode(sessionStorage.getItem("token"));
-    return token.identity[1] == 3
+    return token.identity[1] == 3 || token.identity[1] == 4
 }
+
 
 
 export {isAuth, isAdmin, isTeacher, isComm, isBoss};

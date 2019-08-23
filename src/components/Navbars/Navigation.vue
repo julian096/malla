@@ -131,6 +131,7 @@
 
             <v-list class="pt-0" dense>
                 <v-divider></v-divider>
+
                 <v-list-tile to="/perfil">
                     <v-list-tile-action>
                         <v-icon>perm_identity</v-icon>
@@ -138,6 +139,16 @@
 
                     <v-list-tile-content>
                         <v-list-tile-title>Mi perfil</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile :to="{name: 'DocentesDelDep'}">
+                    <v-list-tile-action>
+                        <v-icon>people_outline</v-icon>
+                    </v-list-tile-action>
+
+                    <v-list-tile-content>
+                        <v-list-tile-title>Docentes</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
 
@@ -271,6 +282,61 @@
                         </v-list-tile-action>
                     </v-list-tile>
                 </v-list-group>
+
+                <v-list-tile v-ripple @click="logout">
+                    <v-list-tile-action>
+                        <v-icon>exit_to_app</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Cerrar sesión</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+            </v-list>
+        </v-navigation-drawer>
+
+        <!-- Navigation para docente -->
+        <v-navigation-drawer app v-model="drawer" :mini-variant.sync="mini" hide-overlay stateless width="277" v-if="userType == 4">
+            <v-toolbar flat class="transparent" color="red lighten-2" dark>
+                <v-list class="pa-0">
+                    <v-list-tile avatar>
+                        <v-list-tile-avatar>
+                            <img src="../../assets/logotec.png">
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>Malla docente</v-list-tile-title>
+                        </v-list-tile-content>
+
+                        <v-list-tile-action>
+                            <v-btn icon @click.stop="mini = !mini">
+                                <v-icon>chevron_left</v-icon>
+                            </v-btn>
+                        </v-list-tile-action>
+                    </v-list-tile>
+                </v-list>
+            </v-toolbar>
+
+            <v-list class="pt-0" dense>
+                <v-divider></v-divider>
+
+                <v-list-tile :to="{name: 'Perfil'}">
+                    <v-list-tile-action>
+                        <v-icon>perm_identity</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Mi perfil</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile :to="{name: 'CursosImpartidosExt'}">
+                    <v-list-tile-action>
+                        <v-icon>school</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Cursos impartidos</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
 
                 <v-list-tile v-ripple @click="logout">
                     <v-list-tile-action>

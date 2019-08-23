@@ -314,6 +314,7 @@
                                                                       :error-messages="errors"
                                                                       :success="valid"
                                                                       label="PIN"
+                                                                      type="password"
                                                                       required />
                                                     </ValidationProvider>
                                                 </v-flex>

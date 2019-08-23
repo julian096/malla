@@ -426,7 +426,7 @@ export default {
                 this.buttonDis = true;
                 setTimeout(() => {
                     this.snackSu = false;
-                    this.getTeacher(this.$route.params.docente);
+                    this.getTeacher();
                     this.update = 'No';
                     this.buttonDis = false;
                 }, 2000)

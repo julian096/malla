@@ -125,8 +125,8 @@ export default {
         // Obtiene los datos del curso 
         async getDataCourseTaught(){
             this.createKeyAuth();
-            await axios.get('/course/'+this.$route.params.CursoImpartidoJefe,this.keyAuth)
-            .then(response => {
+            try {
+                const response = await axios.get('/course/'+this.$route.params.CursoImpartidoJefe,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -140,28 +140,23 @@ export default {
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
                 this.availableButton = response.data.allowPoll;
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            } catch (error) {   
+            }
         },
 
         // obtiene la lista de docentes del curso
         async getTeachersList(){
-            await axios.get("/teacherListToQualify/"+this.$route.params.CursoImpartidoJefe,this.keyAuth)
-            .then(response => {
+            try {
+                await axios.get("/teacherListToQualify/"+this.$route.params.CursoImpartidoJefe,this.keyAuth);
                 this.availablePDFList = false;
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            } catch (error) {   
+            }
         },
 
         // Obtiene el PDF de la lista de asistencia del curso
         async getPDFList(){
-            await axios.get("/course/"+this.$route.params.CursoImpartidoJefe+"/assistantList",this.keyAuth)
-            .then(response => {
-                console.log("PDF descargado");
+            try {
+                const response = await axios.get("/course/"+this.$route.params.CursoImpartidoJefe+"/assistantList",this.keyAuth);
                 let name = "ListaAsistencia"+this.$route.params.CursoImpartidoJefe.replace(" ","");
                 this.btnDisable = true;
                 let blob = new Blob([response.data], { type:'application/pdf' } );
@@ -170,10 +165,8 @@ export default {
                 link.download = name;
                 link.target = '_blank';
                 link.click();
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            } catch (error) {   
+            }
         },
 
         // Abre la vista para calificar los docentes

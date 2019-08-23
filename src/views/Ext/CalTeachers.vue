@@ -1,7 +1,7 @@
 <template>
     <v-container text-xs-center>
         <Navigation/>
-        <p class="display-1">Calificar docentes de {{$route.params.CursoImpartido}}</p>
+        <p class="display-1">Calificar docentes de {{$route.params.CursoImpartidoExterno}}</p>
         
         <v-layout row justify-space-between v-if="arrayTeachers.length">
             <v-flex xs12>
@@ -58,22 +58,18 @@ export default {
         // Obtiene la lista completa de los docentes dentro del curso
         async getListTeacher(){
             this.createKeyAuth();
-            await axios.get("/teacherListToQualify/"+this.$route.params.CursoImpartido,this.keyAuth)
-            .then(response => {
+            try {
+                const response = await axios.get("/teacherListToQualify/"+this.$route.params.CursoImpartidoExterno,this.keyAuth);
                 this.listTeacher = response.data.teachers;
                 this.arrayTeachers = response.data.teachers;
-                console.log(this.arrayTeachers);
-            })
-            .catch(error => {
-                console.error(error)
-            })
+            } catch (error) {   
+            }
         },
 
         // Función que envia el rfc del docente seleccionado para aprobarlo
         async approvedTeacher(rfc,ind){
             try {
-                await axios.put("/approvedCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)    
-                console.log("Aprobado "+rfc);
+                await axios.put("/approvedCourse/"+this.$route.params.CursoImpartidoExterno,{"rfc":rfc},this.keyAuth);
                 this.arrayTeachers.splice(ind,1);
             } catch (error) {
                 console.error(error);
@@ -83,8 +79,7 @@ export default {
         // Elimina el item del docente seleccionado de la lista
         async repproveTeacher(rfc,ind){
             try {
-                await axios.put("/failedCourse/"+this.$route.params.CursoImpartido,{"rfc":rfc},this.keyAuth)
-                console.log("Reprobado "+rfc);
+                await axios.put("/failedCourse/"+this.$route.params.CursoImpartidoExterno,{"rfc":rfc},this.keyAuth);
                 this.arrayTeachers.splice(ind,1);
             } catch (error) {
                 console.error(error);   

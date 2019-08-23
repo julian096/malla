@@ -96,49 +96,11 @@ actions: {
     async logout({commit,state}){
         commit('createKeyAuth');
         try {
-            await axios.get(`/logoutA`,state.keyAuth);
+            await axios.get(`/logout`,state.keyAuth);
             sessionStorage.clear()
             router.push('/login');
         } catch (error) {
 
-        }
-    },
-    // Obtiene los datos del usuario
-    async getDataProfile({commit,state}){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/teacher/${state.userLoged.rfc}`,state.keyAuth);
-            EventBus.$emit('getDataProfile',response);
-        } catch (error) {
-            
-        }
-    },
-    // Obtiene los datos de un docente
-    async getDataTeacher({commit,state},rfc){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/teacher/${rfc}`,state.keyAuth);
-            EventBus.$emit('getDataTeacher',response);
-        } catch (error) {
-            
-        }
-    },
-    // Elimina un docente
-    async deleteTeacher({state},rfc){
-        try {
-            await axios.delete(`/teacher/${rfc}`,state.keyAuth);
-            EventBus.$emit('deleteTeacher');     
-        } catch (error) {
-            
-        }
-    },
-    // Actualiza un docente
-    async updateTeacher({state},{rfc,body}){
-        try {
-            await axios.put(`/teacher/${rfc}`,body,state.keyAuth);
-            EventBus.$emit('suUpdateTeacher');
-        } catch (error) {
-            EventBus.$emit('erUpdateTeacher', error.response.data.message);
         }
     },
     //registro de cursos
@@ -149,152 +111,6 @@ actions: {
             return true;
         } catch (error) {
             return error.response.data.message
-        }
-    },
-    // Obtiene los datos del curso
-    async getDataCourse({commit,state},nameCourse){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/course/${nameCourse}`,state.keyAuth);
-            EventBus.$emit('getDataCourse',response);
-        } catch (error) {
-            
-        }
-    },
-    // Obtiene la lista de docentes a calificar
-    async teacherListToQualify({commit,state},nameCourse){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/teacherListToQualify/${nameCourse}`,state.keyAuth)
-            EventBus.$emit('suGetTeacherListToQualify',response);
-        } catch (error) {
-            
-        }
-    },
-    // Aprueba el docente
-    async approvedTeacher({state},{nameCourse,body}){
-        try {
-            await axios.put(`/approvedCourse/${nameCourse}`,body,state.keyAuth);
-            EventBus.$emit('suApprovedTeacher');
-        } catch (error) {
-            
-        }
-    },
-    // Reorueba el docente
-    async repprovedTeacher({state},{nameCourse,body}){
-        try {
-            await axios.put(`/failedCourse/${nameCourse}`,body,state.keyAuth);
-            EventBus.$emit('suRepprovedTeacher');
-        } catch (error) {
-            
-        }
-    },
-    // Obtiene los metadatos de un documento
-    async getDataLetterhead({commit,state},shortName){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/metadata/${shortName}`,state.keyAuth);
-            EventBus.$emit('getDataLetterhead',response);
-        } catch (error) {
-            
-        }
-    },
-    // Actualiza los metadatos de un documento
-    async updateLetterhead({state},{shortName,body}){
-        try {
-            await axios.put(`/metadata/${shortName}`,body,state.keyAuth);
-            EventBus.$emit('suUpdateLetterhead');
-        } catch (error) {
-            
-        }
-    },
-    // Establece el limite de dias para realizar la encuesta
-    async establishLimitDaysOfPoll({commit,state},body){
-        commit('createKeyAuth');
-        try {
-            await axios.put(`/establishLimitDaysOfPoll`,body,state.keyAuth);
-            EventBus.$emit('suEstablishLimitDaysOfPoll');
-        } catch (error) {
-            
-        }
-    },
-    // Regresa valor para saber si hay docentes inscritos al curso
-    async getTeachersList({state},nameCourse){
-        try {
-            await axios.get(`/teacherList/${nameCourse}`,state.keyAuth);
-            EventBus.$emit('suGetTeachersList');
-        } catch (error) {
-            
-        }
-    },
-    // Peticiones a un curso
-    async requestsTo({commit,state},courseName){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/requestsTo/${courseName}`,state.keyAuth);
-            EventBus.$emit('suRequestsTo',response);
-            return response;
-        } catch (error) {
-            
-        }
-    },
-    // Solicita un curso
-    async requestCourse({state},courseName){
-        try {
-            await axios.get(`/courseRequest/${courseName}`,state.keyAuth);
-            console.log("peticion hecha");
-            const response = await axios.get(`${url}/inscriptionDocument/${courseName}`,state.keyAuth);
-            EventBus.$emit('suRequestCourse',response);
-            
-        } catch (error) {
-            EventBus.$emit('erRequestCourse',error.response.data.message);
-        }
-    },
-
-    // Obtiene los docentes que no han solicitado un curso
-    async getTeachersByDep({commit,state},courseName){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/teachersByDep/${courseName}`,state.keyAuth);
-            EventBus.$emit('getTeachersByDep',response);
-        } catch (error) {
-            
-        }
-    },
-    // Recomienda un docente a un curso
-    async recTeacher({state},{nameCourse,body}){
-        try {
-            await axios.post(`/courseRequest/${nameCourse}`,body,state.keyAuth);
-            EventBus.$emit('suRecTeacher');
-        } catch (error) {
-            console.error(error);
-        }
-    },
-    // Actualiza el curso
-    async updateCourse({state},{nameCourse,body}){
-        try {
-            await axios.put(`/course/${nameCourse}`,body,state.keyAuth);
-            EventBus.$emit('suUpdateCourse');      
-        } catch (error) {
-            EventBus.$emit('erUpdateCourse',error.response.data.message);
-        }
-    },
-    // Elimina un curso
-    async deleteCourse({state},nameCourse){
-        try {
-            await axios.delete(`/course/${nameCourse}`,state.keyAuth);
-            EventBus.$emit('suDeleteCourse');
-        } catch (error) {
-            
-        }
-    },
-    // Obtiene el PDF de lista de asistencia
-    async getPDFList({state},nameCourse){
-        try {
-            const response = await axios.get(`/course/${nameCourse}/assistantList`,state.keyAuth)
-            EventBus.$emit('getPDFList',response)
-        } catch (error) {
-            
         }
     },
     // Cambia la contraseña del usuario
@@ -337,33 +153,6 @@ actions: {
 
         }
     },
-    // Elimina docente del curso
-    async removeTeacher({state},nameCourse){
-        try {
-            await axios.get(`/removeTeacherinCourse/${nameCourse}`,state.keyAuth);
-            EventBus.$emit('suRemoveTeacher');
-        } catch (error) {
-            
-        }
-    },
-    // Acepta las peticiones de los docentes
-    async acceptPetitionTeacher({state},{nameCourse,body}){
-        try {
-            await axios.post(`/addTeacherinCourse/${nameCourse}`,body,state.keyAuth);
-            EventBus.$emit('suAcceptPetition');
-        } catch (error) {
-            
-        }
-    },
-    // Rechaza las peticiones de los docentes
-    async rejectPetitionTeacher({state},{nameCourse,body}){
-        try {
-            await axios.post(`/rejectTeacherOfCourse/${nameCourse}`,body,state.keyAuth);
-            EventBus.$emit('suRejectPetition');
-        } catch (error) {
-            
-        }
-    },
     //obtiene los periodos de todos los cursos
     async getPeriods({commit,state}){
         commit('createKeyAuth');
@@ -401,7 +190,6 @@ actions: {
             const response = await axios.get(`/myCoursesWillTeach`,state.keyAuth);
             commit('saveCoursesTaught',response.data.courses);
         } catch (error) {
-
         }
     },
     // Obtiene los membretados de los documentos

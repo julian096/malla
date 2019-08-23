@@ -1,6 +1,5 @@
 <template>
-<v-container grid-list-lg text-xs-center>
-        <v-snackbar v-model="snack" :timeout="timeout" top color="amber darken-3" class="white--text">Te quedan {{daysToPoll}} dias para realizar la encuesta</v-snackbar>
+    <v-container grid-list-lg text-xs-center>
         <p class="display-1">Datos del curso</p>
         
         <v-card elevation="10">
@@ -63,59 +62,28 @@
                         <span class="subheading">{{Course.totalHours}}</span>
                     </v-flex>
                 </v-layout>
+            </v-card-text>
+            <v-card-actions>
                 <v-layout row justify-space-around v-if="!breakpoint.xs">
-                    <v-flex xs3>
-                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    <v-flex xs4>
+                        <v-btn outline block color="orange" :disabled="availablePDFList" @click="getPDFList">Lista de asistencia</v-btn>
                     </v-flex>
-                    <v-flex xs3>
-                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-btn outline color="indigo" block :to="{name: 'MisCursosJefe'}">Atras</v-btn>
+                    <v-flex xs4>
+                        <v-btn outline block color="blue" :disabled="!availableButton" @click="openCalTeachers">Calificar docentes</v-btn>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap v-else>
                     <v-flex xs12>
-                        <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                        <v-btn outline block color="orange" :disabled="availablePDFList" @click="getPDFList">Lista de asistencia</v-btn>
                     </v-flex>
                     <v-flex xs12>
-                        <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-btn outline color="indigo" block :to="{name: 'MisCursosJefe'}">Atras</v-btn>
+                        <v-btn outline block color="blue" :disabled="!availableButton" @click="openCalTeachers">Calificar docentes</v-btn>
                     </v-flex>
                 </v-layout>
-            </v-card-text>
+            </v-card-actions>
         </v-card>
 
-        <!-- confirmación de eliminacion del docente -->
-        <v-dialog v-model="dialog" max-width="350" persistent>
-            <v-card>
-                <v-toolbar card color="red lighten-2" dark>
-                    <v-icon>warning</v-icon>
-                    <v-toolbar-title>Advertencia</v-toolbar-title>
-                </v-toolbar>
-                <v-container text-xs-center>    
-                    <v-card-text>
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <p class="subheading">¿Estas seguro que quieres darte de baja del curso?</p>
-                            </v-flex>
-                        </v-layout>
-                        <v-layout row justify-space-around>
-                            <v-flex>
-                                <v-btn outline color="green" @click="removeTeacherInCourse">Aceptar</v-btn>
-                            </v-flex>
-                            <v-flex>
-                                <v-btn outline color="red" @click="dialog = false">Cancelar</v-btn>
-                            </v-flex>
-                        </v-layout>
-                    </v-card-text>
-                </v-container>
-            </v-card>
-            
-        </v-dialog>
-    </v-container>
+   </v-container> 
 </template>
 
 <script>
@@ -124,16 +92,12 @@ import {mapState, mapMutations} from 'vuex';
 import router from '../../router';
 
 export default {
-    name: 'DataMyCourseAdmin',
+    name: 'DataCourseTaught',
     data() {
-        return {
-            breakpoint:this.$vuetify.breakpoint,
-            snack:null,
-            timeout:5000,
-            daysToPoll:0,
+        return{
+            breakpoint: this.$vuetify.breakpoint,
             availableButton:null,
-            teachersThatHaveDoneThePoll:[],
-            dialog:null,
+            availablePDFList:true,
             Course:{
                 courseName:"",
                 courseTo:"",
@@ -151,23 +115,16 @@ export default {
         }
     },
     computed:{
-        ...mapState(['keyAuth','userLoged']),
-
-        // Devuelve un booleano para habilitar encuesta
-        findTeacher(){
-            const valor = this.teachersThatHaveDoneThePoll.includes(this.userLoged.rfc);
-            this.snack = !valor;
-            return valor;
-        }
+        ...mapState(['keyAuth'])
     },
     methods:{
         ...mapMutations(['createKeyAuth']),
 
-        //obtiene los datos del curso
-        async getDataCourse(){
+        // Obtiene los datos del curso 
+        async getDataCourseTaught(){
             this.createKeyAuth();
             try {
-                const response = await axios.get('/course/'+this.$route.params.MiCursoJefe,this.keyAuth);
+                const response = await axios.get(`http://localhost:5000/course/${this.$route.params.CursoImpartidoExterno}`,this.keyAuth);
                 this.Course.courseName = response.data.courseName;
                 this.Course.courseTo = response.data.courseTo;
                 this.Course.dateStart = response.data.dateStart.replace("T00:00:00+00:00","");
@@ -181,29 +138,45 @@ export default {
                 this.Course.state = response.data.state;
                 this.Course.teacherName = response.data.teacherName;
                 this.availableButton = response.data.allowPoll;
-                this.snack = response.data.allowPoll;
-                this.daysToPoll = response.data.leftDays;
-                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll;
             } catch (error) {
             }
         },
 
-        // Abre la vista para la encuesta de satisfacción
-        openFormPoll(){
-            router.push({name: 'EncuestaJefe'});
-        },
-
-        // pide un body que es redundante, decirle mañana
-        async removeTeacherInCourse(){
+        // obtiene la lista de docentes del curso
+        async getTeachersList(){
             try {
-                await axios.get("/removeTeacherinCourse/"+this.$route.params.MiCursoJefe,this.keyAuth);
-                router.push({name: 'CursosDelAdmin'})
+                await axios.get(`/teacherListToQualify/${this.$route.params.CursoImpartidoExterno}`,this.keyAuth);
+                this.availablePDFList = false;
             } catch (error) {
+                
             }
+        },
+
+        // Obtiene el PDF de la lista de asistencia del curso
+        async getPDFList(){
+            try {
+                const response = await axios.get(`/course/${this.$route.params.CursoImpartidoExterno}/assistantList`,this.keyAuth);
+                let name = "ListaAsistencia"+this.$route.params.CursoImpartidoExterno.replace(" ","");
+                this.btnDisable = true;
+                let blob = new Blob([response.data], { type:'application/pdf' } );
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.target = '_blank';
+                link.click();
+            } catch (error) {
+                
+            }
+        },
+
+        // Abre la vista para calificar los docentes
+        openCalTeachers(){
+            router.push({name: 'CalDocentesExt'});
         }
     },
-    created(){
-        this.getDataCourse();
+    created() {
+        this.getDataCourseTaught();
+        this.getTeachersList();
     }
 }
 </script>

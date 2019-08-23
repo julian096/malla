@@ -401,7 +401,6 @@ export default {
                 this.availablePDFList = false;
                 
             } catch (error) {
-                console.error(error);
             }
         },
 
@@ -414,7 +413,7 @@ export default {
                 this.buttonDis = true;
                 setTimeout(() => {
                     this.snackSu = false;
-                    this.getDataCourse(this.$route.params.curso);
+                    this.getCourse();
                     this.update = 'No';
                     this.buttonDis = false;
                 }, 2000);

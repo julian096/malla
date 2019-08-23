@@ -49,9 +49,6 @@ export default {
             userType: sessionStorage.getItem('userType')
         }
     },
-    computed: {
-        ...mapState(['keyAuth'])
-    },
     methods:{
         cancelRequest(ind,name){
             EventBus.$emit('removeRequest',[ind,name]);

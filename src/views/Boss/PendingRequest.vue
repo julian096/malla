@@ -39,7 +39,6 @@ export default {
             try {
                 const response = await axios.get("/getRequests",this.keyAuth);
                 this.arrayPendingRequests = response.data.courses;
-                console.log(this.arrayPendingRequests);
             } catch (error) {
                 console.error(error);
             }
@@ -50,9 +49,7 @@ export default {
             try {
                 await axios.get('/cancelRequest/'+dataRequest[1], this.keyAuth);
                 this.arrayPendingRequests.splice(dataRequest[0],1);
-                console.log('Peticion cancelada');
             } catch (error) {
-                console.error(error);   
             }
         })
     },

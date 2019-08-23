@@ -180,10 +180,8 @@ export default {
                 this.availableButton = response.data.allowPoll;
                 this.snack = response.data.allowPoll;
                 this.daysToPoll = response.data.leftDays;
-                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
-                console.log(response);
+                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll;
             } catch (error) {
-                console.error(error);
             }
         },
 
@@ -195,11 +193,9 @@ export default {
         // pide un body que es redundante, decirle mañana
         async removeTeacherInCourse(){
             try {
-                await axios.get("/removeTeacherinCourse/"+this.$route.params.MiCurso,this.keyAuth)
-                console.log("Dado de baja con éxito");
+                await axios.get("/removeTeacherinCourse/"+this.$route.params.MiCurso,this.keyAuth);
                 router.push({name: 'MisCursos'})
             } catch (error) {
-                console.error(error);
             }
         }
     },
