@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-layout row wrap class="mt-1" v-if="userType == 0">
+        <v-layout row wrap v-if="userType == 0">
             <v-flex xs12 sm4 md3 v-for="item of data" :key="item[0]" >
                 <v-card elevation="7" :to="{name: 'CursoDelAdmin', params:{MiCursoAdmin: item.courseName}}" >
                     <v-toolbar dark color="green lighten-1" card v-if="item.state=='Por empezar'">
@@ -20,7 +20,7 @@
             </v-flex>
         </v-layout>
 
-        <v-layout row wrap class="mt-1" v-else-if="userType == 1">
+        <v-layout row wrap v-else-if="userType == 1">
             <v-flex xs12 sm4 md3 v-for="item of data" :key="item[0]" >
                 <v-card elevation="7" :to="{name: 'MiCursoJefe', params:{MiCursoJefe: item.courseName}}" >
                     <v-toolbar dark color="green lighten-1" card v-if="item.state=='Por empezar'">
@@ -40,9 +40,9 @@
             </v-flex>
         </v-layout>
         
-        <v-layout row wrap class="mt-1" v-else-if="userType == 3">
+        <v-layout row wrap v-else-if="userType == 3">
             <v-flex xs12 sm4 md3 v-for="item of data" :key="item[0]" >
-                <v-card elevation="7" :to="{name: 'MiCurso', params:{MiCurso: item.courseName}}" >
+                <v-card elevation="7" :to="{name: 'MiCurso', params:{MiCurso: item.courseName}}">
                     <v-toolbar dark color="green lighten-1" card v-if="item.state=='Por empezar'">
                         <span class="subheading">{{item.courseName}}</span>
                     </v-toolbar>
@@ -72,6 +72,6 @@ export default {
         return {
             userType: sessionStorage.getItem("userType")
         }
-    },
+    }
 }
 </script>

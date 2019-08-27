@@ -16,9 +16,13 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12>
+                    <v-flex xs12 sm6>
                         <p class="headline font-italic">Descripción</p>
                         <span class="subheading">{{Course.description}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <p class="headline font-italic">Acreditación</p>
+                        <span class="subheading">{{qualified}}</span>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
@@ -70,6 +74,9 @@
                         <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
                     </v-flex>
                     <v-flex xs3>
+                        <v-btn outline block color="blue" :disabled="isApprove" @click="getPDFConst">Constancia de aprobación</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
                         <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
                     </v-flex>
                     <v-flex xs3>
@@ -79,6 +86,9 @@
                 <v-layout row wrap v-else>
                     <v-flex xs12>
                         <v-btn outline block color="orange" :disabled="!availableButton || findTeacher" @click="openFormPoll">Encuesta</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn outline block color="blue" :disabled="isApprove" @click="getPDFConst">Constancia de aprobación</v-btn>
                     </v-flex>
                     <v-flex xs12>
                         <v-btn color="red" block dark @click="dialog = true">Darse de baja</v-btn>
@@ -133,6 +143,7 @@ export default {
             availableButton:null,
             teachersThatHaveDoneThePoll:[],
             dialog:null,
+            qualified:"",
             Course:{
                 courseName:"",
                 courseTo:"",
@@ -157,6 +168,11 @@ export default {
             const valor = this.teachersThatHaveDoneThePoll.includes(this.userLoged.rfc);
             this.snack = !valor;
             return valor;
+        },
+
+        // Devuelve un booleano para habilitar la constancia de acreditacion
+        isApprove(){
+            return (this.qualified === 'Sin calificar' || this.qualified === 'Reprobado') ? true : false;
         }
     },
     methods:{
@@ -181,7 +197,8 @@ export default {
                 this.availableButton = response.data.allowPoll;
                 this.snack = response.data.allowPoll;
                 this.daysToPoll = response.data.leftDays;
-                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll
+                this.teachersThatHaveDoneThePoll = response.data.teachersThatHaveDoneThePoll;
+                this.qualified = response.data.qualified;
             } catch (error) {        
             }
         },
@@ -191,6 +208,21 @@ export default {
                 await axios.get(`/removeTeacherinCourse/${this.$route.params.MiCursoAdmin}`,this.keyAuth);
                 router.push({name: 'CursosDelAdmin'});
             } catch (error) {
+            }
+        },
+
+        async getPDFConst(){
+            try {
+                const response = await axios.get(`/acreditation/${this.$route.params.MiCursoAdmin}`,this.keyAuth);
+                let name = "Constancia"+this.$route.params.MiCursoAdmin.replace(" ","");
+                let blob = new Blob([response.data], { type:'application/pdf' } );
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.target = '_blank';
+                link.click();
+            } catch (error) {
+                
             }
         },
         // Abre la vista para la encuesta de satisfacción

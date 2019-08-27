@@ -2,7 +2,7 @@
     <v-container grid-list-lg text-xs-center>
 
         <Navigation/>
-        <p class="display-1">Cursos tomados por el docente</p>
+        <p class="display-1">Cursos tomados por {{teacherName}}</p>
 
         <v-layout justify-center>
             <v-flex xs2>
@@ -29,7 +29,8 @@ export default {
         return {
             year:"",
             itemsSelect:[],
-            coursesOfTeacher:[]
+            coursesOfTeacher:[],
+            teacherName:""
         }
     },
     computed: {
@@ -41,6 +42,8 @@ export default {
     async created() {
         this.createKeyAuth();
         try {
+            const response = await axios.get(`/teacher/${this.$route.params.docente}`,this.keyAuth);
+            this.teacherName = `${response.data.name} ${response.data.fstSurname} ${response.data.sndSurname}`;
             const data = await axios.get(`/getYears`,this.keyAuth);
             const courses = await axios.get(`/coursesOf/${this.$route.params.docente}`,this.keyAuth);
             this.coursesOfTeacher = courses.data.courses;
