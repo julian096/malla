@@ -86,7 +86,7 @@
                     </v-list-tile-content>
                 </v-list-tile>
 
-                <v-list-tile v-ripple @click="getConcentredFile">
+                <v-list-tile v-ripple @click="dialogPDF = true">
                     <v-list-tile-action>
                         <v-icon>file_download</v-icon>
                     </v-list-tile-action>
@@ -351,17 +351,19 @@
         </v-navigation-drawer>
 
         <FormLimitDays :showDialog="dialogLimitDays" v-if="this.dialogLimitDays"/>
+        <GetPDFDataConcentred :openPDF="dialogPDF"/>
 	</div>
 </template>
 
 <script>
 import {mapActions} from 'vuex';
 import FormLimitDays from '@/components/Forms/FormLimitDays.vue';
+import GetPDFDataConcentred from '@/views/Teachers/GetPDFDataConcentred.vue';
 import EventBus from '@/bus.js';
 
 export default {
     name: "Navigation",
-    components:{FormLimitDays},
+    components:{FormLimitDays,GetPDFDataConcentred},
 	data() {
 		return {
             userType:null,
@@ -387,11 +389,12 @@ export default {
             ],
             mini: true,
             userType:0,
-            dialogLimitDays: false
+            dialogLimitDays: false,
+            dialogPDF:false
 		};
     },
     methods:{
-        ...mapActions(['logout','getConcentredFile']),
+        ...mapActions(['logout']),
     },
     created() {
         this.userType = sessionStorage.getItem("userType");
@@ -399,7 +402,11 @@ export default {
     mounted() {
         EventBus.$on('closeLimitDays', () => {
             this.dialogLimitDays = false;
-        })
+        });
+
+        EventBus.$on('closePDF',() => {
+            this.dialogPDF = false;
+        });
     },
 };
 </script>

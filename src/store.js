@@ -183,15 +183,6 @@ actions: {
 
         }
     },
-    //obtiene los cursos impartidos por un docente
-    async getCoursesTaught({commit,state}){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/myCoursesWillTeach`,state.keyAuth);
-            commit('saveCoursesTaught',response.data.courses);
-        } catch (error) {
-        }
-    },
     // Obtiene los membretados de los documentos
     async getLetterheads({commit,state}){
         commit('createKeyAuth');
@@ -200,22 +191,6 @@ actions: {
             commit('saveLetterheads',response.data);
         } catch (error) {   
 
-        }
-    },
-    // Obtiene el PDF de los datos concentrados
-    async getConcentredFile({commit,state}){
-        commit('createKeyAuth');
-        try {
-            const response = await axios.get(`/dataConcentrated`,state.keyAuth);
-            let name = "ConcentradoDeDatos";
-            let blob = new Blob([response.data], { type:'application/pdf' } );
-            let link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = name;
-            link.target = '_blank';
-            link.click();
-        } catch (error) {
-            console.error(error);
         }
     }
   }
