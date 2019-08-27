@@ -67,7 +67,7 @@ export default {
             try {
                 const pdfDC = await axios.get(`/dataConcentrated/${this.year}`,this.keyAuth);
                     let name = "Concentrado"+this.year
-                    let blob = new Blob([pdfPoll.data], { type:'application/pdf' } );
+                    let blob = new Blob([pdfDC.data], { type:'application/pdf' } );
                     let link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
                     link.download = name;
@@ -79,7 +79,6 @@ export default {
                         this.btnDisable = false;
                     },2000);
             } catch (error) {
-                
             }
         }
     },
