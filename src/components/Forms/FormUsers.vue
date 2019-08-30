@@ -416,7 +416,7 @@
                                                                   v-model="TeacherExt.fstSurname"
                                                                   :error-messages="errors"
                                                                   :success="valid"
-                                                                  label="Primer apellido"
+                                                                  label="Apellido paterno"
                                                                   required />
                                                     </ValidationProvider>
                                                 </v-flex>
@@ -428,7 +428,7 @@
                                                                       v-model="TeacherExt.sndSurname"
                                                                       :error-messages="errors"
                                                                       :success="valid"
-                                                                      label="Segundo apellido"
+                                                                      label="Apellido materno"
                                                                       required />
                                                     </ValidationProvider>
                                                 </v-flex>
