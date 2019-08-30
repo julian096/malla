@@ -69,7 +69,7 @@ export default {
             msgError:"",
             user:{
                 rfc:"",
-                pin:"spartan96"
+                pin:""
             },
             timeout:2500
         }
@@ -80,10 +80,11 @@ export default {
     methods:{
         ...mapActions(['login']),
 
+        // Envia la peticion de login
         async send(){
             await this.login(this.user);
-            // console.log(res);
         },
+
         // Envio evento al Navbar para cerrar el login
         closeLogin(){
             EventBus.$emit('closeLogin');

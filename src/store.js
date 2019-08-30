@@ -10,9 +10,6 @@ const url = 'http://10.10.20.205:5000'
 Vue.use(Vuex)
 Vue.use(VueAxios,axios);
 
-// axios.defaults.baseURL = 'http://10.10.20.205:5000';
-// axios.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('token')}`;
-
 export default new Vuex.Store({
   state: {
     userLoged:{
@@ -89,7 +86,8 @@ actions: {
             commit('restartDataCourses');
             router.push("/inicio");
         } catch (error) {
-            EventBus.$emit('getErrorMsg',error.response.data.data.message);
+            console.log(error.response);
+            // EventBus.$emit('getErrorMsg',error.response.data.data.message);
         }
     },
     //logout del usuario
