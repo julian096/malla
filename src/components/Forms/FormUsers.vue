@@ -35,7 +35,7 @@
                                                                       v-model="Teacher.curp"
                                                                       :error-messages="errors"
                                                                       :success="valid"
-                                                                      label="RFC"
+                                                                      label="CURP"
                                                                       required/>
                                                     </ValidationProvider>
                                                 </v-flex>
@@ -375,6 +375,18 @@
                                         <v-card-text>
                                             <v-layout row wrap>
                                                 <v-flex xs12>
+                                                    <ValidationProvider name="CURP" rules="required|alpha_num|length:18">
+                                                        <v-text-field slot-scope="{errors, valid}"
+                                                                      v-model="TeacherExt.curp"
+                                                                      :error-messages="errors"
+                                                                      :success="valid"
+                                                                      label="CURP"
+                                                                      required />
+                                                    </ValidationProvider>
+                                                </v-flex>
+                                            </v-layout>
+                                            <v-layout row wrap>
+                                                <v-flex xs12>
                                                     <ValidationProvider name="RFC" rules="required|alpha_num|length:13">
                                                         <v-text-field slot-scope="{errors, valid}"
                                                                       v-model="TeacherExt.rfc"
@@ -585,6 +597,7 @@ export default {
                 internal:true
             },
             TeacherExt:{
+                curp:"",
                 rfc:"",
                 name:"",
                 fstSurname:"",
@@ -663,6 +676,7 @@ export default {
             this.buttonDis = true;
         },
         clearFieldsExternal(){
+            this.TeacherExt.curp = "";
             this.TeacherExt.rfc = "";
             this.TeacherExt.name = "";
             this.TeacherExt.fstSurname = "";
