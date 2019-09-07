@@ -86,8 +86,7 @@ actions: {
             commit('restartDataCourses');
             router.push("/inicio");
         } catch (error) {
-            console.log(error.response);
-            // EventBus.$emit('getErrorMsg',error.response.data.data.message);
+            EventBus.$emit('getErrorMsg',error.response.data.data.message);
         }
     },
     //logout del usuario
